@@ -1692,24 +1692,26 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
       )}
 
-      {/* Mission Checkpoint - Moves with mission scroll but appears fixed */}
+      {/* Mission Checkpoint - Always at bottom above navigation */}
       {isMissionOpen && mission.checkpoint && (
-        <div className="mt-auto sticky bottom-2 p-3 bg-gradient-to-br from-yellow-900/95 to-orange-900/95 border-4 border-yellow-500/80 rounded-lg backdrop-blur-lg shadow-2xl z-10">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-6 h-6 bg-yellow-400 rounded border-2 border-yellow-600 flex items-center justify-center flex-shrink-0">
-              <span className="text-sm">🎯</span>
-            </div>
-            <div className="text-[10px] font-black pixel-text text-yellow-100 uppercase">
-              {mission.checkpoint.title}
-            </div>
-          </div>
-          <div className="text-[9px] pixel-text text-yellow-50 space-y-1">
-            {mission.checkpoint.requirements.map((req, idx) => (
-              <div key={idx} className="flex items-start gap-1 bg-black/20 p-1.5 rounded">
-                <span className="text-yellow-300 flex-shrink-0">□</span>
-                <span className="flex-1">{req}</span>
+        <div className="mt-4">
+          <div className="p-3 bg-yellow-900/30 border-4 border-yellow-500/60 rounded-lg backdrop-blur-md shadow-2xl">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-6 h-6 bg-yellow-400/80 rounded border-2 border-yellow-600 flex items-center justify-center flex-shrink-0">
+                <span className="text-sm">🎯</span>
               </div>
-            ))}
+              <div className="text-[10px] font-black pixel-text text-yellow-100 uppercase drop-shadow-lg">
+                {mission.checkpoint.title}
+              </div>
+            </div>
+            <div className="text-[9px] pixel-text text-yellow-50 space-y-1">
+              {mission.checkpoint.requirements.map((req, idx) => (
+                <div key={idx} className="flex items-start gap-1 bg-black/30 border border-yellow-500/30 p-1.5 rounded backdrop-blur-sm">
+                  <span className="text-yellow-300 flex-shrink-0 drop-shadow">□</span>
+                  <span className="flex-1 drop-shadow">{req}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -3009,7 +3011,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
             <PixelatedTitle />
           </div>
       
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8 flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8 flex-1 relative z-10 px-4 py-4">
             {stages.map((stage, idx) => {
               const Icon = stage.icon;
               const isHovered = hoveredStage?.id === stage.id;
@@ -3020,7 +3022,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                   className="relative group animate-float-slow h-full"
                   style={{ 
                     animationDelay: `${idx * 100}ms`,
-                    animationDuration: `${6 + (idx % 3)}s`
+                    animationDuration: `${6 + (idx % 3)}s`,
+                    padding: '8px'
                   }}
                 >
                   {/* Animated particles */}
@@ -3049,7 +3052,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                       ${stage.theme.border}
                       overflow-visible
                       transform transition-all duration-500
-                      ${isHovered ? 'scale-105 -translate-y-2' : 'scale-100'}
+                      ${isHovered ? 'scale-100 -translate-y-2' : 'scale-95'}
                       shadow-2xl ${stage.theme.glow}
                       hover:shadow-3xl
                       h-64 flex flex-col
@@ -3246,22 +3249,24 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
 
         {/* Current Mission - Scrollable */}
-        <div className="flex-1 overflow-y-auto mb-4 pr-2">
-          <MissionCard 
-            mission={selectedStage.missions[currentMissionIndex]}
-            mIdx={currentMissionIndex}
-            selectedStage={selectedStage}
-            selectedMission={`${selectedStage.id}-${currentMissionIndex}`}
-            completedTasks={completedTasks}
-            expandedTasks={expandedTasks}   
-            setExpandedTasks={setExpandedTasks}   
-            handleMissionClick={() => {}}
-            handleTaskComplete={handleTaskComplete}
-          />
+        <div className="flex-1 overflow-y-auto pr-2 flex flex-col">
+          <div className="flex-1">
+            <MissionCard 
+              mission={selectedStage.missions[currentMissionIndex]}
+              mIdx={currentMissionIndex}
+              selectedStage={selectedStage}
+              selectedMission={`${selectedStage.id}-${currentMissionIndex}`}
+              completedTasks={completedTasks}
+              expandedTasks={expandedTasks}   
+              setExpandedTasks={setExpandedTasks}   
+              handleMissionClick={() => {}}
+              handleTaskComplete={handleTaskComplete}
+            />
+          </div>
         </div>
-
+        
         {/* Navigation Buttons - Fixed at bottom */}
-        <div className="sticky bottom-0 left-0 right-0 bg-black/80 backdrop-blur-lg border-t-4 border-white/30 p-3 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 z-20">
+        <div className="sticky bottom-0 left-0 right-0 bg-black/80 backdrop-blur-lg border-t-4 border-white/30 p-3 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 z-20 mt-4">
           <button
             onClick={handlePreviousMission}
             disabled={selectedStage.id === 1 && currentMissionIndex === 0}

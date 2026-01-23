@@ -2921,7 +2921,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       
       {activeTab === 'roadmap' && (
       <div 
-        className="h-screen p-4 sm:p-6 md:p-8 pt-20 md:pt-24 overflow-hidden relative flex flex-col"
+        className="h-screen p-4 sm:p-6 md:p-8 pt-24 sm:pt-28 md:pt-32 overflow-hidden relative flex flex-col"
         style={{
           backgroundImage: `url(${worldMapBackground})`,
           backgroundSize: 'cover',
@@ -2972,11 +2972,32 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
           
       {/* Content wrapper with relative positioning */}
-      <div className="relative z-10 flex-1 flex flex-col overflow-hidden">
+      <div className="relative z-10 flex-1 flex flex-col overflow-y-auto pt-2 sm:pt-4">
             
       {!selectedStage ? (
         /* STAGE SELECTION VIEW */
         <div className="max-w-7xl mx-auto h-full overflow-y-auto flex flex-col">
+          {/* Floating dust particles for main menu */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+            {[...Array(30)].map((_, i) => (
+              <div
+                key={`menu-dust-${i}`}
+                className="absolute rounded-full"
+                style={{
+                  width: `${5 + (i % 5)}px`,
+                  height: `${5 + (i % 5)}px`,
+                  backgroundColor: i % 3 === 0 ? '#ffd700' : i % 3 === 1 ? '#ffb347' : '#f0e68c',
+                  left: `${(i * 3.5) % 100}%`,
+                  top: `${(i * 7) % 100}%`,
+                  opacity: 0.4 + ((i % 4) * 0.1),
+                  animation: `dustFloat ${10 + (i % 6)}s ease-in-out infinite`,
+                  animationDelay: `${(i * 0.3) % 6}s`,
+                  boxShadow: '0 0 10px rgba(255, 215, 0, 0.5)',
+                  filter: 'blur(0.5px)'
+                }}
+              />
+            ))}
+          </div>
           <div className="mb-6 sm:mb-8 md:mb-12 lg:mb-16 min-h-[80px] sm:min-h-[100px] md:min-h-[120px] flex items-center justify-center px-2">
             <PixelatedTitle />
           </div>

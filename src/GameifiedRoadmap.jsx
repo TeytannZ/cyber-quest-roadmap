@@ -573,7 +573,24 @@ const [lastQuoteDate, setLastQuoteDate] = useState(() => {
       {/* Floating candle lights effect - independent of sound */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(8)].map((_, i) => (
-          ...existing candle code...
+          <div
+            key={`candle-${i}`}
+            className="absolute"
+            style={{
+              left: `${10 + (i * 12)}%`,
+              top: `${20 + ((i % 3) * 25)}%`,
+              animation: `candleFlicker ${1.5 + (i % 3) * 0.5}s ease-in-out infinite`,
+              animationDelay: `${i * 0.2}s`
+            }}
+          >
+            <div
+              className="w-3 h-3 rounded-full"
+              style={{
+                background: 'radial-gradient(circle, #ffaa00, #ff6600)',
+                boxShadow: '0 0 20px #ffaa00, 0 0 40px #ff660080'
+              }}
+            />
+          </div>
         ))}
       </div>
       

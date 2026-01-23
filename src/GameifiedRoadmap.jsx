@@ -1296,19 +1296,6 @@ const LearningRoadmap = () => {
 // Find this line: const MissionCard = ({ mission, mIdx, selectedStage...
 // Replace everything from there until the closing }; of MissionCard
 
-const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedTasks, expandedTasks, setExpandedTasks, handleMissionClick, handleTaskComplete, className = "" }) => {
-  const missionKey = `${selectedStage.id}-${mIdx}`;
-  const isMissionOpen = selectedMission === missionKey;
-  
-  const toggleTaskExpansion = (taskIdx, e) => {
-    e.stopPropagation();
-    const key = `${missionKey}-${taskIdx}`;
-    setExpandedTasks(prev => ({
-      ...prev,
-      [key]: !prev[key]
-    }));
-  };
-
   const PixelatedTitle = () => {
     const [displayedText, setDisplayedText] = useState('');
     const fullText = 'EPIC LEARNING JOURNEY';
@@ -1363,6 +1350,19 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         <span className="animate-pulse">_</span>
       </h1>
     );
+  };
+  
+const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedTasks, expandedTasks, setExpandedTasks, handleMissionClick, handleTaskComplete, className = "" }) => {
+  const missionKey = `${selectedStage.id}-${mIdx}`;
+  const isMissionOpen = selectedMission === missionKey;
+  
+  const toggleTaskExpansion = (taskIdx, e) => {
+    e.stopPropagation();
+    const key = `${missionKey}-${taskIdx}`;
+    setExpandedTasks(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
   };
   
   return (

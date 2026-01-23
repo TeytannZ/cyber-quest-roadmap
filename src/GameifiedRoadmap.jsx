@@ -431,19 +431,10 @@ const LootTableTab = () => {
 };
 
 const DailyWisdomTab = () => {
-  const [currentQuote, setCurrentQuote] = useState(() => {
-  const saved = localStorage.getItem('dailyQuote');
-  return saved ? JSON.parse(saved) : null;
-});
-const [displayedText, setDisplayedText] = useState('');
-const [isTyping, setIsTyping] = useState(false);
-const [currentWiseMan, setCurrentWiseMan] = useState(() => {
-  const saved = localStorage.getItem('dailyWiseMan');
-  return saved ? saved : wise1;
-});
-const [lastQuoteDate, setLastQuoteDate] = useState(() => {
-  return localStorage.getItem('lastQuoteDate') || '';
-});
+  const [currentQuote, setCurrentQuote] = useState(null);
+  const [displayedText, setDisplayedText] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [currentWiseMan, setCurrentWiseMan] = useState(wise1);
   const audioContextRef = useRef(null);
   const typingIntervalRef = useRef(null);
 
@@ -531,30 +522,16 @@ const [lastQuoteDate, setLastQuoteDate] = useState(() => {
   };
 
   const generateNewQuote = () => {
-    const today = new Date().toDateString();
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
     const randomWiseMan = wiseManImages[Math.floor(Math.random() * wiseManImages.length)];
     
     setCurrentQuote(randomQuote);
     setCurrentWiseMan(randomWiseMan);
-    setLastQuoteDate(today);
-    
-    localStorage.setItem('dailyQuote', JSON.stringify(randomQuote));
-    localStorage.setItem('dailyWiseMan', randomWiseMan);
-    localStorage.setItem('lastQuoteDate', today);
-    
     typeWriter(randomQuote.text, randomQuote.author);
   };
 
   useEffect(() => {
-    const today = new Date().toDateString();
-    
-    if (!currentQuote || lastQuoteDate !== today) {
-      generateNewQuote();
-    } else {
-      // Just display the saved quote without typing animation
-      setDisplayedText(`"${currentQuote.text}"\n\n- ${currentQuote.author}`);
-    }
+    generateNewQuote();
   }, []);
 
   return (
@@ -575,43 +552,18 @@ const [lastQuoteDate, setLastQuoteDate] = useState(() => {
         {[...Array(8)].map((_, i) => (
           <div
             key={`candle-${i}`}
-            className="absolute"
+            className="absolute rounded-full animate-candle-flicker"
             style={{
-              left: `${10 + (i * 12)}%`,
-              top: `${20 + ((i % 3) * 25)}%`,
-              animation: `candleFlicker ${1.5 + (i % 3) * 0.5}s ease-in-out infinite`,
-              animationDelay: `${i * 0.2}s`
-            }}
-          >
-            <div
-              className="w-3 h-3 rounded-full"
-              style={{
-                background: 'radial-gradient(circle, #ffaa00, #ff6600)',
-                boxShadow: '0 0 20px #ffaa00, 0 0 40px #ff660080'
-              }}
-            />
-          </div>
-        ))}
-      </div>
-      
-      {/* ADD THIS NEW SECTION: */}
-      {/* Floating dust particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(60)].map((_, i) => (
-          <div
-            key={`wisdom-dust-${i}`}
-            className="absolute rounded-full"
-            style={{
-              width: '6px',
-              height: '6px',
-              backgroundColor: i % 3 === 0 ? '#f59e0b' : i % 3 === 1 ? '#d97706' : '#b45309',
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              opacity: 0.3 + Math.random() * 0.2,
-              filter: 'blur(1px)',
-              boxShadow: '0 0 8px rgba(245, 158, 11, 0.5)',
-              animation: `dustFloat ${10 + Math.random() * 10}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 10}s`
+              width: '8px',
+              height: '8px',
+              backgroundColor: '#fb923c',
+              left: `${10 + i * 12}%`,
+              top: `${20 + (i * 7.5)}%`,
+              opacity: 0.6,
+              filter: 'blur(2px)',
+              boxShadow: '0 0 10px rgba(251, 146, 60, 0.6)',
+              animation: `candleFlicker ${1.5 + (i * 0.2)}s ease-in-out infinite`,
+              animationDelay: `${i * 0.3}s`
             }}
           />
         ))}
@@ -1369,7 +1321,7 @@ const PixelatedTitle = () => {
   }, []);
 
   return (
-    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-center pixel-text text-amber-100 px-3 sm:px-4 md:px-6 border-3 sm:border-4 border-yellow-700 bg-gradient-to-br from-amber-900/60 to-yellow-900/60 backdrop-blur-sm rounded-lg py-3 sm:py-4 inline-block whitespace-nowrap"
+    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-center pixel-text text-amber-100 px-3 sm:px-4 md:px-6 border-3 sm:border-4 border-yellow-700 bg-gradient-to-br from-amber-900/60 to-yellow-900/60 backdrop-blur-sm rounded-lg py-3 sm:py-4 md:py-6 inline-block max-w-[95%] leading-tight"
         style={{
           textShadow: '2px 2px 0px rgba(101, 67, 33, 0.8), -1px -1px 0px rgba(255, 215, 0, 0.3)',
           boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 0 20px rgba(255, 215, 0, 0.2)',
@@ -1624,43 +1576,11 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                   <div 
                     onClick={() => handleTaskComplete(selectedStage, mIdx, tIdx)}
                     className={`
-                      w-6 h-6 rounded border-3 flex-shrink-0
+                      w-6 h-6 rounded border-3 border-black flex-shrink-0
                       flex items-center justify-center cursor-pointer
+                      ${isCompleted ? 'bg-green-400' : 'bg-white/50 hover:bg-white/70'}
                       transition-all duration-300 hover:scale-110 active:scale-95
-                      ${isCompleted 
-                        ? `${selectedStage.theme.border} border-black shadow-lg` 
-                        : 'bg-white/50 hover:bg-white/70 border-black'
-                      }
                     `}
-                    style={isCompleted ? {
-                      background: `linear-gradient(135deg, ${
-                        selectedStage.theme.particle.includes('green') ? '#4ade80' :
-                        selectedStage.theme.particle.includes('orange') ? '#fb923c' :
-                        selectedStage.theme.particle.includes('amber') ? '#f59e0b' :
-                        selectedStage.theme.particle.includes('cyan') ? '#22d3ee' :
-                        selectedStage.theme.particle.includes('purple') ? '#a855f7' :
-                        selectedStage.theme.particle.includes('blue') ? '#3b82f6' :
-                        selectedStage.theme.particle.includes('teal') ? '#14b8a6' :
-                        selectedStage.theme.particle.includes('red') ? '#ef4444' :
-                        selectedStage.theme.particle.includes('slate') ? '#64748b' :
-                        selectedStage.theme.particle.includes('indigo') ? '#6366f1' :
-                        selectedStage.theme.particle.includes('gray') ? '#6b7280' :
-                        '#4ade80'
-                      }, ${
-                        selectedStage.theme.particle.includes('green') ? '#22c55e' :
-                        selectedStage.theme.particle.includes('orange') ? '#f97316' :
-                        selectedStage.theme.particle.includes('amber') ? '#d97706' :
-                        selectedStage.theme.particle.includes('cyan') ? '#06b6d4' :
-                        selectedStage.theme.particle.includes('purple') ? '#9333ea' :
-                        selectedStage.theme.particle.includes('blue') ? '#2563eb' :
-                        selectedStage.theme.particle.includes('teal') ? '#0d9488' :
-                        selectedStage.theme.particle.includes('red') ? '#dc2626' :
-                        selectedStage.theme.particle.includes('slate') ? '#475569' :
-                        selectedStage.theme.particle.includes('indigo') ? '#4f46e5' :
-                        selectedStage.theme.particle.includes('gray') ? '#52525b' :
-                        '#22c55e'
-                      })`
-                    } : {}}
                   >
                     {isCompleted && (
                       <span className="text-black font-black text-sm">✓</span>
@@ -1772,7 +1692,29 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
       )}
 
-      {/* Checkpoint placeholder - actual checkpoint rendered outside */}
+      {/* Mission Checkpoint - Always at bottom above navigation */}
+      {isMissionOpen && mission.checkpoint && (
+        <div className="mt-4">
+          <div className="p-3 bg-yellow-900/30 border-4 border-yellow-500/60 rounded-lg backdrop-blur-md shadow-2xl">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-6 h-6 bg-yellow-400/80 rounded border-2 border-yellow-600 flex items-center justify-center flex-shrink-0">
+                <span className="text-sm">🎯</span>
+              </div>
+              <div className="text-[10px] font-black pixel-text text-yellow-100 uppercase drop-shadow-lg">
+                {mission.checkpoint.title}
+              </div>
+            </div>
+            <div className="text-[9px] pixel-text text-yellow-50 space-y-1">
+              {mission.checkpoint.requirements.map((req, idx) => (
+                <div key={idx} className="flex items-start gap-1 bg-black/30 border border-yellow-500/30 p-1.5 rounded backdrop-blur-sm">
+                  <span className="text-yellow-300 flex-shrink-0 drop-shadow">□</span>
+                  <span className="flex-1 drop-shadow">{req}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -2999,7 +2941,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         }}
       >
         {/* Old parchment/sepia overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-100/65 via-yellow-50/55 to-orange-100/65 pointer-events-none mix-blend-overlay"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-100/55 via-yellow-50/45 to-orange-100/55 pointer-events-none mix-blend-overlay"></div>
         
         {/* Aged paper texture overlay */}
         <div className="absolute inset-0 pointer-events-none opacity-20" style={{
@@ -3046,7 +2988,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         <div className="max-w-7xl mx-auto h-full overflow-y-auto flex flex-col">
           {/* Floating dust particles for main menu */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-            {[...Array(80)].map((_, i) => (
+            {[...Array(50)].map((_, i) => (
               <div
                 key={`menu-dust-${i}`}
                 className="absolute rounded-full"
@@ -3054,13 +2996,13 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                   width: '8px',
                   height: '8px',
                   backgroundColor: '#ffd700',
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  opacity: 0.4 + Math.random() * 0.3,
+                  left: `${(i * 2.1) % 100}%`,
+                  top: `${(i * 5.3) % 100}%`,
+                  opacity: 0.5,
                   filter: 'blur(2px)',
                   boxShadow: '0 0 12px rgba(255, 215, 0, 0.7)',
-                  animation: `dustFloat ${8 + Math.random() * 8}s ease-in-out infinite`,
-                  animationDelay: `${Math.random() * 8}s`
+                  animation: `dustFloat ${10 + (i % 6)}s ease-in-out infinite`,
+                  animationDelay: `${(i * 0.2) % 6}s`
                 }}
               />
             ))}
@@ -3168,10 +3110,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
           </div>
 
           {/* Footer */}
-          <div className="mt-8 mb-4 text-center">
-            <div className="inline-block bg-gradient-to-br from-amber-900/60 to-yellow-900/60 backdrop-blur-sm border-3 border-yellow-700 rounded-lg px-4 py-2">
-              <p className="text-[10px] sm:text-xs font-black pixel-text text-amber-100">🎮 CLICK STAGE TO START 🎮</p>
-            </div>
+          <div className="mt-16 text-center text-purple-300">
+            <p className="text-sm font-semibold pixel-text">🎮 CLICK EACH STAGE TO BEGIN YOUR QUEST 🎮</p>
           </div>
         </div>
       ) : (
@@ -3216,7 +3156,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
 
       {/* Floating Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(80)].map((_, i) => {
+        {[...Array(50)].map((_, i) => {
+          // Get color based on stage theme
           const getParticleColor = () => {
             const particleClass = selectedStage.theme.particle;
             if (particleClass.includes('green')) return '#4ade80';
@@ -3243,13 +3184,13 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                 width: '8px',
                 height: '8px',
                 backgroundColor: color,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                opacity: 0.4 + Math.random() * 0.3,
+                left: `${(i * 2.1) % 100}%`,
+                top: `${(i * 5.3) % 100}%`,
+                opacity: 0.5,
                 filter: 'blur(2px)',
                 boxShadow: `0 0 12px ${color}aa`,
-                animation: `dustFloat ${8 + Math.random() * 8}s ease-in-out infinite`,
-                animationDelay: `${Math.random() * 8}s`
+                animation: `dustFloat ${10 + (i % 6)}s ease-in-out infinite`,
+                animationDelay: `${(i * 0.2) % 6}s`
               }}
             />
           );
@@ -3308,44 +3249,24 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
 
         {/* Current Mission - Scrollable */}
-        <div className="flex-1 overflow-y-auto pr-2 mb-4">
-          <MissionCard 
-            mission={selectedStage.missions[currentMissionIndex]}
-            mIdx={currentMissionIndex}
-            selectedStage={selectedStage}
-            selectedMission={`${selectedStage.id}-${currentMissionIndex}`}
-            completedTasks={completedTasks}
-            expandedTasks={expandedTasks}   
-            setExpandedTasks={setExpandedTasks}   
-            handleMissionClick={() => {}}
-            handleTaskComplete={handleTaskComplete}
-          />
+        <div className="flex-1 overflow-y-auto pr-2 flex flex-col">
+          <div className="flex-1">
+            <MissionCard 
+              mission={selectedStage.missions[currentMissionIndex]}
+              mIdx={currentMissionIndex}
+              selectedStage={selectedStage}
+              selectedMission={`${selectedStage.id}-${currentMissionIndex}`}
+              completedTasks={completedTasks}
+              expandedTasks={expandedTasks}   
+              setExpandedTasks={setExpandedTasks}   
+              handleMissionClick={() => {}}
+              handleTaskComplete={handleTaskComplete}
+            />
+          </div>
         </div>
         
-        {/* Checkpoint - Fixed at bottom */}
-        {selectedStage.missions[currentMissionIndex].checkpoint && (
-          <div className={`bg-gradient-to-br ${selectedStage.theme.bg} bg-opacity-40 backdrop-blur-md border-4 ${selectedStage.theme.border} rounded-lg p-3 mb-4 shadow-2xl`}>
-            <div className="flex items-center gap-2 mb-2">
-              <div className={`w-6 h-6 bg-white/90 rounded border-2 ${selectedStage.theme.border} flex items-center justify-center flex-shrink-0`}>
-                <span className="text-sm">🎯</span>
-              </div>
-              <div className="text-[10px] font-black pixel-text text-white uppercase drop-shadow-lg">
-                {selectedStage.missions[currentMissionIndex].checkpoint.title}
-              </div>
-            </div>
-            <div className="text-[9px] pixel-text text-white space-y-1">
-              {selectedStage.missions[currentMissionIndex].checkpoint.requirements.map((req, idx) => (
-                <div key={idx} className="flex items-start gap-1 bg-black/40 border-2 border-white/30 p-1.5 rounded backdrop-blur-sm">
-                  <span className="text-white flex-shrink-0 drop-shadow">□</span>
-                  <span className="flex-1 drop-shadow">{req}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-        
         {/* Navigation Buttons - Fixed at bottom */}
-        <div className="sticky bottom-0 left-0 right-0 bg-black/80 backdrop-blur-lg border-t-4 border-white/30 p-3 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 z-20">
+        <div className="sticky bottom-0 left-0 right-0 bg-black/80 backdrop-blur-lg border-t-4 border-white/30 p-3 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 z-20 mt-4">
           <button
             onClick={handlePreviousMission}
             disabled={selectedStage.id === 1 && currentMissionIndex === 0}

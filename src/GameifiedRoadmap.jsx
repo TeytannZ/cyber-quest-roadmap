@@ -1324,7 +1324,11 @@ const PixelatedTitle = () => {
   }, []);
 
   return (
-    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-center pixel-text text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.8)] px-4 animate-glow"
+    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-center pixel-text text-amber-900 px-4"
+        style={{
+          textShadow: '3px 3px 0px rgba(0,0,0,0.3), -1px -1px 0px rgba(255,255,255,0.2)',
+          filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))'
+        }}
         style={{
           textShadow: '4px 4px 0px #000, -2px -2px 0px rgba(255,255,255,0.3)',
           imageRendering: 'pixelated'
@@ -1694,9 +1698,9 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
       )}
 
-      {/* Mission Checkpoint - Fixed at bottom */}
+      {/* Mission Checkpoint - Moves with mission scroll but appears fixed */}
       {isMissionOpen && mission.checkpoint && (
-        <div className="fixed bottom-20 left-4 right-4 md:left-auto md:right-8 md:w-96 p-3 bg-gradient-to-br from-yellow-900/90 to-orange-900/90 border-4 border-yellow-500/80 rounded-lg backdrop-blur-lg shadow-2xl z-30 animate-slideIn">
+        <div className="mt-auto sticky bottom-2 p-3 bg-gradient-to-br from-yellow-900/95 to-orange-900/95 border-4 border-yellow-500/80 rounded-lg backdrop-blur-lg shadow-2xl z-10">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-6 h-6 bg-yellow-400 rounded border-2 border-yellow-600 flex items-center justify-center flex-shrink-0">
               <span className="text-sm">🎯</span>
@@ -2939,30 +2943,24 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
           imageRendering: 'pixelated'
         }}
       >
-        {/* Animated vignette overlay */}
-        <div className="absolute inset-0 bg-gradient-radial from-transparent via-black/20 to-black/60 pointer-events-none animate-pulse" style={{ animationDuration: '4s' }}></div>
+        {/* Old parchment/sepia overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-100/40 via-yellow-50/30 to-orange-100/40 pointer-events-none mix-blend-overlay"></div>
         
-        {/* Scan lines for retro RPG effect */}
-        <div className="absolute inset-0 pointer-events-none opacity-10" style={{
-          backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 4px)',
-          animation: 'scanlines 8s linear infinite'
+        {/* Aged paper texture overlay */}
+        <div className="absolute inset-0 pointer-events-none opacity-20" style={{
+          backgroundImage: 'url("data:image/svg+xml,%3Csvg width="200" height="200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.4"/%3E%3C/svg%3E")',
+          backgroundRepeat: 'repeat'
         }}></div>
         
-        {/* Floating light particles */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(20)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-yellow-300 rounded-full opacity-40 animate-float-particle"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 5}s`,
-                animationDuration: `${5 + Math.random() * 10}s`
-              }}
-            />
-          ))}
-        </div>
+        {/* Dark vignette for depth */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'radial-gradient(ellipse at center, transparent 0%, transparent 40%, rgba(101, 67, 33, 0.3) 100%)'
+        }}></div>
+        
+        {/* Subtle scan lines */}
+        <div className="absolute inset-0 pointer-events-none opacity-5" style={{
+          backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.1) 3px, rgba(0,0,0,0.1) 6px)'
+        }}></div>
           
           {/* Content wrapper with relative positioning */}
           <div className="relative z-10 flex-1 flex flex-col overflow-hidden">
@@ -3184,7 +3182,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
 
         {/* Current Mission - Scrollable */}
-        <div className="flex-1 overflow-y-auto mb-4 pr-2" style={{ scrollbarWidth: 'thin' }}>
+        <div className="flex-1 overflow-y-auto mb-4 pr-2">
           <MissionCard 
             mission={selectedStage.missions[currentMissionIndex]}
             mIdx={currentMissionIndex}
@@ -3247,6 +3245,15 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
 
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        * {
+          scrollbar-width: none; /* Firefox */
+          -ms-overflow-style: none; /* IE and Edge */
+        }
+        
+        *::-webkit-scrollbar {
+          display: none; /* Chrome, Safari, Opera */
+        }
         
         .pixel-text {
           font-family: 'Press Start 2P', cursive;

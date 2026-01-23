@@ -1475,89 +1475,62 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
   
   return (
     <div
-      className={`bg-black/20 backdrop-blur-sm rounded-sm overflow-hidden border-4 border-white/50 shadow-2xl transform hover:scale-105 transition-all duration-300 ${className}`}
+      className={`relative overflow-visible ${className}`}
       style={{
         animation: `slideIn 0.5s ease-out ${mIdx * 0.15}s forwards`,
         opacity: 0,
-        imageRendering: 'pixelated',
-        boxShadow: '0 0 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,255,255,0.1)'
+        imageRendering: 'pixelated'
       }}
     >
-      {/* Mission Header - Enhanced */}
+      {/* Mission Header - Compact floating style */}
       <div
         onClick={() => handleMissionClick(selectedStage, mission, mIdx)}
         className={`
-          p-6 cursor-pointer relative
-          bg-gradient-to-br ${selectedStage.theme.bg}
-          flex flex-col items-center justify-center text-center
-          hover:brightness-110 transition-all duration-300
-          ${isMissionOpen ? 'shadow-2xl scale-105' : ''}
-          border-b-4 border-white/40
-          min-h-[140px]
-          overflow-hidden
+          p-4 cursor-pointer relative
+          bg-black/40 backdrop-blur-md border-4 border-white/60
+          rounded-lg mb-3
+          hover:bg-black/50 hover:border-white/80 transition-all duration-300
+          ${isMissionOpen ? 'shadow-2xl border-yellow-400/80' : 'shadow-lg'}
         `}
       >
-        {/* Animated background pattern */}
-        <div className="absolute inset-0 opacity-20" style={{
-          backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px)',
-          animation: 'slidePattern 20s linear infinite'
-        }}></div>
-        
-        {/* Glowing corners */}
-        <div className="absolute top-0 left-0 w-4 h-4 bg-white/60 rounded-br-sm"></div>
-        <div className="absolute top-0 right-0 w-4 h-4 bg-white/60 rounded-bl-sm"></div>
-        <div className="absolute bottom-0 left-0 w-4 h-4 bg-white/60 rounded-tr-sm"></div>
-        <div className="absolute bottom-0 right-0 w-4 h-4 bg-white/60 rounded-tl-sm"></div>
-        
-        <div className="relative z-10">
-          {/* Emoji with glow effect */}
-          <div className="relative mb-3">
-            <div className="absolute inset-0 blur-xl bg-white/40 rounded-full scale-150"></div>
-            <div className="relative w-16 h-16 bg-black/40 rounded-sm border-4 border-white/60 flex items-center justify-center transform hover:scale-125 hover:rotate-12 transition-all duration-300 shadow-lg">
-              <span className="text-4xl drop-shadow-lg">{mission.emoji}</span>
+        <div className="flex items-center justify-between gap-4">
+          {/* Left: Emoji + Title */}
+          <div className="flex items-center gap-3 flex-1">
+            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-lg border-3 border-white/50 flex items-center justify-center flex-shrink-0">
+              <span className="text-3xl">{mission.emoji}</span>
+            </div>
+            <div>
+              <h3 className="text-xs font-black text-white pixel-text uppercase leading-tight">
+                {mission.name}
+              </h3>
+              {mission.duration && (
+                <p className="text-white/70 text-[9px] pixel-text mt-1">
+                  ⏰ {mission.duration}
+                </p>
+              )}
             </div>
           </div>
           
-          {/* Mission name */}
-          <h3 className="text-xs font-black text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] pixel-text uppercase leading-tight mb-2 tracking-wide">
-            {mission.name}
-          </h3>
-          
-          {/* Duration badge */}
-          {mission.duration && (
-            <div className="inline-block bg-black/50 px-3 py-1 rounded-sm border-2 border-white/50 mb-2">
-              <p className="text-white/90 text-[9px] font-black pixel-text">
-                ⏰ {mission.duration}
+          {/* Right: Task count + Arrow */}
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-lg border-2 border-white/40">
+              <p className="text-white font-black pixel-text text-[10px]">
+                {mission.tasks.length} TASKS
               </p>
             </div>
-          )}
-          
-          {/* Tasks count with animation */}
-          <div className="inline-block bg-white/20 px-4 py-1 rounded-sm border-2 border-white/60 backdrop-blur-sm">
-            <p className="text-white font-black pixel-text text-[10px]">
-              📋 {mission.tasks.length} TASKS
-            </p>
-          </div>
-          
-          {/* Expand arrow with pulse */}
-          <div className={`
-            transform transition-all duration-300 text-white font-black text-2xl mt-3
-            ${isMissionOpen ? 'rotate-180 scale-125' : 'rotate-0 scale-100'}
-            drop-shadow-lg
-            ${isMissionOpen ? 'animate-pulse' : ''}
-          `}>
-            ▼
+            <div className={`
+              transform transition-all duration-300 text-white font-black text-xl
+              ${isMissionOpen ? 'rotate-180' : 'rotate-0'}
+            `}>
+              ▼
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Tasks Container - Enhanced */}
-      <div className={`
-        transition-all duration-500
-        ${isMissionOpen ? 'max-h-[1200px] opacity-100' : 'max-h-0 opacity-0'}
-        overflow-hidden overflow-y-auto
-      `}>
-        <div className="p-4 space-y-2 bg-gradient-to-b from-black/30 to-black/40">
+      {/* Tasks Grid - No scroll, compact grid layout */}
+      {isMissionOpen && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
           {mission.tasks.map((task, tIdx) => {
             const taskKey = `${selectedStage.id}-${mIdx}-${tIdx}`;
             const isCompleted = completedTasks[taskKey];
@@ -1569,122 +1542,89 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
               <div
                 key={tIdx}
                 className={`
-                  rounded-sm relative overflow-hidden
-                  border-3
+                  rounded-lg relative overflow-hidden
+                  border-3 backdrop-blur-md
                   ${isCompleted 
-                    ? `bg-gradient-to-br ${selectedStage.theme.bg} bg-opacity-60 shadow-xl border-yellow-400/80 scale-105` 
-                    : 'bg-white/40 backdrop-blur-sm border-white/60 hover:border-white/80 shadow-lg'
+                    ? 'bg-gradient-to-br from-green-500/30 to-emerald-500/30 border-green-400/80 shadow-lg shadow-green-500/20' 
+                    : 'bg-white/15 border-white/40 hover:border-white/60 hover:bg-white/20'
                   }
-                  transform transition-all duration-300
+                  transform transition-all duration-300 hover:scale-102
                 `}
-                style={{
-                  animation: isMissionOpen ? `slideIn 0.4s ease-out ${tIdx * 0.1}s forwards` : 'none',
-                  opacity: isMissionOpen ? 1 : 0,
-                  imageRendering: 'pixelated'
-                }}
               >
-                {/* Completed shine effect */}
-                {isCompleted && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
-                )}
-                
-                {/* Task Header */}
-                <div className="p-3 flex items-start gap-3">
-                  {/* Checkbox - Enhanced */}
-                  <div className="flex-shrink-0">
-                    <div 
-                      onClick={() => handleTaskComplete(selectedStage, mIdx, tIdx)}
-                      className={`
-                        w-8 h-8 rounded-sm border-4 border-black flex-shrink-0
-                        flex items-center justify-center cursor-pointer
-                        ${isCompleted ? 'bg-yellow-300 scale-110' : 'bg-black/30 hover:bg-black/40'}
-                        transition-all duration-300 shadow-lg
-                        hover:scale-125 active:scale-95
-                      `}
-                    >
-                      {isCompleted && (
-                        <span className="text-black font-black text-xl animate-bounce">✓</span>
-                      )}
-                    </div>
+                {/* Task Header - Compact */}
+                <div className="p-3 flex items-start gap-2">
+                  {/* Checkbox */}
+                  <div 
+                    onClick={() => handleTaskComplete(selectedStage, mIdx, tIdx)}
+                    className={`
+                      w-6 h-6 rounded border-3 border-black flex-shrink-0
+                      flex items-center justify-center cursor-pointer
+                      ${isCompleted ? 'bg-green-400' : 'bg-white/50 hover:bg-white/70'}
+                      transition-all duration-300 hover:scale-110 active:scale-95
+                    `}
+                  >
+                    {isCompleted && (
+                      <span className="text-black font-black text-sm">✓</span>
+                    )}
                   </div>
                   
                   {/* Task info */}
                   <div 
                     onClick={() => handleTaskComplete(selectedStage, mIdx, tIdx)}
-                    className="flex-1 cursor-pointer"
+                    className="flex-1 cursor-pointer min-w-0"
                   >
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1">
-                        <span className={`
-                          text-[11px] font-black pixel-text leading-tight block mb-1
-                          ${isCompleted ? 'text-white line-through drop-shadow-lg' : 'text-black'}
-                        `}>
-                          {task.title}
-                        </span>
-                        {task.time && (
-                          <div className={`
-                            inline-block px-2 py-1 rounded-sm text-[9px] font-bold pixel-text
-                            ${isCompleted ? 'bg-white/20 text-white/90 border border-white/40' : 'bg-black/10 text-gray-700 border border-gray-300'}
-                          `}>
-                            ⏱ {task.time}
-                          </div>
-                        )}
+                    <span className={`
+                      text-[10px] font-black pixel-text leading-tight block
+                      ${isCompleted ? 'text-white line-through' : 'text-white'}
+                    `}>
+                      {task.title}
+                    </span>
+                    {task.time && (
+                      <div className={`
+                        inline-block px-2 py-0.5 rounded mt-1 text-[8px] font-bold pixel-text
+                        ${isCompleted ? 'bg-white/20 text-white/80' : 'bg-black/20 text-white/90'}
+                      `}>
+                        ⏱ {task.time}
                       </div>
-                      
-                      {/* Expand button */}
-                      {(hasDetails || hasResource) && (
-                        <div 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleTaskExpansion(tIdx, e);
-                          }}
-                          className={`
-                            text-sm font-black transition-all duration-200 cursor-pointer
-                            px-3 py-2 rounded-sm border-2
-                            ${isCompleted 
-                              ? 'text-white hover:bg-white/20 border-white/60 bg-white/10' 
-                              : 'text-black hover:bg-black/10 border-black/30 bg-black/5'
-                            }
-                            ${isExpanded ? 'rotate-180 scale-110' : 'rotate-0'}
-                            hover:scale-125 active:scale-95
-                          `}
-                        >
-                          ▼
-                        </div>
-                      )}
-                    </div>
+                    )}
                   </div>
 
-                  {/* Completion sparkle */}
-                  {isCompleted && (
-                    <div className="w-6 h-6 bg-yellow-400 rounded-sm border-3 border-yellow-600 flex items-center justify-center animate-pulse flex-shrink-0 shadow-lg">
-                      <Sparkles className="w-4 h-4 text-yellow-900" />
+                  {/* Expand button */}
+                  {(hasDetails || hasResource) && (
+                    <div 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleTaskExpansion(tIdx, e);
+                      }}
+                      className={`
+                        text-xs font-black transition-all duration-200 cursor-pointer
+                        px-2 py-1 rounded border-2 flex-shrink-0
+                        ${isCompleted 
+                          ? 'text-white hover:bg-white/20 border-white/60 bg-white/10' 
+                          : 'text-white hover:bg-white/20 border-white/50 bg-white/10'
+                        }
+                        ${isExpanded ? 'rotate-180' : 'rotate-0'}
+                        hover:scale-110 active:scale-95
+                      `}
+                    >
+                      ▼
                     </div>
                   )}
                 </div>
 
-                {/* Task Details - Enhanced */}
-                {(hasDetails || hasResource) && (
-                  <div className={`
-                    transition-all duration-300 overflow-hidden
-                    ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}
-                  `}>
+                {/* Task Details - Compact */}
+                {(hasDetails || hasResource) && isExpanded && (
+                  <div className="px-3 pb-3 pt-0">
                     <div className={`
-                      px-4 pb-3 text-[10px] pixel-text leading-relaxed
-                      ${isCompleted ? 'text-white/95' : 'text-gray-900'}
+                      text-[9px] pixel-text leading-relaxed p-2 rounded
+                      ${isCompleted ? 'bg-black/30 text-white/90' : 'bg-black/20 text-white'}
                     `}>
                       {hasDetails && (
-                        <div className={`
-                          mb-3 space-y-1 p-3 rounded-sm border-2
-                          ${isCompleted 
-                            ? 'bg-white/10 border-white/30' 
-                            : 'bg-black/5 border-gray-300'
-                          }
-                        `}>
+                        <div className="space-y-1 mb-2">
                           {task.details.map((detail, dIdx) => (
-                            <div key={dIdx} className="flex items-start gap-2">
-                              <span className={isCompleted ? 'text-yellow-300' : 'text-gray-600'}>▸</span>
-                              <span>{detail}</span>
+                            <div key={dIdx} className="flex items-start gap-1">
+                              <span>▸</span>
+                              <span className="flex-1">{detail}</span>
                             </div>
                           ))}
                         </div>
@@ -1692,28 +1632,25 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                       
                       {hasResource && (
                         <div className={`
-                          p-3 rounded-sm border-2
+                          p-2 rounded border
                           ${isCompleted 
-                            ? 'bg-cyan-500/20 border-cyan-300/50' 
-                            : 'bg-blue-50 border-blue-300'
+                            ? 'bg-cyan-500/20 border-cyan-300/40' 
+                            : 'bg-blue-500/20 border-blue-300/40'
                           }
                         `}>
                           {typeof task.resource === 'string' ? (
                             <>
-                              <strong className={isCompleted ? 'text-cyan-200' : 'text-blue-800'}>📚 Resource:</strong>
-                              <span className="ml-2">{task.resource}</span>
+                              <strong>📚</strong>
+                              <span className="ml-1">{task.resource}</span>
                             </>
                           ) : task.resource.url ? (
                             <>
-                              <strong className={isCompleted ? 'text-cyan-200' : 'text-blue-800'}>📚 Resource:</strong>{' '}
+                              <strong>📚</strong>{' '}
                               <a 
                                 href={task.resource.url} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className={`
-                                  underline font-bold transition-colors ml-2
-                                  ${isCompleted ? 'text-yellow-200 hover:text-yellow-100' : 'text-blue-600 hover:text-blue-800'}
-                                `}
+                                className="underline font-bold hover:text-yellow-300 ml-1"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 {task.resource.name || task.resource.url} →
@@ -1721,8 +1658,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                             </>
                           ) : (
                             <>
-                              <strong className={isCompleted ? 'text-cyan-200' : 'text-blue-800'}>📚 Resource:</strong>
-                              <span className="ml-2">{task.resource.name}</span>
+                              <strong>📚</strong>
+                              <span className="ml-1">{task.resource.name}</span>
                             </>
                           )}
                         </div>
@@ -1733,35 +1670,30 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
               </div>
             );
           })}
-
-          {/* Mission Checkpoint - Enhanced */}
-          {mission.checkpoint && (
-            <div className="mt-4 p-4 bg-gradient-to-br from-yellow-900/60 to-orange-900/60 border-4 border-yellow-500/80 rounded-sm shadow-xl backdrop-blur-sm relative overflow-hidden">
-              {/* Checkpoint glow */}
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 via-orange-500/20 to-yellow-500/20 animate-pulse"></div>
-              
-              <div className="relative z-10">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-8 h-8 bg-yellow-400 rounded-sm border-2 border-yellow-600 flex items-center justify-center">
-                    <span className="text-lg">🎯</span>
-                  </div>
-                  <div className="text-[11px] font-black pixel-text text-yellow-100 uppercase">
-                    {mission.checkpoint.title}
-                  </div>
-                </div>
-                <div className="text-[10px] pixel-text text-yellow-50 space-y-2">
-                  {mission.checkpoint.requirements.map((req, idx) => (
-                    <div key={idx} className="flex items-start gap-2 bg-black/20 p-2 rounded-sm border border-yellow-600/30">
-                      <span className="text-yellow-300">□</span>
-                      <span>{req}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
         </div>
-      </div>
+      )}
+
+      {/* Mission Checkpoint - Compact */}
+      {isMissionOpen && mission.checkpoint && (
+        <div className="mt-3 p-3 bg-gradient-to-br from-yellow-900/40 to-orange-900/40 border-3 border-yellow-500/60 rounded-lg backdrop-blur-md">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-6 h-6 bg-yellow-400 rounded border-2 border-yellow-600 flex items-center justify-center flex-shrink-0">
+              <span className="text-sm">🎯</span>
+            </div>
+            <div className="text-[10px] font-black pixel-text text-yellow-100 uppercase">
+              {mission.checkpoint.title}
+            </div>
+          </div>
+          <div className="text-[9px] pixel-text text-yellow-50 space-y-1">
+            {mission.checkpoint.requirements.map((req, idx) => (
+              <div key={idx} className="flex items-start gap-1 bg-black/20 p-1.5 rounded">
+                <span className="text-yellow-300 flex-shrink-0">□</span>
+                <span className="flex-1">{req}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1351,31 +1351,52 @@ const LearningRoadmap = () => {
 
   // Preload all images and initialize audio
   useEffect(() => {
-    // Initialize audio context immediately
+    // Initialize audio context immediately and aggressively
     audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
     
-    // Play silent sound to wake up audio context
-    const wakeSilentAudio = () => {
+    // Force audio context to start
+    const forceAudioStart = () => {
+      if (audioContextRef.current) {
+        if (audioContextRef.current.state === 'suspended') {
+          audioContextRef.current.resume();
+        }
+        
+        // Play multiple silent sounds to truly wake the audio
+        for (let i = 0; i < 5; i++) {
+          setTimeout(() => {
+            const oscillator = audioContextRef.current.createOscillator();
+            const gainNode = audioContextRef.current.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContextRef.current.destination);
+            gainNode.gain.value = 0.001;
+            oscillator.frequency.value = 440;
+            oscillator.start();
+            oscillator.stop(audioContextRef.current.currentTime + 0.001);
+          }, i * 100);
+        }
+      }
+    };
+    
+    // Call immediately
+    forceAudioStart();
+    
+    // Also on any user interaction
+    const wakeAudio = () => {
+      forceAudioStart();
+    };
+    
+    document.addEventListener('click', wakeAudio, { once: true });
+    document.addEventListener('touchstart', wakeAudio, { once: true });
+    document.addEventListener('keydown', wakeAudio, { once: true });
+    
+    // Keep trying every second for the first 5 seconds
+    const interval = setInterval(() => {
       if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
         audioContextRef.current.resume();
       }
-      const oscillator = audioContextRef.current.createOscillator();
-      const gainNode = audioContextRef.current.createGain();
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContextRef.current.destination);
-      gainNode.gain.value = 0.001;
-      oscillator.start();
-      oscillator.stop(audioContextRef.current.currentTime + 0.001);
-    };
+    }, 1000);
     
-    // Wake audio on first user interaction
-    const wakeAudio = () => {
-      wakeSilentAudio();
-      document.removeEventListener('click', wakeAudio);
-      document.removeEventListener('keydown', wakeAudio);
-    };
-    document.addEventListener('click', wakeAudio);
-    document.addEventListener('keydown', wakeAudio);
+    setTimeout(() => clearInterval(interval), 5000);
 
     // Collect all images to preload
     const allImages = [
@@ -1673,9 +1694,9 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
       )}
 
-      {/* Mission Checkpoint - Compact */}
+      {/* Mission Checkpoint - Fixed at bottom */}
       {isMissionOpen && mission.checkpoint && (
-        <div className="mt-3 p-3 bg-gradient-to-br from-yellow-900/40 to-orange-900/40 border-3 border-yellow-500/60 rounded-lg backdrop-blur-md">
+        <div className="fixed bottom-20 left-4 right-4 md:left-auto md:right-8 md:w-96 p-3 bg-gradient-to-br from-yellow-900/90 to-orange-900/90 border-4 border-yellow-500/80 rounded-lg backdrop-blur-lg shadow-2xl z-30 animate-slideIn">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-6 h-6 bg-yellow-400 rounded border-2 border-yellow-600 flex items-center justify-center flex-shrink-0">
               <span className="text-sm">🎯</span>
@@ -2907,8 +2928,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       {activeTab === 'endgame' && <EndgameTab />}
       
       {activeTab === 'roadmap' && (
-        <div 
-          className="min-h-screen p-4 sm:p-6 md:p-8 pt-20 md:pt-24 overflow-hidden relative"
+      <div 
+        className="h-screen p-4 sm:p-6 md:p-8 pt-20 md:pt-24 overflow-hidden relative flex flex-col"
           style={{
             backgroundImage: `url(${worldMapBackground})`,
             backgroundSize: 'cover',
@@ -2922,11 +2943,11 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
           <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
           
           {/* Content wrapper with relative positioning */}
-          <div className="relative z-10">
+          <div className="relative z-10 flex-1 flex flex-col overflow-hidden">
             
       {!selectedStage ? (
         /* STAGE SELECTION VIEW */
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto h-full overflow-y-auto">
           <PixelatedTitle />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
@@ -3032,7 +3053,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
       ) : (
   /* STAGE DETAIL VIEW - Single Mission at a Time */
-  <div className="min-h-screen relative">
+  <div className="h-full relative flex flex-col">
     {/* Transition Overlay */}
     <div className={`
       fixed inset-0 bg-black z-50 pointer-events-none transition-opacity duration-300
@@ -3047,7 +3068,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
 
     {/* Mission Background */}
     <div 
-      className="min-h-screen p-4 md:p-8 relative overflow-hidden transition-all duration-500"
+      className="flex-1 p-4 md:p-8 relative overflow-hidden transition-all duration-500 flex flex-col"
       style={{
         backgroundImage: `url(${selectedStage.missionBackgrounds[currentMissionIndex]})`,
         backgroundSize: 'cover',
@@ -3086,7 +3107,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         ))}
       </div>
       
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10 flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <button
@@ -3137,8 +3158,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
           </div>
         </div>
 
-        {/* Current Mission */}
-        <div className="mb-8">
+        {/* Current Mission - Scrollable */}
+        <div className="flex-1 overflow-y-auto mb-4 pr-2" style={{ scrollbarWidth: 'thin' }}>
           <MissionCard 
             mission={selectedStage.missions[currentMissionIndex]}
             mIdx={currentMissionIndex}
@@ -3152,8 +3173,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
           />
         </div>
 
-        {/* Navigation Buttons */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 px-2 sm:px-4">
+        {/* Navigation Buttons - Fixed at bottom */}
+        <div className="sticky bottom-0 left-0 right-0 bg-black/80 backdrop-blur-lg border-t-4 border-white/30 p-3 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 z-20">
           <button
             onClick={handlePreviousMission}
             disabled={selectedStage.id === 1 && currentMissionIndex === 0}

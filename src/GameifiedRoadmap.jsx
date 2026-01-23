@@ -551,13 +551,13 @@ const DailyWisdomTab = () => {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(8)].map((_, i) => (
           <div
-            key={i}
+            key={`candle-${i}`}
             className="absolute w-2 h-2 bg-orange-400 rounded-full opacity-60 blur-sm"
             style={{
               left: `${10 + i * 12}%`,
-              top: `${20 + Math.random() * 60}%`,
-              animation: `candleFlicker ${1.5 + Math.random() * 1}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 2}s`
+              top: `${20 + (i * 7.5)}%`,
+              animation: `candleFlicker ${1.5 + (i * 0.2)}s ease-in-out infinite`,
+              animationDelay: `${i * 0.3}s`
             }}
           />
         ))}
@@ -1315,17 +1315,14 @@ const PixelatedTitle = () => {
   }, []);
 
   return (
-    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-center pixel-text text-amber-100 px-4 border-4 border-yellow-700 bg-gradient-to-br from-amber-900/60 to-yellow-900/60 backdrop-blur-sm rounded-lg py-4 inline-block"
+    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-center pixel-text text-amber-100 px-3 sm:px-4 md:px-6 border-3 sm:border-4 border-yellow-700 bg-gradient-to-br from-amber-900/60 to-yellow-900/60 backdrop-blur-sm rounded-lg py-3 sm:py-4 md:py-6 inline-block max-w-[95%] leading-tight"
         style={{
           textShadow: '2px 2px 0px rgba(101, 67, 33, 0.8), -1px -1px 0px rgba(255, 215, 0, 0.3)',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 0 20px rgba(255, 215, 0, 0.2)'
-        }}
-        style={{
-          textShadow: '4px 4px 0px #000, -2px -2px 0px rgba(255,255,255,0.3)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 0 20px rgba(255, 215, 0, 0.2)',
           imageRendering: 'pixelated'
         }}>
       {displayedText}
-      <span className="animate-blink ml-2">▮</span>
+      <span className="animate-blink ml-1 sm:ml-2">▮</span>
     </h1>
   );
 };
@@ -2957,16 +2954,18 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {[...Array(25)].map((_, i) => (
             <div
-              key={i}
-              className="absolute rounded-full opacity-30"
+              key={`dust-${i}`}
+              className="absolute rounded-full"
               style={{
-                width: `${2 + Math.random() * 3}px`,
-                height: `${2 + Math.random() * 3}px`,
-                backgroundColor: i % 3 === 0 ? '#f5deb3' : i % 3 === 1 ? '#daa520' : '#d4af37',
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animation: `dustFloat ${8 + Math.random() * 12}s ease-in-out infinite`,
-                animationDelay: `${Math.random() * 5}s`
+                width: `${4 + (i % 4)}px`,
+                height: `${4 + (i % 4)}px`,
+                backgroundColor: i % 3 === 0 ? '#ffd700' : i % 3 === 1 ? '#ffb347' : '#daa520',
+                left: `${(i * 4) % 100}%`,
+                top: `${(i * 6) % 100}%`,
+                opacity: 0.5 + ((i % 3) * 0.1),
+                animation: `dustFloat ${8 + (i % 5)}s ease-in-out infinite`,
+                animationDelay: `${(i * 0.4) % 5}s`,
+                boxShadow: '0 0 8px rgba(255, 215, 0, 0.4)'
               }}
             />
           ))}
@@ -2978,7 +2977,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       {!selectedStage ? (
         /* STAGE SELECTION VIEW */
         <div className="max-w-7xl mx-auto h-full overflow-y-auto flex flex-col">
-          <div className="mb-8 md:mb-16 h-24 md:h-32 flex items-center justify-center">
+          <div className="mb-6 sm:mb-8 md:mb-12 lg:mb-16 min-h-[80px] sm:min-h-[100px] md:min-h-[120px] flex items-center justify-center px-2">
             <PixelatedTitle />
           </div>
       

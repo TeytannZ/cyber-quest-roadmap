@@ -20,19 +20,78 @@ import wise2 from './images/wise2.jpg';
 import wise3 from './images/wise3.jpg';
 import wise4 from './images/wise4.jpg';
 // Import roadmap and stage backgrounds
-import roadmapBackground from './images/roadmap.png';
-import bgStage1 from './images/bg_stage1.png';
-import bgStage2 from './images/bg_stage2.png';
-import bgStage3 from './images/bg_stage3.png';
-import bgStage4 from './images/bg_stage4.png';
-import bgStage5 from './images/bg_stage1.png';
-import bgStage6 from './images/bg_stage1.png';
-import bgStage7 from './images/bg_stage1.png';
-import bgStage8 from './images/bg_stage1.png';
-import bgStage9 from './images/bg_stage1.png';
-import bgStage10 from './images/bg_stage1.png';
-import bgStage11 from './images/bg_stage1.png';
-import bgStage12 from './images/bg_stage1.png';
+import worldMapBackground from './images/world_map.png';
+
+// Import stage card backgrounds
+import stage1Bg from './images/stage1.png';
+import stage2Bg from './images/stage2.png';
+import stage3Bg from './images/stage3.png';
+import stage4Bg from './images/stage4.png';
+import stage5Bg from './images/stage1.png';
+import stage6Bg from './images/stage1.png';
+import stage7Bg from './images/stage1.png';
+import stage8Bg from './images/stage1.png';
+import stage9Bg from './images/stage1.png';
+import stage10Bg from './images/stage1.png';
+import stage11Bg from './images/stage1.png';
+import stage12Bg from './images/stage1.png';
+
+// Import mission backgrounds - Stage 1 (3 missions)
+import s1_m1 from './images/s1_m1.png';
+import s1_m2 from './images/s1_m2.png';
+import s1_m3 from './images/s1_m3.png';
+
+// Stage 2 (3 missions)
+import s2_m1 from './images/s2_m1.png';
+import s2_m2 from './images/s2_m2.png';
+import s2_m3 from './images/s2_m3.png';
+
+// Stage 3 (4 missions)
+import s3_m1 from './images/s3_m1.png';
+import s3_m2 from './images/s3_m2.png';
+import s3_m3 from './images/s3_m3.png';
+import s3_m4 from './images/s3_m4.png';
+
+// Stage 4 (3 missions)
+import s4_m1 from './images/s4_m1.png';
+import s4_m2 from './images/s4_m2.png';
+import s4_m3 from './images/s4_m3.png';
+
+// Stage 5 (3 missions)
+import s5_m1 from './images/s5_m1.png';
+import s5_m2 from './images/s5_m2.png';
+import s5_m3 from './images/s5_m3.png';
+
+// Stage 6 (3 missions)
+import s6_m1 from './images/s6_m1.png';
+import s6_m2 from './images/s6_m2.png';
+import s6_m3 from './images/s6_m3.png';
+
+// Stage 7 (2 missions)
+import s7_m1 from './images/s7_m1.png';
+import s7_m2 from './images/s7_m2.png';
+
+// Stage 8 (3 missions)
+import s8_m1 from './images/s1_m1.png';
+import s8_m2 from './images/s1_m2.png';
+import s8_m3 from './images/s1_m3.png';
+
+// Stage 9 (2 missions)
+import s9_m1 from './images/s1_m1.png';
+import s9_m2 from './images/s1_m2.png';
+
+// Stage 10 (2 missions)
+import s10_m1 from './images/s1_m1.png';
+import s10_m2 from './images/s1_m2.png';
+
+// Stage 11 (1 mission)
+import s11_m1 from './images/s1_m1.png';
+
+// Stage 12 (4 missions)
+import s12_m1 from './images/s1_m1.png';
+import s12_m2 from './images/s1_m2.png';
+import s12_m3 from './images/s1_m3.png';
+import s12_m4 from './images/s3_m4.png';
 
 const TabNavigation = ({ activeTab, setActiveTab, playSound }) => {
   const tabs = [
@@ -1225,6 +1284,8 @@ const LearningRoadmap = () => {
   const [selectedStage, setSelectedStage] = useState(null);
   const [hoveredStage, setHoveredStage] = useState(null);
   const [selectedMission, setSelectedMission] = useState(null);
+  const [currentMissionIndex, setCurrentMissionIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [completedTasks, setCompletedTasks] = useState({});
   const [expandedTasks, setExpandedTasks] = useState({});
   const { playSound } = AudioManager();
@@ -1246,6 +1307,62 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       ...prev,
       [key]: !prev[key]
     }));
+  };
+
+  const PixelatedTitle = () => {
+    const [displayedText, setDisplayedText] = useState('');
+    const fullText = 'EPIC LEARNING JOURNEY';
+    const audioContextRef = useRef(null);
+  
+    useEffect(() => {
+      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      let index = 0;
+      
+      const interval = setInterval(() => {
+        if (index < fullText.length) {
+          setDisplayedText(fullText.substring(0, index + 1));
+          
+          // Play pixel sound
+          if (audioContextRef.current) {
+            const oscillator = audioContextRef.current.createOscillator();
+            const gainNode = audioContextRef.current.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContextRef.current.destination);
+            
+            oscillator.frequency.value = 800 + (index * 30);
+            oscillator.type = 'square';
+            gainNode.gain.value = 0.08;
+            
+            oscillator.start();
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContextRef.current.currentTime + 0.06);
+            oscillator.stop(audioContextRef.current.currentTime + 0.06);
+          }
+          
+          index++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 80);
+  
+      return () => {
+        clearInterval(interval);
+        if (audioContextRef.current) {
+          audioContextRef.current.close();
+        }
+      };
+    }, []);
+  
+    return (
+      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-center mb-8 md:mb-16 pixel-text text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.8)] px-4"
+          style={{
+            textShadow: '4px 4px 0px #000, -2px -2px 0px rgba(255,255,255,0.3)',
+            imageRendering: 'pixelated'
+          }}>
+        {displayedText}
+        <span className="animate-pulse">_</span>
+      </h1>
+    );
   };
   
   return (
@@ -1549,7 +1666,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       emoji: "🌱",
       pixelArt: "sprout",
       characterImage: phase1Image,
-      stageBackground: bgStage1,
+      stageBg: stage1Bg,
+      missionBackgrounds: [s1_m1, s1_m2, s1_m3],
       theme: {
         bg: "from-green-700 via-emerald-600 to-lime-700",
         card: "bg-gradient-to-br from-green-100 to-emerald-200",
@@ -1873,7 +1991,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       emoji: "⚡",
       pixelArt: "lightning",
       characterImage: phase2Image,
-      stageBackground: bgStage2,
+      stageBg: stage2Bg,
+      missionBackgrounds: [s2_m1, s2_m2, s2_m3],
       theme: {
         bg: "from-yellow-600 via-amber-600 to-orange-700",
         card: "bg-gradient-to-br from-yellow-100 to-orange-200",
@@ -2085,7 +2204,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       emoji: "✨",
       pixelArt: "diamond",
       characterImage: phase3Image,
-      stageBackground: bgStage3,
+      stageBg: stage3Bg,
+      missionBackgrounds: [s3_m1, s3_m2, s3_m3, s3_m4],
       theme: {
         bg: "from-amber-800 via-orange-700 to-yellow-800",
         card: "bg-gradient-to-br from-amber-100 to-orange-200",
@@ -2158,7 +2278,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       emoji: "🎨",
       pixelArt: "palette",
       characterImage: phase4Image,
-      stageBackground: bgStage4,
+      stageBg: stage4Bg,
+      missionBackgrounds: [s4_m1, s4_m2, s4_m3],
       theme: {
         bg: "from-cyan-700 via-blue-600 to-sky-700",
         card: "bg-gradient-to-br from-cyan-100 to-blue-200",
@@ -2215,7 +2336,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       emoji: "🖥️",
       pixelArt: "terminal",
       characterImage: phase5Image,
-      stageBackground: bgStage5,
+      stageBg: stage5Bg,
+      missionBackgrounds: [s5_m1, s5_m2, s5_m3],
       theme: {
         bg: "from-purple-800 via-violet-700 to-indigo-800",
         card: "bg-gradient-to-br from-purple-100 to-violet-200",
@@ -2275,7 +2397,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       emoji: "🗄️",
       pixelArt: "database",
       characterImage: phase5Image,
-      stageBackground: bgStage5,
+      stageBg: stage6Bg,
+      missionBackgrounds: [s6_m1, s6_m2, s6_m3],
       theme: {
         bg: "from-blue-800 via-indigo-700 to-blue-900",
         card: "bg-gradient-to-br from-blue-200 to-indigo-300",
@@ -2334,7 +2457,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       emoji: "🔗",
       pixelArt: "chain",
       characterImage: phase7Image,
-      stageBackground: bgStage7,
+      stageBg: stage7Bg,
+      missionBackgrounds: [s7_m1, s7_m2],
       theme: {
         bg: "from-teal-800 via-cyan-800 to-blue-900",
         card: "bg-gradient-to-br from-teal-200 to-cyan-300",
@@ -2380,7 +2504,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       emoji: "🛡️",
       pixelArt: "shield",
       characterImage: phase8Image,
-      stageBackground: bgStage8,
+      stageBg: stage8Bg,
+      missionBackgrounds: [s8_m1, s8_m2, s8_m3],
       theme: {
         bg: "from-red-800 via-red-700 to-orange-900",
         card: "bg-gradient-to-br from-red-200 to-orange-300",
@@ -2440,7 +2565,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       emoji: "📚",
       pixelArt: "layers",
       characterImage: phase9Image,
-      stageBackground: bgStage9,
+      stageBg: stage9Bg,
+      missionBackgrounds: [s9_m1, s9_m2],
       theme: {
         bg: "from-slate-800 via-gray-800 to-zinc-900",
         card: "bg-gradient-to-br from-slate-300 to-gray-400",
@@ -2494,7 +2620,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       emoji: "📡",
       pixelArt: "signal",
       characterImage: phase10Image,
-      stageBackground: bgStage10,
+      stageBg: stage10Bg,
+      missionBackgrounds: [s10_m1, s10_m2],
       theme: {
         bg: "from-indigo-900 via-purple-900 to-violet-950",
         card: "bg-gradient-to-br from-indigo-400 to-purple-500",
@@ -2543,7 +2670,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       emoji: "🚀",
       pixelArt: "rocket",
       characterImage: phase11Image,
-      stageBackground: bgStage11,
+      stageBg: stage11Bg,
+      missionBackgrounds: [s11_m1],
       theme: {
         bg: "from-gray-900 via-slate-900 to-zinc-950",
         card: "bg-gradient-to-br from-gray-500 to-slate-600",
@@ -2578,7 +2706,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       emoji: "👑",
       pixelArt: "skull",
       characterImage: phase12Image,
-      stageBackground: bgStage12,
+      stageBg: stage12Bg,
+      missionBackgrounds: [s12_m1, s12_m2, s12_m3, s12_m4],
       theme: {
         bg: "from-black via-red-950 to-purple-950",
         card: "bg-gradient-to-br from-red-900 to-purple-900",
@@ -2645,6 +2774,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
     playSound(stage.sound.freq, 0.3, stage.sound.type);
     setSelectedStage(stage);
     setSelectedMission(null);
+    setCurrentMissionIndex(0); // Reset to first mission
   };
 
   const handleCloseStage = () => {
@@ -2675,6 +2805,57 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
     }));
   };
 
+  const handleNextMission = () => {
+    if (!selectedStage) return;
+    
+    setIsTransitioning(true);
+    playSound(1200, 0.3, 'square', 0.2);
+    
+    setTimeout(() => {
+      if (currentMissionIndex < selectedStage.missions.length - 1) {
+        // Next mission in same stage
+        setCurrentMissionIndex(prev => prev + 1);
+      } else {
+        // Move to next stage
+        const nextStageIndex = stages.findIndex(s => s.id === selectedStage.id) + 1;
+        if (nextStageIndex < stages.length) {
+          setSelectedStage(stages[nextStageIndex]);
+          setCurrentMissionIndex(0);
+        }
+      }
+      
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 300);
+    }, 300);
+  };
+  
+  const handlePreviousMission = () => {
+    if (!selectedStage) return;
+    
+    setIsTransitioning(true);
+    playSound(1000, 0.3, 'square', 0.2);
+    
+    setTimeout(() => {
+      if (currentMissionIndex > 0) {
+        // Previous mission in same stage
+        setCurrentMissionIndex(prev => prev - 1);
+      } else {
+        // Move to previous stage
+        const prevStageIndex = stages.findIndex(s => s.id === selectedStage.id) - 1;
+        if (prevStageIndex >= 0) {
+          const prevStage = stages[prevStageIndex];
+          setSelectedStage(prevStage);
+          setCurrentMissionIndex(prevStage.missions.length - 1);
+        }
+      }
+      
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 300);
+    }, 300);
+  };
+
   return (
     <div className="min-h-screen">
       <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} playSound={playSound} />
@@ -2687,12 +2868,14 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       
       {activeTab === 'roadmap' && (
         <div 
-          className="min-h-screen p-8 pt-24 overflow-hidden relative"
+          className="min-h-screen p-4 sm:p-6 md:p-8 pt-20 md:pt-24 overflow-hidden relative"
           style={{
-            backgroundImage: `url(${roadmapBackground})`,
+            backgroundImage: `url(${worldMapBackground})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            backgroundRepeat: 'repeat'
+            backgroundRepeat: 'no-repeat',
+            backgroundAttachment: 'scroll',
+            imageRendering: 'pixelated'
           }}
         >
           {/* Dark overlay for better readability */}
@@ -2704,11 +2887,9 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       {!selectedStage ? (
         /* STAGE SELECTION VIEW */
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-6xl font-black text-center mb-16 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent animate-pulse">
-            EPIC LEARNING JOURNEY
-          </h1>
+          <PixelatedTitle />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
             {stages.map((stage, idx) => {
               const Icon = stage.icon;
               const isHovered = hoveredStage?.id === stage.id;
@@ -2716,8 +2897,11 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
               return (
                 <div
                   key={stage.id}
-                  className="relative group"
-                  style={{ animationDelay: `${idx * 100}ms` }}
+                  className="relative group animate-float-slow"
+                  style={{ 
+                    animationDelay: `${idx * 100}ms`,
+                    animationDuration: `${3 + (idx % 3)}s`
+                  }}
                 >
                   {/* Animated particles */}
                   <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -2742,7 +2926,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                     onMouseLeave={() => setHoveredStage(null)}
                     className={`
                       relative cursor-pointer p-6 rounded-lg border-4 
-                      ${stage.theme.card} ${stage.theme.border}
+                      ${stage.theme.border}
+                      overflow-hidden
                       transform transition-all duration-500
                       ${isHovered ? 'scale-105 -translate-y-2' : 'scale-100'}
                       shadow-2xl ${stage.theme.glow}
@@ -2752,26 +2937,45 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                       imageRendering: 'pixelated'
                     }}
                   >
-                    {/* Stage number badge */}
-                    <div className={`absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br ${stage.theme.bg} rounded-sm flex items-center justify-center border-4 border-white shadow-lg transform group-hover:rotate-12 transition-transform duration-300`} style={{imageRendering: 'pixelated'}}>
-                      <span className="text-white font-black text-lg pixel-text">{stage.id}</span>
-                    </div>
-
-                    {/* Pixel Art Icon */}
-                    <div className={`mb-4 transform transition-all duration-500 ${isHovered ? 'scale-125' : 'scale-100'}`}>
-                      <PixelArt type={stage.pixelArt} className="w-20 h-20 mx-auto" />
-                    </div>
-
-                    {/* Title */}
-                    <h2 className="text-lg font-black text-center mb-4 leading-tight pixel-text uppercase">
-                      {stage.title}
-                    </h2>
-
-                    {/* Click indicator */}
-                    <div className="text-center text-xs font-black mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pixel-text">
-                      &gt; CLICK TO ENTER &lt;
+                    {/* Stage card background image */}
+                    <div 
+                      className="absolute inset-0 opacity-80"
+                      style={{
+                        backgroundImage: `url(${stage.stageBg})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        imageRendering: 'pixelated',
+                        filter: isHovered ? 'brightness(1.2)' : 'brightness(1)'
+                      }}
+                    />
+                    
+                    {/* Gradient overlay */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${stage.theme.bg} opacity-40`} />
+                    
+                    {/* Content wrapper */}
+                    <div className="relative z-10">
+                      {/* Stage number badge */}
+                      <div className={`absolute -top-9 -left-9 md:-top-10 md:-left-10 w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br ${stage.theme.bg} rounded-sm flex items-center justify-center border-3 md:border-4 border-white shadow-lg transform group-hover:rotate-12 transition-transform duration-300`} style={{imageRendering: 'pixelated'}}>
+                        <span className="text-white font-black text-base md:text-lg pixel-text">{stage.id}</span>
+                      </div>
+                  
+                      {/* Pixel Art Icon */}
+                      <div className={`mb-3 md:mb-4 transform transition-all duration-500 ${isHovered ? 'scale-125' : 'scale-100'}`}>
+                        <PixelArt type={stage.pixelArt} className="w-16 h-16 md:w-20 md:h-20 mx-auto" />
+                      </div>
+                  
+                      {/* Title */}
+                      <h2 className="text-xs sm:text-sm md:text-base lg:text-lg font-black text-center mb-3 md:mb-4 leading-tight pixel-text uppercase px-2">
+                        {stage.title}
+                      </h2>
+                  
+                      {/* Click indicator */}
+                      <div className="text-center text-[10px] md:text-xs font-black mt-3 md:mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pixel-text">
+                        &gt; CLICK TO ENTER &lt;
+                      </div>
                     </div>
                   </div>
+                </div>
 
                   {/* Glow effect on hover */}
                   {isHovered && (
@@ -2788,312 +2992,170 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
           </div>
         </div>
       ) : (
-        /* STAGE DETAIL VIEW */
-        <div 
-          className="min-h-screen p-8 animate-fadeIn relative overflow-hidden"
-          style={{
-            backgroundImage: `url(${selectedStage.stageBackground})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        >
-          {/* Dark overlay for readability */}
-          <div className="absolute inset-0 bg-black/50"></div>
-          
-          {/* Enhanced gradient overlay matching stage theme */}
-          <div className={`absolute inset-0 bg-gradient-to-br ${selectedStage.theme.bg} opacity-40`}></div>
-          
-          {/* Pixel Grid Background */}
-          <div className="absolute inset-0 opacity-5" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '20px 20px'
-          }}></div>
+  /* STAGE DETAIL VIEW - Single Mission at a Time */
+  <div className="min-h-screen relative">
+    {/* Transition Overlay */}
+    <div className={`
+      fixed inset-0 bg-black z-50 pointer-events-none transition-opacity duration-300
+      ${isTransitioning ? 'opacity-100' : 'opacity-0'}
+    `}>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="pixel-text text-white text-4xl animate-pulse">
+          LOADING...
+        </div>
+      </div>
+    </div>
 
-          {/* Animated Floating Particles */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {[...Array(20)].map((_, i) => (
-              <div
-                key={i}
-                className={`absolute w-2 h-2 ${selectedStage.theme.particle} rounded-full opacity-30`}
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animation: `float ${3 + Math.random() * 4}s ease-in-out infinite`,
-                  animationDelay: `${Math.random() * 3}s`
-                }}
-              />
-            ))}
-          </div>
-          
-          {/* Animated Large Orbs */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className={`absolute rounded-full ${selectedStage.theme.particle} opacity-10 blur-3xl`}
-                style={{
-                  width: `${100 + Math.random() * 200}px`,
-                  height: `${100 + Math.random() * 200}px`,
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animation: `pulse ${4 + Math.random() * 4}s ease-in-out infinite`,
-                  animationDelay: `${Math.random() * 2}s`
-                }}
-              />
-            ))}
-          </div>
-          
-          {/* Decorative Border Patterns */}
-          <div className="absolute inset-0 pointer-events-none">
-            {/* Top Border Pattern - Animated */}
-            <div className="absolute top-0 left-0 right-0 h-20 flex justify-around items-center opacity-15">
-              {[...Array(15)].map((_, i) => (
-                <div 
-                  key={i} 
-                  className="w-10 h-10 bg-white/20 rounded-sm border-2 border-white/30 animate-pulse" 
-                  style={{
-                    imageRendering: 'pixelated',
-                    animationDelay: `${i * 0.1}s`,
-                    animationDuration: '3s'
-                  }} 
-                />
-              ))}
-            </div>
-            
-            {/* Bottom Border Pattern */}
-            <div className="absolute bottom-0 left-0 right-0 h-20 flex justify-around items-center opacity-15">
-              {[...Array(15)].map((_, i) => (
-                <div key={i} className="w-10 h-10 bg-white/20 rounded-sm border-2 border-white/30" style={{imageRendering: 'pixelated'}} />
-              ))}
-            </div>
-            
-            {/* Left Border Pattern */}
-            <div className="absolute top-24 bottom-24 left-0 w-20 flex flex-col justify-around items-center opacity-15">
-              {[...Array(10)].map((_, i) => (
-                <div key={i} className="w-10 h-10 bg-white/20 rounded-sm border-2 border-white/30" style={{imageRendering: 'pixelated'}} />
-              ))}
-            </div>
-            
-            {/* Right Border Pattern */}
-            <div className="absolute top-24 bottom-24 right-0 w-20 flex flex-col justify-around items-center opacity-15">
-              {[...Array(10)].map((_, i) => (
-                <div key={i} className="w-10 h-10 bg-white/20 rounded-sm border-2 border-white/30" style={{imageRendering: 'pixelated'}} />
-              ))}
-            </div>
-          </div>
-          
-          {/* Large Pixel Art Background - Centered and Prominent */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-30">
-            <PixelArt type={selectedStage.pixelArt} className="w-[500px] h-[500px]" />
-          </div>
-          
-          <div className="max-w-7xl mx-auto relative z-10">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8">
-              <button
-                onClick={handleCloseStage}
-                className="px-6 py-3 bg-black/50 hover:bg-black/70 text-white font-black rounded-sm backdrop-blur transition-all duration-300 hover:scale-105 border-4 border-white/50 pixel-text"
-                style={{imageRendering: 'pixelated'}}
-              >
-                &lt; BACK TO MAP
-              </button>
-              
-              <div className={`px-6 py-3 bg-white/30 backdrop-blur rounded-sm border-4 ${selectedStage.theme.border} pixel-text`} style={{imageRendering: 'pixelated'}}>
-                <span className="font-black text-white text-lg">STAGE {selectedStage.id}</span>
-              </div>
-            </div>
+    {/* Mission Background */}
+    <div 
+      className="min-h-screen p-4 md:p-8 relative overflow-hidden transition-all duration-500"
+      style={{
+        backgroundImage: `url(${selectedStage.missionBackgrounds[currentMissionIndex]})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'scroll',
+        imageRendering: 'pixelated',
+        opacity: isTransitioning ? 0.5 : 1
+      }}
+    >
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/50"></div>
+      
+      {/* Enhanced gradient overlay */}
+      <div className={`absolute inset-0 bg-gradient-to-br ${selectedStage.theme.bg} opacity-30`}></div>
+      
+      {/* Pixel Grid */}
+      <div className="absolute inset-0 opacity-5" style={{
+        backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+        backgroundSize: '20px 20px'
+      }}></div>
 
-            {/* Stage Title Card */}
-            <div className="bg-black/60 backdrop-blur rounded-sm p-8 mb-8 border-8 border-white/80 shadow-2xl transform hover:scale-102 transition-all duration-300" style={{imageRendering: 'pixelated'}}>
-              <div className="flex items-center gap-6 justify-between">
-                {/* SVG icon on the LEFT */}
-                <div className="transform animate-float flex-shrink-0">
-                  <PixelArt type={selectedStage.pixelArt} className="w-32 h-32" />
-                </div>
-                
-                {/* Title (stays left-aligned) with Animation */}
-                <div className="flex-1">
-                  <AnimatedStageTitle title={selectedStage.title} />
-                  <div className="flex gap-3 items-center">
-                    <div className="px-4 py-2 bg-white/20 rounded-sm border-2 border-white/40 pixel-text text-white font-bold">
-                      {selectedStage.missions.length} MISSIONS
-                    </div>
-                    <div className="flex gap-2">
-                      {selectedStage.missions.map((m, i) => (
-                        <div key={i} className="w-8 h-8 bg-white/20 rounded-sm border-2 border-white/40 flex items-center justify-center">
-                          <span className="text-xl">{m.emoji || m.missionEmoji}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                
-                {/* CHARACTER IMAGE on the RIGHT - Responsive with Animation */}
-              <div className="hidden md:block flex-shrink-0 animate-float">
-                <img 
-                  src={selectedStage.characterImage}
-                  alt={`Character Stage ${selectedStage.id}`}
-                  className="h-32 lg:h-40 w-auto object-contain rounded-lg border-4 border-white/50 transition-transform duration-300 hover:scale-110"
-                    style={{ 
-                      imageRendering: 'auto',
-                      filter: 'drop-shadow(0 0 20px rgba(0,0,0,0.5))'
-                    }}
-                  />
+      {/* Floating Particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={i}
+            className={`absolute w-2 h-2 ${selectedStage.theme.particle} rounded-full opacity-30 animate-float-particle`}
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${3 + Math.random() * 4}s`
+            }}
+          />
+        ))}
+      </div>
+      
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <button
+            onClick={handleCloseStage}
+            className="px-4 md:px-6 py-2 md:py-3 bg-black/70 hover:bg-black/90 text-white font-black rounded-sm backdrop-blur transition-all duration-300 hover:scale-105 border-3 md:border-4 border-white/50 pixel-text active:scale-95 text-[10px] md:text-xs"
+            style={{imageRendering: 'pixelated'}}
+          >
+            <span className="hidden sm:inline">&lt; BACK TO MAP</span>
+            <span className="sm:hidden">&lt; BACK</span>
+          </button>
+          
+          <div className={`px-3 md:px-6 py-2 md:py-3 bg-white/30 backdrop-blur rounded-sm border-2 md:border-4 ${selectedStage.theme.border} pixel-text`}>
+            <span className="font-black text-white text-[10px] sm:text-xs md:text-sm lg:text-base">
+              S{selectedStage.id} M{currentMissionIndex + 1}/{selectedStage.missions.length}
+            </span>
+          </div>
+        </div>
+
+        {/* Stage Title Card */}
+        <div className="bg-black/60 backdrop-blur rounded-sm p-4 md:p-8 mb-4 md:mb-8 border-4 md:border-8 border-white/80 shadow-2xl">
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
+            <div className="transform animate-float flex-shrink-0">
+              <PixelArt type={selectedStage.pixelArt} className="w-20 h-20 md:w-32 md:h-32" />
+            </div>
+            
+            <div className="flex-1 text-center md:text-left">
+              <h1 className="text-2xl md:text-4xl lg:text-5xl font-black mb-2 md:mb-3 text-white pixel-text drop-shadow-lg uppercase tracking-wider">
+                {selectedStage.title}
+              </h1>
+              <div className="flex flex-wrap gap-2 md:gap-3 items-center justify-center md:justify-start">
+                <div className="px-3 md:px-4 py-1 md:py-2 bg-white/20 rounded-sm border-2 border-white/40 pixel-text text-white font-bold text-[8px] md:text-xs">
+                  {selectedStage.missions[currentMissionIndex].name}
                 </div>
               </div>
             </div>
-
-            {/* Missions - Responsive Layouts */}
-            <div className="relative min-h-[400px] md:min-h-[800px] pb-20">
-              {/* 1 Mission Layout */}
-              {selectedStage.missions.length === 1 && (
-                <div className="w-full max-w-2xl mx-auto px-4">
-                  <MissionCard 
-                    mission={selectedStage.missions[0]}
-                    mIdx={0}
-                    selectedStage={selectedStage}
-                    selectedMission={selectedMission}
-                    completedTasks={completedTasks}
-                    expandedTasks={expandedTasks}   
-                    setExpandedTasks={setExpandedTasks}   
-                    handleMissionClick={handleMissionClick}
-                    handleTaskComplete={handleTaskComplete}
-                  />
-                </div>
-              )}
-              
-              {/* 2 Missions Layout */}
-              {selectedStage.missions.length === 2 && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 px-4 max-w-7xl mx-auto items-start">
-                  <MissionCard 
-                    mission={selectedStage.missions[0]}
-                    mIdx={0}
-                    selectedStage={selectedStage}
-                    selectedMission={selectedMission}
-                    completedTasks={completedTasks}
-                    expandedTasks={expandedTasks}   
-                    setExpandedTasks={setExpandedTasks}   
-                    handleMissionClick={handleMissionClick}
-                    handleTaskComplete={handleTaskComplete}
-                  />
-                  <MissionCard 
-                    mission={selectedStage.missions[1]}
-                    mIdx={1}
-                    selectedStage={selectedStage}
-                    selectedMission={selectedMission}
-                    completedTasks={completedTasks}
-                    expandedTasks={expandedTasks}   
-                    setExpandedTasks={setExpandedTasks}   
-                    handleMissionClick={handleMissionClick}
-                    handleTaskComplete={handleTaskComplete}
-                  />
-                </div>
-              )}
-              
-              {/* 3 Missions Layout - More spacing to avoid covering background */}
-              {selectedStage.missions.length === 3 && (
-                <div className="space-y-8 px-4 max-w-7xl mx-auto">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-                    <MissionCard 
-                      mission={selectedStage.missions[0]}
-                      mIdx={0}
-                      selectedStage={selectedStage}
-                      selectedMission={selectedMission}
-                      completedTasks={completedTasks}
-                      expandedTasks={expandedTasks}   
-                      setExpandedTasks={setExpandedTasks}   
-                      handleMissionClick={handleMissionClick}
-                      handleTaskComplete={handleTaskComplete}
-                    />
-                    <MissionCard 
-                      mission={selectedStage.missions[1]}
-                      mIdx={1}
-                      selectedStage={selectedStage}
-                      selectedMission={selectedMission}
-                      completedTasks={completedTasks}
-                      expandedTasks={expandedTasks}   
-                      setExpandedTasks={setExpandedTasks}   
-                      handleMissionClick={handleMissionClick}
-                      handleTaskComplete={handleTaskComplete}
-                    />
-                  </div>
-                  {/* Third mission lower to avoid background */}
-                  <div className="max-w-2xl mx-auto mt-32">
-                    <MissionCard 
-                      mission={selectedStage.missions[2]}
-                      mIdx={2}
-                      selectedStage={selectedStage}
-                      selectedMission={selectedMission}
-                      completedTasks={completedTasks}
-                      expandedTasks={expandedTasks}   
-                      setExpandedTasks={setExpandedTasks}   
-                      handleMissionClick={handleMissionClick}
-                      handleTaskComplete={handleTaskComplete}
-                    />
-                  </div>
-                </div>
-              )}
-              
-              {/* 4 Missions Layout - Second row lower */}
-              {selectedStage.missions.length === 4 && (
-                <div className="space-y-8 px-4 max-w-7xl mx-auto">
-                  {/* First row */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-                    <MissionCard 
-                      mission={selectedStage.missions[0]}
-                      mIdx={0}
-                      selectedStage={selectedStage}
-                      selectedMission={selectedMission}
-                      completedTasks={completedTasks}
-                      expandedTasks={expandedTasks}   
-                      setExpandedTasks={setExpandedTasks}   
-                      handleMissionClick={handleMissionClick}
-                      handleTaskComplete={handleTaskComplete}
-                    />
-                    <MissionCard 
-                      mission={selectedStage.missions[1]}
-                      mIdx={1}
-                      selectedStage={selectedStage}
-                      selectedMission={selectedMission}
-                      completedTasks={completedTasks}
-                      expandedTasks={expandedTasks}   
-                      setExpandedTasks={setExpandedTasks}   
-                      handleMissionClick={handleMissionClick}
-                      handleTaskComplete={handleTaskComplete}
-                    />
-                  </div>
-                  {/* Second row - much lower to avoid background */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-32 items-start">
-                    <MissionCard 
-                      mission={selectedStage.missions[2]}
-                      mIdx={2}
-                      selectedStage={selectedStage}
-                      selectedMission={selectedMission}
-                      completedTasks={completedTasks}
-                      expandedTasks={expandedTasks}   
-                      setExpandedTasks={setExpandedTasks}   
-                      handleMissionClick={handleMissionClick}
-                      handleTaskComplete={handleTaskComplete}
-                    />
-                    <MissionCard 
-                      mission={selectedStage.missions[3]}
-                      mIdx={3}
-                      selectedStage={selectedStage}
-                      selectedMission={selectedMission}
-                      completedTasks={completedTasks}
-                      expandedTasks={expandedTasks}   
-                      setExpandedTasks={setExpandedTasks}   
-                      handleMissionClick={handleMissionClick}
-                      handleTaskComplete={handleTaskComplete}
-                    />
-                  </div>
-                </div>
-              )}
+            
+            <div className="hidden md:block flex-shrink-0 animate-float">
+              <img 
+                src={selectedStage.characterImage}
+                alt={`Character Stage ${selectedStage.id}`}
+                className="h-24 md:h-32 lg:h-40 w-auto object-contain rounded-lg border-4 border-white/50 transition-transform duration-300 hover:scale-110"
+                style={{ 
+                  imageRendering: 'auto',
+                  filter: 'drop-shadow(0 0 20px rgba(0,0,0,0.5))'
+                }}
+              />
             </div>
           </div>
         </div>
-      )}
+
+        {/* Current Mission */}
+        <div className="mb-8">
+          <MissionCard 
+            mission={selectedStage.missions[currentMissionIndex]}
+            mIdx={currentMissionIndex}
+            selectedStage={selectedStage}
+            selectedMission={`${selectedStage.id}-${currentMissionIndex}`}
+            completedTasks={completedTasks}
+            expandedTasks={expandedTasks}   
+            setExpandedTasks={setExpandedTasks}   
+            handleMissionClick={() => {}}
+            handleTaskComplete={handleTaskComplete}
+          />
+        </div>
+
+        {/* Navigation Buttons */}
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 px-2 sm:px-4">
+          <button
+            onClick={handlePreviousMission}
+            disabled={selectedStage.id === 1 && currentMissionIndex === 0}
+            className={`
+              w-full sm:w-auto px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-blue-600 to-cyan-600 
+              hover:from-blue-500 hover:to-cyan-500
+              text-white font-black rounded-sm border-3 md:border-4 border-blue-900 
+              pixel-text text-xs md:text-sm transform hover:scale-105 transition-all duration-300 
+              shadow-lg hover:shadow-2xl active:scale-95
+              ${selectedStage.id === 1 && currentMissionIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}
+            `}
+            style={{imageRendering: 'pixelated'}}
+          >
+            <span className="hidden sm:inline">&lt;&lt; PREVIOUS</span>
+            <span className="sm:hidden">&lt;&lt; PREV</span>
+          </button>
+
+          <div className="text-center pixel-text text-white text-[10px] md:text-xs bg-black/50 px-3 md:px-4 py-2 rounded-sm border-2 border-white/30 whitespace-nowrap">
+            MISSION {currentMissionIndex + 1} / {selectedStage.missions.length}
+          </div>
+
+          <button
+            onClick={handleNextMission}
+            disabled={selectedStage.id === 12 && currentMissionIndex === selectedStage.missions.length - 1}
+            className={`
+              w-full sm:w-auto px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-purple-600 to-pink-600 
+              hover:from-purple-500 hover:to-pink-500
+              text-white font-black rounded-sm border-3 md:border-4 border-purple-900 
+              pixel-text text-xs md:text-sm transform hover:scale-105 transition-all duration-300 
+              shadow-lg hover:shadow-2xl active:scale-95
+              ${selectedStage.id === 12 && currentMissionIndex === selectedStage.missions.length - 1 ? 'opacity-50 cursor-not-allowed' : ''}
+            `}
+            style={{imageRendering: 'pixelated'}}
+          >
+            NEXT &gt;&gt;
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
           </div>
         </div>
       )}
@@ -3199,6 +3261,58 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         
         .animate-shimmer {
           animation: shimmer 2s infinite;
+        }
+
+        @keyframes float-slow {
+          0%, 100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-15px);
+          }
+        }
+        
+        @keyframes float-particle {
+          0%, 100% {
+            transform: translateY(0px) translateX(0px);
+            opacity: 0.3;
+          }
+          50% {
+            transform: translateY(-20px) translateX(10px);
+            opacity: 0.6;
+          }
+        }
+        
+        .animate-float-slow {
+          animation: float-slow 3s ease-in-out infinite;
+        }
+        
+        .animate-float-particle {
+          animation: float-particle 4s ease-in-out infinite;
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 640px) {
+          .pixel-text {
+            letter-spacing: 0;
+          }
+          
+          /* Reduce particle count on mobile for performance */
+          .animate-float-particle:nth-child(n+8) {
+            display: none;
+          }
+        }
+        
+        /* Smooth background scaling */
+        @media (min-width: 1024px) {
+          .stage-detail-bg {
+            background-attachment: fixed;
+          }
+        }
+        
+        /* Prevent horizontal scroll */
+        body {
+          overflow-x: hidden;
         }
       `}</style>
     </div>

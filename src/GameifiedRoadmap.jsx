@@ -1475,7 +1475,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
   
   return (
     <div
-      className={`bg-black/40 backdrop-blur-md rounded-sm overflow-hidden border-4 border-white/70 shadow-2xl transform hover:scale-105 transition-all duration-300 ${className}`}
+      className={`bg-black/20 backdrop-blur-sm rounded-sm overflow-hidden border-4 border-white/50 shadow-2xl transform hover:scale-105 transition-all duration-300 ${className}`}
       style={{
         animation: `slideIn 0.5s ease-out ${mIdx * 0.15}s forwards`,
         opacity: 0,
@@ -1554,10 +1554,10 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       {/* Tasks Container - Enhanced */}
       <div className={`
         transition-all duration-500
-        ${isMissionOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}
+        ${isMissionOpen ? 'max-h-[1200px] opacity-100' : 'max-h-0 opacity-0'}
         overflow-hidden overflow-y-auto
       `}>
-        <div className="p-4 space-y-3 bg-gradient-to-b from-black/60 to-black/80">
+        <div className="p-4 space-y-2 bg-gradient-to-b from-black/30 to-black/40">
           {mission.tasks.map((task, tIdx) => {
             const taskKey = `${selectedStage.id}-${mIdx}-${tIdx}`;
             const isCompleted = completedTasks[taskKey];
@@ -1570,10 +1570,10 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                 key={tIdx}
                 className={`
                   rounded-sm relative overflow-hidden
-                  border-4
+                  border-3
                   ${isCompleted 
-                    ? `bg-gradient-to-br ${selectedStage.theme.bg} shadow-xl border-yellow-400 scale-105` 
-                    : 'bg-gradient-to-br from-white/95 to-white/85 border-white/80 hover:border-white shadow-lg'
+                    ? `bg-gradient-to-br ${selectedStage.theme.bg} bg-opacity-60 shadow-xl border-yellow-400/80 scale-105` 
+                    : 'bg-white/40 backdrop-blur-sm border-white/60 hover:border-white/80 shadow-lg'
                   }
                   transform transition-all duration-300
                 `}

@@ -2975,7 +2975,6 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                       </div>
                     </div>
                   </div>
-                </div>
 
                   {/* Glow effect on hover */}
                   {isHovered && (

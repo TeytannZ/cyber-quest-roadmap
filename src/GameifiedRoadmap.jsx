@@ -1324,7 +1324,7 @@ const PixelatedTitle = () => {
   }, []);
 
   return (
-    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-center mb-8 md:mb-16 pixel-text text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.8)] px-4"
+    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-center pixel-text text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.8)] px-4 animate-glow"
         style={{
           textShadow: '4px 4px 0px #000, -2px -2px 0px rgba(255,255,255,0.3)',
           imageRendering: 'pixelated'
@@ -2930,27 +2930,51 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       {activeTab === 'roadmap' && (
       <div 
         className="h-screen p-4 sm:p-6 md:p-8 pt-20 md:pt-24 overflow-hidden relative flex flex-col"
-          style={{
-            backgroundImage: `url(${worldMapBackground})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundAttachment: 'scroll',
-            imageRendering: 'pixelated'
-          }}
-        >
-          {/* Dark overlay for better readability */}
-          <div className="absolute inset-0 bg-black/30 pointer-events-none"></div>
+        style={{
+          backgroundImage: `url(${worldMapBackground})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'scroll',
+          imageRendering: 'pixelated'
+        }}
+      >
+        {/* Animated vignette overlay */}
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-black/20 to-black/60 pointer-events-none animate-pulse" style={{ animationDuration: '4s' }}></div>
+        
+        {/* Scan lines for retro RPG effect */}
+        <div className="absolute inset-0 pointer-events-none opacity-10" style={{
+          backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 4px)',
+          animation: 'scanlines 8s linear infinite'
+        }}></div>
+        
+        {/* Floating light particles */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-yellow-300 rounded-full opacity-40 animate-float-particle"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${5 + Math.random() * 10}s`
+              }}
+            />
+          ))}
+        </div>
           
           {/* Content wrapper with relative positioning */}
           <div className="relative z-10 flex-1 flex flex-col overflow-hidden">
             
       {!selectedStage ? (
         /* STAGE SELECTION VIEW */
-        <div className="max-w-7xl mx-auto h-full overflow-y-auto">
-          <PixelatedTitle />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+        <div className="max-w-7xl mx-auto h-full overflow-y-auto flex flex-col">
+          <div className="mb-8 md:mb-16 h-24 md:h-32 flex items-center justify-center">
+            <PixelatedTitle />
+          </div>
+      
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8 flex-1">
             {stages.map((stage, idx) => {
               const Icon = stage.icon;
               const isHovered = hoveredStage?.id === stage.id;
@@ -2958,10 +2982,10 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
               return (
                 <div
                   key={stage.id}
-                  className="relative group animate-float-slow"
+                  className="relative group animate-float-slow h-full"
                   style={{ 
                     animationDelay: `${idx * 100}ms`,
-                    animationDuration: `${3 + (idx % 3)}s`
+                    animationDuration: `${6 + (idx % 3)}s`
                   }}
                 >
                   {/* Animated particles */}
@@ -2988,11 +3012,12 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                     className={`
                       relative cursor-pointer p-6 rounded-lg border-4 
                       ${stage.theme.border}
-                      overflow-hidden
+                      overflow-visible
                       transform transition-all duration-500
                       ${isHovered ? 'scale-105 -translate-y-2' : 'scale-100'}
                       shadow-2xl ${stage.theme.glow}
                       hover:shadow-3xl
+                      h-64 flex flex-col
                     `}
                     style={{
                       imageRendering: 'pixelated'
@@ -3016,17 +3041,17 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                     {/* Content wrapper */}
                     <div className="relative z-10">
                       {/* Stage number badge */}
-                      <div className={`absolute -top-9 -left-9 md:-top-10 md:-left-10 w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br ${stage.theme.bg} rounded-sm flex items-center justify-center border-3 md:border-4 border-white shadow-lg transform group-hover:rotate-12 transition-transform duration-300`} style={{imageRendering: 'pixelated'}}>
+                      <div className={`absolute -top-3 -left-3 w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br ${stage.theme.bg} rounded-sm flex items-center justify-center border-3 md:border-4 border-white shadow-lg transform group-hover:rotate-12 transition-transform duration-300 z-10`} style={{imageRendering: 'pixelated'}}>
                         <span className="text-white font-black text-base md:text-lg pixel-text">{stage.id}</span>
                       </div>
-                  
+                      
                       {/* Pixel Art Icon */}
                       <div className={`mb-3 md:mb-4 transform transition-all duration-500 ${isHovered ? 'scale-125' : 'scale-100'}`}>
                         <PixelArt type={stage.pixelArt} className="w-16 h-16 md:w-20 md:h-20 mx-auto" />
                       </div>
                   
                       {/* Title */}
-                      <h2 className="text-xs sm:text-sm md:text-base lg:text-lg font-black text-center mb-3 md:mb-4 leading-tight pixel-text uppercase px-2">
+                      <h2 className="text-xs sm:text-sm md:text-base lg:text-lg font-black text-center mb-3 md:mb-4 leading-tight pixel-text uppercase px-2 text-white drop-shadow-lg">
                         {stage.title}
                       </h2>
                   
@@ -3328,7 +3353,16 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
             transform: translateY(0px);
           }
           50% {
-            transform: translateY(-15px);
+            transform: translateY(-5px);
+          }
+        }
+        
+        @keyframes scanlines {
+          0% {
+            background-position: 0 0;
+          }
+          100% {
+            background-position: 0 100px;
           }
         }
         

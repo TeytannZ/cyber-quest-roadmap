@@ -1345,6 +1345,115 @@ const LearningRoadmap = () => {
   const [expandedTasks, setExpandedTasks] = useState({});
   const { playSound } = AudioManager();
   const [activeTab, setActiveTab] = useState('roadmap');
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const audioContextRef = useRef(null);
+
+  // Preload all images and initialize audio
+  useEffect(() => {
+    // Initialize audio context immediately
+    audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // Play silent sound to wake up audio context
+    const wakeSilentAudio = () => {
+      if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+        audioContextRef.current.resume();
+      }
+      const oscillator = audioContextRef.current.createOscillator();
+      const gainNode = audioContextRef.current.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContextRef.current.destination);
+      gainNode.gain.value = 0.001;
+      oscillator.start();
+      oscillator.stop(audioContextRef.current.currentTime + 0.001);
+    };
+    
+    // Wake audio on first user interaction
+    const wakeAudio = () => {
+      wakeSilentAudio();
+      document.removeEventListener('click', wakeAudio);
+      document.removeEventListener('keydown', wakeAudio);
+    };
+    document.addEventListener('click', wakeAudio);
+    document.addEventListener('keydown', wakeAudio);
+
+    // Collect all images to preload
+    const allImages = [
+      libraryBackground,
+      wise1, wise2, wise3, wise4,
+      worldMapBackground,
+      phase1Image, phase2Image, phase3Image, phase4Image,
+      phase5Image, phase6Image, phase7Image, phase8Image,
+      phase9Image, phase10Image, phase11Image, phase12Image,
+      stage1Bg, stage2Bg, stage3Bg, stage4Bg,
+      stage5Bg, stage6Bg, stage7Bg, stage8Bg,
+      stage9Bg, stage10Bg, stage11Bg, stage12Bg,
+      s1_m1, s1_m2, s1_m3,
+      s2_m1, s2_m2, s2_m3,
+      s3_m1, s3_m2, s3_m3, s3_m4,
+      s4_m1, s4_m2, s4_m3,
+      s5_m1, s5_m2, s5_m3,
+      s6_m1, s6_m2, s6_m3,
+      s7_m1, s7_m2,
+      s8_m1, s8_m2, s8_m3,
+      s9_m1, s9_m2,
+      s10_m1, s10_m2,
+      s11_m1,
+      s12_m1, s12_m2, s12_m3, s12_m4
+    ];
+
+    let loadedCount = 0;
+    const totalImages = allImages.length;
+
+    const imagePromises = allImages.map((src) => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          loadedCount++;
+          setLoadingProgress(Math.round((loadedCount / totalImages) * 100));
+          resolve();
+        };
+        img.onerror = () => {
+          loadedCount++;
+          setLoadingProgress(Math.round((loadedCount / totalImages) * 100));
+          resolve(); // Still resolve even on error
+        };
+        img.src = src;
+      });
+    });
+
+    Promise.all(imagePromises).then(() => {
+      setImagesLoaded(true);
+    });
+
+    return () => {
+      document.removeEventListener('click', wakeAudio);
+      document.removeEventListener('keydown', wakeAudio);
+    };
+  }, []);
+
+  // Show loading screen while images load
+  if (!imagesLoaded) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="mb-8">
+            <PixelArt type="diamond" className="w-32 h-32 mx-auto animate-pulse" />
+          </div>
+          <h1 className="text-4xl font-black text-white pixel-text mb-4 animate-pulse">
+            LOADING...
+          </h1>
+          <div className="w-64 h-8 bg-black/60 rounded-sm border-4 border-white/50 overflow-hidden">
+            <div 
+              className="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 transition-all duration-300"
+              style={{ width: `${loadingProgress}%` }}
+            />
+          </div>
+          <p className="text-white pixel-text text-xs mt-4">{loadingProgress}%</p>
+        </div>
+      </div>
+    );
+  }
 
   // Mission Card Component
   // REPLACE THE ENTIRE MissionCard COMPONENT (starts around line 47)

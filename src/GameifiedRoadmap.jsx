@@ -552,10 +552,16 @@ const DailyWisdomTab = () => {
         {[...Array(8)].map((_, i) => (
           <div
             key={`candle-${i}`}
-            className="absolute w-2 h-2 bg-orange-400 rounded-full opacity-60 blur-sm"
+            className="absolute rounded-full animate-candle-flicker"
             style={{
+              width: '8px',
+              height: '8px',
+              backgroundColor: '#fb923c',
               left: `${10 + i * 12}%`,
               top: `${20 + (i * 7.5)}%`,
+              opacity: 0.6,
+              filter: 'blur(2px)',
+              boxShadow: '0 0 10px rgba(251, 146, 60, 0.6)',
               animation: `candleFlicker ${1.5 + (i * 0.2)}s ease-in-out infinite`,
               animationDelay: `${i * 0.3}s`
             }}
@@ -2921,7 +2927,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       
       {activeTab === 'roadmap' && (
       <div 
-        className="h-screen p-4 sm:p-6 md:p-8 pt-24 sm:pt-28 md:pt-32 overflow-hidden relative flex flex-col"
+        className="h-screen p-4 sm:p-6 md:p-8 pt-20 md:pt-24 relative flex flex-col"
+        style={{ overflowX: 'hidden', overflowY: 'auto' }}
         style={{
           backgroundImage: `url(${worldMapBackground})`,
           backgroundSize: 'cover',
@@ -2972,33 +2979,33 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
           
       {/* Content wrapper with relative positioning */}
-      <div className="relative z-10 flex-1 flex flex-col overflow-y-auto pt-2 sm:pt-4">
+      <div className="relative z-10 flex-1 flex flex-col overflow-visible">
             
       {!selectedStage ? (
         /* STAGE SELECTION VIEW */
         <div className="max-w-7xl mx-auto h-full overflow-y-auto flex flex-col">
           {/* Floating dust particles for main menu */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-            {[...Array(30)].map((_, i) => (
+            {[...Array(50)].map((_, i) => (
               <div
                 key={`menu-dust-${i}`}
                 className="absolute rounded-full"
                 style={{
-                  width: `${5 + (i % 5)}px`,
-                  height: `${5 + (i % 5)}px`,
-                  backgroundColor: i % 3 === 0 ? '#ffd700' : i % 3 === 1 ? '#ffb347' : '#f0e68c',
-                  left: `${(i * 3.5) % 100}%`,
-                  top: `${(i * 7) % 100}%`,
-                  opacity: 0.4 + ((i % 4) * 0.1),
+                  width: '8px',
+                  height: '8px',
+                  backgroundColor: '#ffd700',
+                  left: `${(i * 2.1) % 100}%`,
+                  top: `${(i * 5.3) % 100}%`,
+                  opacity: 0.5,
+                  filter: 'blur(2px)',
+                  boxShadow: '0 0 12px rgba(255, 215, 0, 0.7)',
                   animation: `dustFloat ${10 + (i % 6)}s ease-in-out infinite`,
-                  animationDelay: `${(i * 0.3) % 6}s`,
-                  boxShadow: '0 0 10px rgba(255, 215, 0, 0.5)',
-                  filter: 'blur(0.5px)'
+                  animationDelay: `${(i * 0.2) % 6}s`
                 }}
               />
             ))}
           </div>
-          <div className="mb-6 sm:mb-8 md:mb-12 lg:mb-16 min-h-[80px] sm:min-h-[100px] md:min-h-[120px] flex items-center justify-center px-2">
+          <div className="mb-8 md:mb-16 py-4 flex items-center justify-center px-2 relative z-10">
             <PixelatedTitle />
           </div>
       
@@ -3146,18 +3153,45 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
 
       {/* Floating Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(15)].map((_, i) => (
-          <div
-            key={i}
-            className={`absolute w-2 h-2 ${selectedStage.theme.particle} rounded-full opacity-30 animate-float-particle`}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${3 + Math.random() * 4}s`
-            }}
-          />
-        ))}
+        {[...Array(50)].map((_, i) => {
+          // Get color based on stage theme
+          const getParticleColor = () => {
+            const particleClass = selectedStage.theme.particle;
+            if (particleClass.includes('green')) return '#4ade80';
+            if (particleClass.includes('orange')) return '#fb923c';
+            if (particleClass.includes('amber')) return '#f59e0b';
+            if (particleClass.includes('cyan')) return '#22d3ee';
+            if (particleClass.includes('purple')) return '#a855f7';
+            if (particleClass.includes('blue')) return '#3b82f6';
+            if (particleClass.includes('teal')) return '#14b8a6';
+            if (particleClass.includes('red')) return '#ef4444';
+            if (particleClass.includes('slate')) return '#64748b';
+            if (particleClass.includes('indigo')) return '#6366f1';
+            if (particleClass.includes('gray')) return '#6b7280';
+            return '#ffd700';
+          };
+          
+          const color = getParticleColor();
+          
+          return (
+            <div
+              key={`stage-dust-${i}`}
+              className="absolute rounded-full"
+              style={{
+                width: '8px',
+                height: '8px',
+                backgroundColor: color,
+                left: `${(i * 2.1) % 100}%`,
+                top: `${(i * 5.3) % 100}%`,
+                opacity: 0.5,
+                filter: 'blur(2px)',
+                boxShadow: `0 0 12px ${color}aa`,
+                animation: `dustFloat ${10 + (i % 6)}s ease-in-out infinite`,
+                animationDelay: `${(i * 0.2) % 6}s`
+              }}
+            />
+          );
+        })}
       </div>
       
       <div className="max-w-7xl mx-auto relative z-10 flex-1 flex flex-col overflow-hidden">

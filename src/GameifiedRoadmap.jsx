@@ -1279,6 +1279,61 @@ const EndgameTab = () => {
   );
 };
 
+const PixelatedTitle = () => {
+  const [displayedText, setDisplayedText] = useState('');
+  const fullText = 'EPIC LEARNING JOURNEY';
+  const audioContextRef = useRef(null);
+
+  useEffect(() => {
+    audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    let index = 0;
+    
+    const interval = setInterval(() => {
+      if (index < fullText.length) {
+        setDisplayedText(fullText.substring(0, index + 1));
+        
+        // Play pixel sound
+        if (audioContextRef.current) {
+          const oscillator = audioContextRef.current.createOscillator();
+          const gainNode = audioContextRef.current.createGain();
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContextRef.current.destination);
+          
+          oscillator.frequency.value = 800 + (index * 30);
+          oscillator.type = 'square';
+          gainNode.gain.value = 0.08;
+          
+          oscillator.start();
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContextRef.current.currentTime + 0.06);
+          oscillator.stop(audioContextRef.current.currentTime + 0.06);
+        }
+        
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 80);
+
+    return () => {
+      clearInterval(interval);
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
+  }, []);
+
+  return (
+    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-center mb-8 md:mb-16 pixel-text text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.8)] px-4"
+        style={{
+          textShadow: '4px 4px 0px #000, -2px -2px 0px rgba(255,255,255,0.3)',
+          imageRendering: 'pixelated'
+        }}>
+      {displayedText}
+      <span className="animate-pulse">_</span>
+    </h1>
+  );
+};
 
 const LearningRoadmap = () => {
   const [selectedStage, setSelectedStage] = useState(null);
@@ -1295,62 +1350,6 @@ const LearningRoadmap = () => {
   // REPLACE THE ENTIRE MissionCard COMPONENT (starts around line 47)
 // Find this line: const MissionCard = ({ mission, mIdx, selectedStage...
 // Replace everything from there until the closing }; of MissionCard
-
-  const PixelatedTitle = () => {
-    const [displayedText, setDisplayedText] = useState('');
-    const fullText = 'EPIC LEARNING JOURNEY';
-    const audioContextRef = useRef(null);
-  
-    useEffect(() => {
-      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
-      let index = 0;
-      
-      const interval = setInterval(() => {
-        if (index < fullText.length) {
-          setDisplayedText(fullText.substring(0, index + 1));
-          
-          // Play pixel sound
-          if (audioContextRef.current) {
-            const oscillator = audioContextRef.current.createOscillator();
-            const gainNode = audioContextRef.current.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContextRef.current.destination);
-            
-            oscillator.frequency.value = 800 + (index * 30);
-            oscillator.type = 'square';
-            gainNode.gain.value = 0.08;
-            
-            oscillator.start();
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContextRef.current.currentTime + 0.06);
-            oscillator.stop(audioContextRef.current.currentTime + 0.06);
-          }
-          
-          index++;
-        } else {
-          clearInterval(interval);
-        }
-      }, 80);
-  
-      return () => {
-        clearInterval(interval);
-        if (audioContextRef.current) {
-          audioContextRef.current.close();
-        }
-      };
-    }, []);
-  
-    return (
-      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-center mb-8 md:mb-16 pixel-text text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.8)] px-4"
-          style={{
-            textShadow: '4px 4px 0px #000, -2px -2px 0px rgba(255,255,255,0.3)',
-            imageRendering: 'pixelated'
-          }}>
-        {displayedText}
-        <span className="animate-pulse">_</span>
-      </h1>
-    );
-  };
   
 const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedTasks, expandedTasks, setExpandedTasks, handleMissionClick, handleTaskComplete, className = "" }) => {
   const missionKey = `${selectedStage.id}-${mIdx}`;

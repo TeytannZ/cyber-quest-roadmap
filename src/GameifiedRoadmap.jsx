@@ -547,7 +547,7 @@ const DailyWisdomTab = () => {
       {/* Dark overlay for better text readability */}
       <div className="absolute inset-0 bg-black/40"></div>
       
-      {/* Floating candle lights effect */}
+      {/* Floating candle lights effect - independent of sound */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(8)].map((_, i) => (
           <div
@@ -556,7 +556,7 @@ const DailyWisdomTab = () => {
             style={{
               left: `${10 + i * 12}%`,
               top: `${20 + Math.random() * 60}%`,
-              animation: `flicker ${1 + Math.random()}s ease-in-out infinite`,
+              animation: `candleFlicker ${1.5 + Math.random() * 1}s ease-in-out infinite`,
               animationDelay: `${Math.random() * 2}s`
             }}
           />
@@ -651,16 +651,7 @@ const DailyWisdomTab = () => {
 
       {/* Additional CSS for candle flicker animation */}
       <style jsx>{`
-        @keyframes flicker {
-          0%, 100% {
-            opacity: 0.6;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 1;
-            transform: scale(1.2);
-          }
-        }
+        
       `}</style>
     </div>
   );
@@ -1324,17 +1315,17 @@ const PixelatedTitle = () => {
   }, []);
 
   return (
-    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-center pixel-text text-amber-900 px-4"
+    <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-center pixel-text text-amber-100 px-4 border-4 border-yellow-700 bg-gradient-to-br from-amber-900/60 to-yellow-900/60 backdrop-blur-sm rounded-lg py-4 inline-block"
         style={{
-          textShadow: '3px 3px 0px rgba(0,0,0,0.3), -1px -1px 0px rgba(255,255,255,0.2)',
-          filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.5))'
+          textShadow: '2px 2px 0px rgba(101, 67, 33, 0.8), -1px -1px 0px rgba(255, 215, 0, 0.3)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 0 20px rgba(255, 215, 0, 0.2)'
         }}
         style={{
           textShadow: '4px 4px 0px #000, -2px -2px 0px rgba(255,255,255,0.3)',
           imageRendering: 'pixelated'
         }}>
       {displayedText}
-      <span className="animate-pulse">_</span>
+      <span className="animate-blink ml-2">▮</span>
     </h1>
   );
 };
@@ -2944,7 +2935,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         }}
       >
         {/* Old parchment/sepia overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-100/40 via-yellow-50/30 to-orange-100/40 pointer-events-none mix-blend-overlay"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-100/55 via-yellow-50/45 to-orange-100/55 pointer-events-none mix-blend-overlay"></div>
         
         {/* Aged paper texture overlay */}
         <div className="absolute inset-0 pointer-events-none opacity-20" style={{
@@ -2961,9 +2952,28 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         <div className="absolute inset-0 pointer-events-none opacity-5" style={{
           backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.1) 3px, rgba(0,0,0,0.1) 6px)'
         }}></div>
+
+        {/* Floating dust particles for atmosphere */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(25)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full opacity-30"
+              style={{
+                width: `${2 + Math.random() * 3}px`,
+                height: `${2 + Math.random() * 3}px`,
+                backgroundColor: i % 3 === 0 ? '#f5deb3' : i % 3 === 1 ? '#daa520' : '#d4af37',
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animation: `dustFloat ${8 + Math.random() * 12}s ease-in-out infinite`,
+                animationDelay: `${Math.random() * 5}s`
+              }}
+            />
+          ))}
+        </div>
           
-          {/* Content wrapper with relative positioning */}
-          <div className="relative z-10 flex-1 flex flex-col overflow-hidden">
+      {/* Content wrapper with relative positioning */}
+      <div className="relative z-10 flex-1 flex flex-col overflow-hidden">
             
       {!selectedStage ? (
         /* STAGE SELECTION VIEW */
@@ -3370,6 +3380,59 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
           }
           100% {
             background-position: 0 100px;
+          }
+        }
+
+        @keyframes blink {
+          0%, 49% {
+            opacity: 1;
+          }
+          50%, 100% {
+            opacity: 0;
+          }
+        }
+        
+        .animate-blink {
+          animation: blink 1s step-end infinite;
+        }
+        
+        @keyframes dustFloat {
+          0%, 100% {
+            transform: translate(0, 0) rotate(0deg);
+            opacity: 0;
+          }
+          10% {
+            opacity: 0.3;
+          }
+          50% {
+            transform: translate(20px, -100px) rotate(180deg);
+            opacity: 0.4;
+          }
+          90% {
+            opacity: 0.2;
+          }
+          100% {
+            transform: translate(-10px, -200px) rotate(360deg);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes candleFlicker {
+          0%, 100% {
+            opacity: 0.4;
+            transform: scale(1);
+          }
+          25% {
+            opacity: 0.7;
+            transform: scale(1.3);
+          }
+          50% {
+            opacity: 0.5;
+            transform: scale(0.9);
+          }
+          75% {
+            opacity: 0.8;
+            transform: scale(1.2);
           }
         }
         

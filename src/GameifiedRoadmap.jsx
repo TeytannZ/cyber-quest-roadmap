@@ -1840,6 +1840,12 @@ const LearningRoadmap = () => {
     return (
       <div 
         className="fixed inset-0 z-[9999] flex items-center justify-center"
+        onClick={(e) => {
+          // Close if clicking outside the card (after animation complete)
+          if (e.target === e.currentTarget && animationStep >= 2) {
+            onClose();
+          }
+        }}
         style={{
           background: 'rgba(0, 0, 0, 0.85)',
           backdropFilter: 'blur(8px)',
@@ -1848,38 +1854,60 @@ const LearningRoadmap = () => {
       >
         {/* Pixelated particle effects */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={`unlock-particle-${i}`}
-              className="absolute"
-              style={{
-                width: '8px',
-                height: '8px',
-                backgroundColor: stageColor,
-                left: `${50 + (Math.cos(i * 0.5) * 40)}%`,
-                top: `${50 + (Math.sin(i * 0.5) * 40)}%`,
-                opacity: animationStep >= 2 ? 0 : 0.6,
-                transform: animationStep >= 2 ? `translate(${Math.cos(i * 0.5) * 200}px, ${Math.sin(i * 0.5) * 200}px) scale(0)` : 'translate(0, 0) scale(1)',
-                transition: 'all 0.8s ease-out',
-                boxShadow: `0 0 12px ${stageColor}`,
-                imageRendering: 'pixelated'
-              }}
-            />
-          ))}
+          {[...Array(60)].map((_, i) => {
+            const angle = (i / 60) * Math.PI * 2;
+            const distance = 150 + (i % 3) * 50;
+            const spiralOffset = (i % 5) * 30;
+            
+            return (
+              <div
+                key={`unlock-particle-${i}`}
+                className="absolute"
+                style={{
+                  width: `${6 + (i % 3) * 2}px`,
+                  height: `${6 + (i % 3) * 2}px`,
+                  backgroundColor: stageColor,
+                  left: '50%',
+                  top: '50%',
+                  opacity: animationStep >= 2 ? 1 : 0.8,
+                  transform: animationStep >= 2 
+                    ? `translate(${Math.cos(angle) * distance + spiralOffset}px, ${Math.sin(angle) * distance + spiralOffset}px) scale(0) rotate(${angle * 180}deg)` 
+                    : 'translate(-50%, -50%) scale(1) rotate(0deg)',
+                  transition: `all ${0.8 + (i % 5) * 0.1}s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${i * 0.015}s`,
+                  boxShadow: animationStep >= 2 ? `0 0 20px ${stageColor}, 0 0 40px ${stageColor}88` : `0 0 12px ${stageColor}`,
+                  imageRendering: 'pixelated',
+                  pointerEvents: 'none'
+                }}
+              />
+            );
+          })}
         </div>
         
         {/* Stage card */}
         <div 
-          className="relative"
+          className="relative group"
           style={{
-            transform: animationStep >= 3 ? 'scale(1.2)' : 'scale(1)',
-            opacity: animationStep >= 3 ? 0 : 1,
-            transition: 'all 0.8s ease-out'
+            transform: animationStep >= 2 ? 'scale(1)' : 'scale(0.95)',
+            opacity: 1,
+            transition: 'all 0.5s ease-out'
           }}
         >
           {/* Card background */}
           <div
-            className="relative p-8 rounded-lg border-8 overflow-hidden"
+            onClick={() => {
+              if (animationStep >= 2) {
+                onClose();
+                // Navigate to the unlocked stage
+                const stageToOpen = stages.find(s => s.id === stage.id);
+                if (stageToOpen) {
+                  playSound(stageToOpen.sound.freq, 0.3, stageToOpen.sound.type);
+                  setSelectedStage(stageToOpen);
+                  setSelectedMission(null);
+                  setCurrentMissionIndex(0);
+                }
+              }
+            }}
+            className={`relative p-8 rounded-lg border-8 overflow-hidden ${animationStep >= 2 ? 'cursor-pointer' : 'cursor-default'}`}
             style={{
               width: '400px',
               height: '500px',
@@ -1887,8 +1915,12 @@ const LearningRoadmap = () => {
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               borderColor: stageColor,
-              boxShadow: `0 0 40px ${stageColor}88, inset 0 0 60px rgba(0,0,0,0.5)`,
-              imageRendering: 'pixelated'
+              boxShadow: animationStep >= 2 
+                ? `0 0 60px ${stageColor}cc, inset 0 0 60px rgba(0,0,0,0.5)` 
+                : `0 0 40px ${stageColor}88, inset 0 0 60px rgba(0,0,0,0.5)`,
+              imageRendering: 'pixelated',
+              transform: animationStep >= 2 ? 'scale(1)' : 'scale(0.98)',
+              transition: 'all 0.3s ease-out'
             }}
           >
             {/* Gradient overlay */}
@@ -1963,10 +1995,14 @@ const LearningRoadmap = () => {
                   </div>
                 </div>
                 
-                <div className="text-sm font-black pixel-text text-white px-4"
-                     style={{ textShadow: '2px 2px 0 #000' }}>
-                  {stage.title}
-                </div>
+                <div className="text-xs font-black pixel-text text-white px-6 leading-tight text-center max-w-full"
+                 style={{ 
+                   textShadow: '2px 2px 0 #000',
+                   wordBreak: 'break-word',
+                   hyphens: 'auto'
+                 }}>
+              {stage.title}
+            </div>
               </div>
             </div>
             
@@ -1995,13 +2031,13 @@ const LearningRoadmap = () => {
           />
         </div>
         
-        {/* "Continue" text at bottom - appears at final step */}
-        {animationStep >= 3 && (
+        {/* "Click to Enter" text at bottom - appears after animation completes */}
+        {animationStep >= 2 && (
           <div 
-            className="absolute bottom-20 left-1/2 transform -translate-x-1/2 pixel-text text-white text-sm animate-pulse"
-            style={{ textShadow: `0 0 10px ${stageColor}` }}
+            className="absolute bottom-16 left-1/2 transform -translate-x-1/2 pixel-text text-white text-xs animate-pulse"
+            style={{ textShadow: `0 0 10px ${stageColor}`, pointerEvents: 'none' }}
           >
-            STAGE UNLOCKED! CONTINUE YOUR JOURNEY...
+            ▼ CLICK TO ENTER STAGE ▼
           </div>
         )}
       </div>
@@ -3577,12 +3613,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
               playLockBreakSound();
               setUnlockAnimationStep(2);
             }, 2000);
-            setTimeout(() => setUnlockAnimationStep(3), 3000);
-            setTimeout(() => {
-              setShowUnlockAnimation(false);
-              setUnlockedStage(null);
-              setUnlockAnimationStep(0);
-            }, 5000);
+            // Don't auto-close anymore - let user click to enter
           }
         }
       }, 100);

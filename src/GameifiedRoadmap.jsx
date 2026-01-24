@@ -1625,8 +1625,8 @@ const LearningRoadmap = () => {
             />
           </div>
   
-          {/* Loading text - fully pixelated */}
-          <div className="mb-8">
+          {/* Loading text - fully pixelated and centered */}
+          <div className="mb-8 flex flex-col items-center justify-center">
             <div className="relative inline-block">
               {/* Pixelated title background */}
               <div className="absolute inset-0 -z-10" style={{
@@ -1635,66 +1635,68 @@ const LearningRoadmap = () => {
                 opacity: 0.6
               }}></div>
               
-              {/* Main pixelated title */}
-              <svg width="400" height="80" viewBox="0 0 400 80" className="w-full max-w-md" style={{ imageRendering: 'pixelated' }}>
-                {/* "LOADING" in pixel blocks */}
-                {/* L */}
-                <rect x="20" y="20" width="8" height="40" fill="#fff"/>
-                <rect x="20" y="52" width="24" height="8" fill="#fff"/>
-                
-                {/* O */}
-                <rect x="56" y="20" width="24" height="8" fill="#fff"/>
-                <rect x="56" y="52" width="24" height="8" fill="#fff"/>
-                <rect x="56" y="28" width="8" height="24" fill="#fff"/>
-                <rect x="72" y="28" width="8" height="24" fill="#fff"/>
-                
-                {/* A */}
-                <rect x="92" y="20" width="24" height="8" fill="#fff"/>
-                <rect x="92" y="28" width="8" height="32" fill="#fff"/>
-                <rect x="108" y="28" width="8" height="32" fill="#fff"/>
-                <rect x="92" y="36" width="24" height="8" fill="#fff"/>
-                
-                {/* D */}
-                <rect x="128" y="20" width="16" height="8" fill="#fff"/>
-                <rect x="128" y="52" width="16" height="8" fill="#fff"/>
-                <rect x="128" y="28" width="8" height="24" fill="#fff"/>
-                <rect x="144" y="28" width="8" height="24" fill="#fff"/>
-                
-                {/* I */}
-                <rect x="164" y="20" width="8" height="40" fill="#fff"/>
-                
-                {/* N */}
-                <rect x="184" y="20" width="8" height="40" fill="#fff"/>
-                <rect x="192" y="28" width="8" height="8" fill="#fff"/>
-                <rect x="200" y="36" width="8" height="8" fill="#fff"/>
-                <rect x="208" y="20" width="8" height="40" fill="#fff"/>
-                
-                {/* G */}
-                <rect x="228" y="20" width="24" height="8" fill="#fff"/>
-                <rect x="228" y="52" width="24" height="8" fill="#fff"/>
-                <rect x="228" y="28" width="8" height="24" fill="#fff"/>
-                <rect x="244" y="44" width="8" height="8" fill="#fff"/>
-                <rect x="236" y="36" width="16" height="8" fill="#fff"/>
-                
-                {/* Drop shadow effect */}
-                {[...Array(13)].map((_, i) => (
-                  <g key={i} opacity="0.3">
-                    <rect x={24 + i * 18} y="64" width="8" height="4" fill="#8b5cf6"/>
-                  </g>
-                ))}
-              </svg>
+              {/* Main pixelated title - centered */}
+              <div className="flex justify-center">
+                <svg width="320" height="60" viewBox="0 0 320 60" className="w-full max-w-sm" style={{ imageRendering: 'pixelated' }}>
+                  {/* "LOADING" in pixel blocks - centered */}
+                  {/* L */}
+                  <rect x="10" y="10" width="6" height="30" fill="#fff"/>
+                  <rect x="10" y="34" width="18" height="6" fill="#fff"/>
+                  
+                  {/* O */}
+                  <rect x="38" y="10" width="18" height="6" fill="#fff"/>
+                  <rect x="38" y="34" width="18" height="6" fill="#fff"/>
+                  <rect x="38" y="16" width="6" height="18" fill="#fff"/>
+                  <rect x="50" y="16" width="6" height="18" fill="#fff"/>
+                  
+                  {/* A */}
+                  <rect x="66" y="10" width="18" height="6" fill="#fff"/>
+                  <rect x="66" y="16" width="6" height="24" fill="#fff"/>
+                  <rect x="78" y="16" width="6" height="24" fill="#fff"/>
+                  <rect x="66" y="24" width="18" height="6" fill="#fff"/>
+                  
+                  {/* D */}
+                  <rect x="94" y="10" width="12" height="6" fill="#fff"/>
+                  <rect x="94" y="34" width="12" height="6" fill="#fff"/>
+                  <rect x="94" y="16" width="6" height="18" fill="#fff"/>
+                  <rect x="106" y="16" width="6" height="18" fill="#fff"/>
+                  
+                  {/* I */}
+                  <rect x="122" y="10" width="6" height="30" fill="#fff"/>
+                  
+                  {/* N */}
+                  <rect x="138" y="10" width="6" height="30" fill="#fff"/>
+                  <rect x="144" y="16" width="6" height="6" fill="#fff"/>
+                  <rect x="150" y="22" width="6" height="6" fill="#fff"/>
+                  <rect x="156" y="10" width="6" height="30" fill="#fff"/>
+                  
+                  {/* G */}
+                  <rect x="172" y="10" width="18" height="6" fill="#fff"/>
+                  <rect x="172" y="34" width="18" height="6" fill="#fff"/>
+                  <rect x="172" y="16" width="6" height="18" fill="#fff"/>
+                  <rect x="184" y="28" width="6" height="6" fill="#fff"/>
+                  <rect x="178" y="24" width="12" height="6" fill="#fff"/>
+                  
+                  {/* Drop shadow effect */}
+                  {[...Array(10)].map((_, i) => (
+                    <g key={i} opacity="0.3">
+                      <rect x={14 + i * 18} y="44" width="6" height="3" fill="#8b5cf6"/>
+                    </g>
+                  ))}
+                </svg>
+              </div>
             </div>
             
-            <h2 className="text-2xl md:text-3xl font-black pixel-text mt-4" style={{
-              color: loadingProgress < 100 ? '#8b5cf6' : '#4ade80',
-              textShadow: loadingProgress < 100 
-                ? '3px 3px 0 #ec4899, -2px -2px 0 #8b5cf6' 
-                : '3px 3px 0 #22c55e, -2px -2px 0 #4ade80',
-              animation: 'pulse 2s ease-in-out infinite',
-              imageRendering: 'pixelated'
-            }}>
-              {loadingProgress < 100 ? '' : 'READY!'}
-            </h2>
+            {loadingProgress === 100 && (
+              <h2 className="text-2xl md:text-3xl font-black pixel-text mt-4" style={{
+                color: '#4ade80',
+                textShadow: '3px 3px 0 #22c55e, -2px -2px 0 #4ade80',
+                animation: 'pulse 2s ease-in-out infinite',
+                imageRendering: 'pixelated'
+              }}>
+                READY!
+              </h2>
+            )}
           </div>
   
           {/* Progress bar - pixelated style */}
@@ -4328,28 +4330,29 @@ const playExplosionSound = () => {
                     <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2" style={{ borderColor: selectedStage.theme.particle.replace('bg-', '') }}></div>
                     <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2" style={{ borderColor: selectedStage.theme.particle.replace('bg-', '') }}></div>
                     <div className="relative z-10 p-3 bg-black/10 backdrop-blur-sm">
-                      <div className="mb-4">
+                      <div className="flex items-center gap-3 mb-3">
                         {/* Pixelated scroll icon */}
-                        <div className="relative inline-block mb-2">
-                          <svg width="32" height="32" viewBox="0 0 32 32" style={{ imageRendering: 'pixelated' }}>
+                        <div className="relative flex-shrink-0">
+                          <svg width="40" height="40" viewBox="0 0 40 40" style={{ imageRendering: 'pixelated' }}>
                             {/* Scroll paper */}
-                            <rect x="6" y="4" width="20" height="24" fill="#f5e6d3" stroke="#000" strokeWidth="1.5"/>
-                            <rect x="8" y="6" width="16" height="20" fill="#faf0e6"/>
+                            <rect x="8" y="6" width="24" height="28" fill="#f5e6d3" stroke="#000" strokeWidth="1.5"/>
+                            <rect x="10" y="8" width="20" height="24" fill="#faf0e6"/>
                             
                             {/* Scroll rolls */}
-                            <rect x="4" y="2" width="3" height="3" fill="#8b7355" stroke="#000" strokeWidth="1"/>
-                            <rect x="25" y="2" width="3" height="3" fill="#8b7355" stroke="#000" strokeWidth="1"/>
-                            <rect x="4" y="27" width="3" height="3" fill="#8b7355" stroke="#000" strokeWidth="1"/>
-                            <rect x="25" y="27" width="3" height="3" fill="#8b7355" stroke="#000" strokeWidth="1"/>
+                            <rect x="6" y="4" width="4" height="4" fill="#8b7355" stroke="#000" strokeWidth="1"/>
+                            <rect x="30" y="4" width="4" height="4" fill="#8b7355" stroke="#000" strokeWidth="1"/>
+                            <rect x="6" y="32" width="4" height="4" fill="#8b7355" stroke="#000" strokeWidth="1"/>
+                            <rect x="30" y="32" width="4" height="4" fill="#8b7355" stroke="#000" strokeWidth="1"/>
                             
                             {/* Text lines */}
-                            <rect x="10" y="10" width="12" height="2" fill="#3e2723" opacity="0.6"/>
-                            <rect x="10" y="14" width="9" height="2" fill="#3e2723" opacity="0.6"/>
-                            <rect x="10" y="18" width="11" height="2" fill="#3e2723" opacity="0.6"/>
+                            <rect x="12" y="12" width="16" height="2" fill="#3e2723" opacity="0.6"/>
+                            <rect x="12" y="16" width="12" height="2" fill="#3e2723" opacity="0.6"/>
+                            <rect x="12" y="20" width="14" height="2" fill="#3e2723" opacity="0.6"/>
+                            <rect x="12" y="24" width="10" height="2" fill="#3e2723" opacity="0.6"/>
                             
                             {/* Decorative seal */}
-                            <circle cx="16" cy="22" r="2.5" fill="#fbbf24" stroke="#000" strokeWidth="1"/>
-                            <circle cx="16" cy="22" r="1.2" fill="#f59e0b"/>
+                            <circle cx="20" cy="28" r="3" fill="#fbbf24" stroke="#000" strokeWidth="1"/>
+                            <circle cx="20" cy="28" r="1.5" fill="#f59e0b"/>
                           </svg>
                           
                           {/* Glow */}
@@ -4362,9 +4365,28 @@ const playExplosionSound = () => {
                           />
                         </div>
                         
-                        <span className="px-3 py-1 bg-amber-800/50 border-2 border-amber-600 rounded-sm pixel-text text-[9px] text-amber-200">
-                          {currentQuote.category.toUpperCase()}
-                        </span>
+                        <div className="flex-1">
+                          <div className="text-[10px] font-black pixel-text uppercase tracking-wider px-2 py-1 inline-block rounded-sm border-2 border-black text-white" style={{
+                            background: `linear-gradient(90deg, ${
+                              selectedStage.id === 1 ? '#15803d, #84cc16' :
+                              selectedStage.id === 2 ? '#ea580c, #f59e0b' :
+                              selectedStage.id === 3 ? '#b45309, #eab308' :
+                              selectedStage.id === 4 ? '#0e7490, #06b6d4' :
+                              selectedStage.id === 5 ? '#6b21a8, #a855f7' :
+                              selectedStage.id === 6 ? '#1e40af, #3b82f6' :
+                              selectedStage.id === 7 ? '#115e59, #14b8a6' :
+                              selectedStage.id === 8 ? '#991b1b, #ef4444' :
+                              selectedStage.id === 9 ? '#1e293b, #64748b' :
+                              selectedStage.id === 10 ? '#4338ca, #7c3aed' :
+                              selectedStage.id === 11 ? '#111827, #4b5563' :
+                              '#7f1d1d, #dc2626'
+                            })`,
+                            textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
+                            boxShadow: '0 0 10px #fbbf2444, inset 0 1px 0 rgba(255,255,255,0.2)'
+                          }}>
+                            {selectedStage.missions[currentMissionIndex].checkpoint.title.toUpperCase()}
+                          </div>
+                        </div>
                       </div>
                       <div className="space-y-2">
                         {selectedStage.missions[currentMissionIndex].checkpoint.requirements.map((req, idx) => (

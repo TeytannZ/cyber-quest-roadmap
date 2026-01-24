@@ -1701,14 +1701,48 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
       )}
 
-      {/* Mission Checkpoint - Always at bottom above navigation */}
+      {/* Mission Checkpoint - Unique style per stage */}
       {isMissionOpen && mission.checkpoint && (
         <div className="mt-4">
           <div 
             className={`p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden`}
             style={{
-              background: `linear-gradient(135deg, ${selectedStage.theme.bg.split(' ')[0].replace('from-', '')}dd, ${selectedStage.theme.bg.split(' ')[2].replace('to-', '')}dd)`,
-              borderColor: selectedStage.theme.border.replace('border-', '')
+              background: selectedStage.id === 1 ? 'linear-gradient(135deg, #15803ddd, #84cc16dd)' :
+                         selectedStage.id === 2 ? 'linear-gradient(135deg, #ea580cdd, #f59e0bdd)' :
+                         selectedStage.id === 3 ? 'linear-gradient(135deg, #b45309dd, #f59e0bdd)' :
+                         selectedStage.id === 4 ? 'linear-gradient(135deg, #0e7490dd, #0284c7dd)' :
+                         selectedStage.id === 5 ? 'linear-gradient(135deg, #6b21a8dd, #7e22cedd)' :
+                         selectedStage.id === 6 ? 'linear-gradient(135deg, #1e40afdd, #1e3a8add)' :
+                         selectedStage.id === 7 ? 'linear-gradient(135deg, #115e59dd, #0891b2dd)' :
+                         selectedStage.id === 8 ? 'linear-gradient(135deg, #991b1bdd, #c2410cdd)' :
+                         selectedStage.id === 9 ? 'linear-gradient(135deg, #1e293bdd, #27272add)' :
+                         selectedStage.id === 10 ? 'linear-gradient(135deg, #3730a3dd, #5b21b6dd)' :
+                         selectedStage.id === 11 ? 'linear-gradient(135deg, #111827dd, #18181bdd)' :
+                         'linear-gradient(135deg, #000000dd, #7f1d1ddd)',
+              borderColor: selectedStage.id === 1 ? '#16a34a' :
+                          selectedStage.id === 2 ? '#ea580c' :
+                          selectedStage.id === 3 ? '#b45309' :
+                          selectedStage.id === 4 ? '#0891b2' :
+                          selectedStage.id === 5 ? '#7e22ce' :
+                          selectedStage.id === 6 ? '#1e40af' :
+                          selectedStage.id === 7 ? '#0891b2' :
+                          selectedStage.id === 8 ? '#991b1b' :
+                          selectedStage.id === 9 ? '#1e293b' :
+                          selectedStage.id === 10 ? '#4338ca' :
+                          selectedStage.id === 11 ? '#000000' :
+                          '#7f1d1d',
+              boxShadow: selectedStage.id === 1 ? '0 0 30px rgba(34, 197, 94, 0.3)' :
+                        selectedStage.id === 2 ? '0 0 30px rgba(251, 146, 60, 0.3)' :
+                        selectedStage.id === 3 ? '0 0 30px rgba(251, 191, 36, 0.3)' :
+                        selectedStage.id === 4 ? '0 0 30px rgba(34, 211, 238, 0.3)' :
+                        selectedStage.id === 5 ? '0 0 30px rgba(168, 85, 247, 0.3)' :
+                        selectedStage.id === 6 ? '0 0 30px rgba(59, 130, 246, 0.3)' :
+                        selectedStage.id === 7 ? '0 0 30px rgba(20, 184, 166, 0.3)' :
+                        selectedStage.id === 8 ? '0 0 30px rgba(239, 68, 68, 0.3)' :
+                        selectedStage.id === 9 ? '0 0 30px rgba(100, 116, 139, 0.3)' :
+                        selectedStage.id === 10 ? '0 0 30px rgba(99, 102, 241, 0.3)' :
+                        selectedStage.id === 11 ? '0 0 30px rgba(107, 114, 128, 0.3)' :
+                        '0 0 30px rgba(239, 68, 68, 0.5)'
             }}
           >
             {/* Subtle pattern overlay */}
@@ -3138,8 +3172,34 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                         {stage.title}
                       </h2>
                   
-                      {/* Click indicator */}
-                      <div className="text-center text-[10px] md:text-xs font-black mt-3 md:mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pixel-text">
+                      {/* Click indicator - Dynamic style based on stage */}
+                      <div 
+                        className={`text-center text-[10px] md:text-xs font-black mt-3 md:mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pixel-text drop-shadow-lg`}
+                        style={{
+                          color: stage.id === 1 ? '#4ade80' : 
+                                 stage.id === 2 ? '#fb923c' : 
+                                 stage.id === 3 ? '#fbbf24' : 
+                                 stage.id === 4 ? '#22d3ee' : 
+                                 stage.id === 5 ? '#a855f7' : 
+                                 stage.id === 6 ? '#3b82f6' : 
+                                 stage.id === 7 ? '#14b8a6' : 
+                                 stage.id === 8 ? '#ef4444' : 
+                                 stage.id === 9 ? '#64748b' : 
+                                 stage.id === 10 ? '#6366f1' : 
+                                 stage.id === 11 ? '#6b7280' : '#ff0000',
+                          textShadow: `0 0 10px ${stage.id === 1 ? '#4ade8088' : 
+                                                   stage.id === 2 ? '#fb923c88' : 
+                                                   stage.id === 3 ? '#fbbf2488' : 
+                                                   stage.id === 4 ? '#22d3ee88' : 
+                                                   stage.id === 5 ? '#a855f788' : 
+                                                   stage.id === 6 ? '#3b82f688' : 
+                                                   stage.id === 7 ? '#14b8a688' : 
+                                                   stage.id === 8 ? '#ef444488' : 
+                                                   stage.id === 9 ? '#64748b88' : 
+                                                   stage.id === 10 ? '#6366f188' : 
+                                                   stage.id === 11 ? '#6b728088' : '#ff000088'}`
+                        }}
+                      >
                         &gt; CLICK TO ENTER &lt;
                       </div>
                     </div>
@@ -3249,7 +3309,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       </div>
     </div>
     
-    <div className="relative z-10 h-full flex flex-col p-4 md:p-8 overflow-hidden">
+    <div className="relative z-10 h-full flex flex-col p-2 md:p-4 overflow-hidden">
       <div className="max-w-7xl mx-auto w-full h-full flex flex-col overflow-hidden">
         {/* Header - Fixed */}
         <div className="flex items-center justify-between mb-4 flex-shrink-0">
@@ -3270,7 +3330,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
   
         {/* Stage Title Card - Fixed */}
-        <div className="bg-black/60 backdrop-blur rounded-sm p-4 md:p-6 mb-4 border-4 md:border-6 border-white/80 shadow-2xl flex-shrink-0">
+        <div className="bg-black/60 backdrop-blur rounded-sm p-3 md:p-4 mb-2 border-3 md:border-4 border-white/80 shadow-2xl flex-shrink-0">
           <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
             <div className="transform animate-float flex-shrink-0">
               <PixelArt type={selectedStage.pixelArt} className="w-16 h-16 md:w-24 md:h-24" />
@@ -3302,7 +3362,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
   
         {/* Current Mission - Scrollable Only This Section */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden pr-2 min-h-0">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden pr-1 min-h-0 scrollbar-hide">
           <MissionCard 
             mission={selectedStage.missions[currentMissionIndex]}
             mIdx={currentMissionIndex}
@@ -3317,7 +3377,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
         
         {/* Navigation Buttons - Fixed at bottom */}
-        <div className="bg-black/80 backdrop-blur-lg border-t-4 border-white/30 p-3 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 mt-4 flex-shrink-0 rounded-sm">
+        <div className="bg-black/80 backdrop-blur-lg border-t-3 border-white/30 p-2 md:p-3 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-3 mt-2 flex-shrink-0 rounded-sm">
           <button
             onClick={handlePreviousMission}
             disabled={selectedStage.id === 1 && currentMissionIndex === 0}

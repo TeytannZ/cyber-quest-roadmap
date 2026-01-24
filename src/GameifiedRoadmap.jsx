@@ -1352,6 +1352,9 @@ const LearningRoadmap = () => {
   const [expandedTasks, setExpandedTasks] = useState({});
   const { playSound } = AudioManager();
   const [activeTab, setActiveTab] = useState('roadmap');
+  const [showUnlockAnimation, setShowUnlockAnimation] = useState(false);
+  const [unlockedStage, setUnlockedStage] = useState(null);
+  const [unlockAnimationStep, setUnlockAnimationStep] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const audioContextRef = useRef(null);
@@ -1766,6 +1769,244 @@ const LearningRoadmap = () => {
   // REPLACE THE ENTIRE MissionCard COMPONENT (starts around line 47)
 // Find this line: const MissionCard = ({ mission, mIdx, selectedStage...
 // Replace everything from there until the closing }; of MissionCard
+
+  const PixelatedLock = ({ isBreaking, stageColor }) => {
+    return (
+      <svg 
+        viewBox="0 0 120 120" 
+        className="w-32 h-32 md:w-48 md:h-48"
+        style={{ imageRendering: 'pixelated' }}
+      >
+        {/* Lock body */}
+        <g className={isBreaking ? 'animate-shake' : ''}>
+          {/* Main body - pixelated rectangle */}
+          <rect x="30" y="60" width="60" height="48" fill="#1a1a1a" stroke="#000" strokeWidth="3"/>
+          <rect x="33" y="63" width="54" height="42" fill="#2a2a2a"/>
+          
+          {/* Lock shackle - pixelated arc */}
+          <rect x="42" y="36" width="6" height="30" fill="#2a2a2a" stroke="#000" strokeWidth="2"/>
+          <rect x="72" y="36" width="6" height="30" fill="#2a2a2a" stroke="#000" strokeWidth="2"/>
+          <rect x="42" y="30" width="36" height="6" fill="#2a2a2a" stroke="#000" strokeWidth="2"/>
+          
+          {/* Inner shackle detail */}
+          <rect x="48" y="36" width="24" height="6" fill="#1a1a1a"/>
+          
+          {/* Keyhole - pixelated */}
+          <rect x="57" y="78" width="6" height="6" fill={stageColor}/>
+          <rect x="57" y="84" width="6" height="12" fill={stageColor}/>
+          <rect x="54" y="84" width="3" height="9" fill={stageColor}/>
+          <rect x="63" y="84" width="3" height="9" fill={stageColor}/>
+          
+          {/* Lock highlights - pixelated shine */}
+          <rect x="36" y="66" width="12" height="3" fill="#444" opacity="0.6"/>
+          <rect x="36" y="72" width="6" height="3" fill="#444" opacity="0.4"/>
+          
+          {/* 3D effect - bottom shadow */}
+          <rect x="30" y="105" width="60" height="3" fill="#000" opacity="0.5"/>
+        </g>
+        
+        {/* Breaking cracks (only visible when breaking) */}
+        {isBreaking && (
+          <g className="animate-pulse">
+            <line x1="60" y1="60" x2="45" y2="45" stroke={stageColor} strokeWidth="2" opacity="0.8"/>
+            <line x1="60" y1="60" x2="75" y2="45" stroke={stageColor} strokeWidth="2" opacity="0.8"/>
+            <line x1="60" y1="80" x2="40" y2="95" stroke={stageColor} strokeWidth="2" opacity="0.8"/>
+            <line x1="60" y1="80" x2="80" y2="95" stroke={stageColor} strokeWidth="2" opacity="0.8"/>
+            
+            {/* Pixelated crack lines */}
+            <rect x="58" y="60" width="4" height="6" fill={stageColor} opacity="0.6"/>
+            <rect x="54" y="66" width="4" height="6" fill={stageColor} opacity="0.6"/>
+            <rect x="62" y="66" width="4" height="6" fill={stageColor} opacity="0.6"/>
+          </g>
+        )}
+      </svg>
+    );
+  };
+
+  const StageUnlockOverlay = ({ stage, animationStep, onClose }) => {
+    if (!stage) return null;
+    
+    const getStageColor = () => {
+      const colors = {
+        1: '#4ade80', 2: '#fb923c', 3: '#fbbf24', 4: '#22d3ee',
+        5: '#a855f7', 6: '#3b82f6', 7: '#14b8a6', 8: '#ef4444',
+        9: '#64748b', 10: '#6366f1', 11: '#6b7280', 12: '#dc2626'
+      };
+      return colors[stage.id] || '#ffd700';
+    };
+    
+    const stageColor = getStageColor();
+    
+    return (
+      <div 
+        className="fixed inset-0 z-[9999] flex items-center justify-center"
+        style={{
+          background: 'rgba(0, 0, 0, 0.85)',
+          backdropFilter: 'blur(8px)',
+          animation: 'fadeIn 0.5s ease-out'
+        }}
+      >
+        {/* Pixelated particle effects */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(50)].map((_, i) => (
+            <div
+              key={`unlock-particle-${i}`}
+              className="absolute"
+              style={{
+                width: '8px',
+                height: '8px',
+                backgroundColor: stageColor,
+                left: `${50 + (Math.cos(i * 0.5) * 40)}%`,
+                top: `${50 + (Math.sin(i * 0.5) * 40)}%`,
+                opacity: animationStep >= 2 ? 0 : 0.6,
+                transform: animationStep >= 2 ? `translate(${Math.cos(i * 0.5) * 200}px, ${Math.sin(i * 0.5) * 200}px) scale(0)` : 'translate(0, 0) scale(1)',
+                transition: 'all 0.8s ease-out',
+                boxShadow: `0 0 12px ${stageColor}`,
+                imageRendering: 'pixelated'
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Stage card */}
+        <div 
+          className="relative"
+          style={{
+            transform: animationStep >= 3 ? 'scale(1.2)' : 'scale(1)',
+            opacity: animationStep >= 3 ? 0 : 1,
+            transition: 'all 0.8s ease-out'
+          }}
+        >
+          {/* Card background */}
+          <div
+            className="relative p-8 rounded-lg border-8 overflow-hidden"
+            style={{
+              width: '400px',
+              height: '500px',
+              backgroundImage: `url(${stage.stageBg})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              borderColor: stageColor,
+              boxShadow: `0 0 40px ${stageColor}88, inset 0 0 60px rgba(0,0,0,0.5)`,
+              imageRendering: 'pixelated'
+            }}
+          >
+            {/* Gradient overlay */}
+            <div 
+              className="absolute inset-0"
+              style={{
+                background: `linear-gradient(to bottom right, ${stageColor}40, transparent)`
+              }}
+            />
+            
+            {/* Scan lines */}
+            <div className="absolute inset-0 opacity-10" style={{
+              backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.1) 3px, rgba(255,255,255,0.1) 6px)',
+              animation: 'scanlines 8s linear infinite'
+            }}></div>
+            
+            {/* Content */}
+            <div className="relative z-10 h-full flex flex-col items-center justify-center">
+              {/* Stage icon */}
+              <div className="mb-6 transform" style={{
+                animation: animationStep >= 1 ? 'float 2s ease-in-out infinite' : 'none'
+              }}>
+                <PixelArt type={stage.pixelArt} className="w-32 h-32" />
+              </div>
+              
+              {/* Lock (disappears when breaking) */}
+              <div 
+                className="mb-6 relative"
+                style={{
+                  opacity: animationStep >= 2 ? 0 : 1,
+                  transform: animationStep >= 2 ? 'scale(0) rotate(180deg)' : 'scale(1) rotate(0deg)',
+                  transition: 'all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)'
+                }}
+              >
+                <PixelatedLock isBreaking={animationStep === 1} stageColor={stageColor} />
+                
+                {/* Glow effect */}
+                <div 
+                  className="absolute inset-0 blur-xl"
+                  style={{
+                    background: `radial-gradient(circle, ${stageColor}60 0%, transparent 70%)`,
+                    animation: 'pulse 2s ease-in-out infinite'
+                  }}
+                />
+              </div>
+              
+              {/* Stage title - appears after lock breaks */}
+              <div 
+                className="text-center"
+                style={{
+                  opacity: animationStep >= 2 ? 1 : 0,
+                  transform: animationStep >= 2 ? 'translateY(0)' : 'translateY(30px)',
+                  transition: 'all 0.5s ease-out 0.3s'
+                }}
+              >
+                <div 
+                  className="px-6 py-3 rounded-lg border-4 mb-4"
+                  style={{
+                    background: `linear-gradient(135deg, ${stageColor}40, ${stageColor}20)`,
+                    borderColor: stageColor,
+                    boxShadow: `0 0 20px ${stageColor}60`,
+                    backdropFilter: 'blur(10px)'
+                  }}
+                >
+                  <div className="text-4xl font-black pixel-text text-white mb-2"
+                       style={{ textShadow: `0 0 20px ${stageColor}, 2px 2px 0 #000` }}>
+                    STAGE {stage.id}
+                  </div>
+                  <div className="text-xs font-black pixel-text"
+                       style={{ color: stageColor, textShadow: '1px 1px 0 #000' }}>
+                    UNLOCKED!
+                  </div>
+                </div>
+                
+                <div className="text-sm font-black pixel-text text-white px-4"
+                     style={{ textShadow: '2px 2px 0 #000' }}>
+                  {stage.title}
+                </div>
+              </div>
+            </div>
+            
+            {/* Corner decorations */}
+            {animationStep >= 2 && (
+              <>
+                <div className="absolute top-2 left-2 w-6 h-6 border-t-4 border-l-4" 
+                     style={{ borderColor: stageColor, animation: 'fadeIn 0.3s ease-out' }}/>
+                <div className="absolute top-2 right-2 w-6 h-6 border-t-4 border-r-4" 
+                     style={{ borderColor: stageColor, animation: 'fadeIn 0.3s ease-out 0.1s' }}/>
+                <div className="absolute bottom-2 left-2 w-6 h-6 border-b-4 border-l-4" 
+                     style={{ borderColor: stageColor, animation: 'fadeIn 0.3s ease-out 0.2s' }}/>
+                <div className="absolute bottom-2 right-2 w-6 h-6 border-b-4 border-r-4" 
+                     style={{ borderColor: stageColor, animation: 'fadeIn 0.3s ease-out 0.3s' }}/>
+              </>
+            )}
+          </div>
+          
+          {/* Radial glow behind card */}
+          <div 
+            className="absolute inset-0 -z-10 blur-3xl"
+            style={{
+              background: `radial-gradient(circle, ${stageColor}60 0%, transparent 70%)`,
+              animation: animationStep >= 2 ? 'pulse 1.5s ease-in-out infinite' : 'none'
+            }}
+          />
+        </div>
+        
+        {/* "Continue" text at bottom - appears at final step */}
+        {animationStep >= 3 && (
+          <div 
+            className="absolute bottom-20 left-1/2 transform -translate-x-1/2 pixel-text text-white text-sm animate-pulse"
+            style={{ textShadow: `0 0 10px ${stageColor}` }}
+          >
+            STAGE UNLOCKED! CONTINUE YOUR JOURNEY...
+          </div>
+        )}
+      </div>
+    );
+  };
   
 const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedTasks, expandedTasks, setExpandedTasks, handleMissionClick, handleTaskComplete, className = "" }) => {
   const missionKey = `${selectedStage.id}-${mIdx}`;
@@ -3194,13 +3435,158 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
     setSelectedMission(selectedMission === key ? null : key);
   };
 
+  const checkStageCompletion = (stageId) => {
+    const stage = stages.find(s => s.id === stageId);
+    if (!stage) return false;
+    
+    let totalTasks = 0;
+    let completedCount = 0;
+    
+    stage.missions.forEach((mission, mIdx) => {
+      mission.tasks.forEach((task, tIdx) => {
+        totalTasks++;
+        const key = `${stageId}-${mIdx}-${tIdx}`;
+        if (completedTasks[key]) {
+          completedCount++;
+        }
+      });
+    });
+    
+    return totalTasks > 0 && completedCount === totalTasks;
+  };
+
+  const playUnlockSound = () => {
+    if (!audioContextRef.current) return;
+    
+    const ctx = audioContextRef.current;
+    const now = ctx.currentTime;
+    
+    // Epic ascending arpeggio
+    const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      
+      osc.type = 'square';
+      osc.frequency.value = freq;
+      
+      gain.gain.setValueAtTime(0, now + i * 0.1);
+      gain.gain.linearRampToValueAtTime(0.3, now + i * 0.1 + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.1 + 0.3);
+      
+      osc.start(now + i * 0.1);
+      osc.stop(now + i * 0.1 + 0.3);
+    });
+    
+    // Victory chime
+    setTimeout(() => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1046.50, now + 0.6);
+      osc.frequency.exponentialRampToValueAtTime(2093, now + 0.9);
+      
+      gain.gain.setValueAtTime(0.4, now + 0.6);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 1.2);
+      
+      osc.start(now + 0.6);
+      osc.stop(now + 1.2);
+    }, 0);
+  };
+  
+  const playLockBreakSound = () => {
+    if (!audioContextRef.current) return;
+    
+    const ctx = audioContextRef.current;
+    const now = ctx.currentTime;
+    
+    // Shattering glass effect
+    for (let i = 0; i < 8; i++) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      
+      osc.type = 'square';
+      osc.frequency.value = 2000 + Math.random() * 1000;
+      
+      gain.gain.setValueAtTime(0.15, now + i * 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.02 + 0.1);
+      
+      osc.start(now + i * 0.02);
+      osc.stop(now + i * 0.02 + 0.1);
+    }
+  };
+  
   const handleTaskComplete = (stage, missionIdx, taskIdx) => {
     const key = `${stage.id}-${missionIdx}-${taskIdx}`;
+    const newCompletedState = !completedTasks[key];
+    
     playSound(1400 + taskIdx * 50, 0.15, 'sine', 0.2);
-    setCompletedTasks(prev => ({
-      ...prev,
-      [key]: !prev[key]
-    }));
+    
+    const newCompletedTasks = {
+      ...completedTasks,
+      [key]: newCompletedState
+    };
+    
+    setCompletedTasks(newCompletedTasks);
+    
+    // Check if this was the last task to complete the stage
+    if (newCompletedState) {
+      setTimeout(() => {
+        // Temporarily update completedTasks to check completion
+        const isStageComplete = (() => {
+          const currentStage = stages.find(s => s.id === stage.id);
+          if (!currentStage) return false;
+          
+          let totalTasks = 0;
+          let completedCount = 0;
+          
+          currentStage.missions.forEach((mission, mIdx) => {
+            mission.tasks.forEach((task, tIdx) => {
+              totalTasks++;
+              const taskKey = `${stage.id}-${mIdx}-${tIdx}`;
+              if (newCompletedTasks[taskKey]) {
+                completedCount++;
+              }
+            });
+          });
+          
+          return totalTasks > 0 && completedCount === totalTasks;
+        })();
+        
+        if (isStageComplete && stage.id < 12) {
+          const nextStage = stages.find(s => s.id === stage.id + 1);
+          if (nextStage) {
+            setUnlockedStage(nextStage);
+            setShowUnlockAnimation(true);
+            setUnlockAnimationStep(0);
+            playUnlockSound();
+            
+            // Animation sequence
+            setTimeout(() => setUnlockAnimationStep(1), 1000);
+            setTimeout(() => {
+              playLockBreakSound();
+              setUnlockAnimationStep(2);
+            }, 2000);
+            setTimeout(() => setUnlockAnimationStep(3), 3000);
+            setTimeout(() => {
+              setShowUnlockAnimation(false);
+              setUnlockedStage(null);
+              setUnlockAnimationStep(0);
+            }, 5000);
+          }
+        }
+      }, 100);
+    }
   };
 
   const handleNextMission = () => {
@@ -3258,7 +3644,20 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
     <div className="min-h-screen">
       <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} playSound={playSound} />
       
-      {activeTab === 'quest' && <QuestLogTab />}
+      {/* ADD THIS: Stage Unlock Animation Overlay */}
+      {showUnlockAnimation && unlockedStage && (
+        <StageUnlockOverlay 
+          stage={unlockedStage} 
+          animationStep={unlockAnimationStep}
+          onClose={() => {
+            setShowUnlockAnimation(false);
+            setUnlockedStage(null);
+            setUnlockAnimationStep(0);
+          }}
+        />
+      )}
+    
+    {activeTab === 'quest' && <QuestLogTab />}
       {activeTab === 'loot' && <LootTableTab />}
       {activeTab === 'achievements' && <AchievementsTab completedTasks={completedTasks} stages={stages} />}
       {activeTab === 'wisdom' && <DailyWisdomTab />}
@@ -4058,6 +4457,26 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         body {
           overflow-x: hidden;
         }
+
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+          20%, 40%, 60%, 80% { transform: translateX(4px); }
+        }
+        
+        .animate-shake {
+          animation: shake 0.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.6; }
+        }
+        
+        .animate-pulse-slow {
+          animation: pulse-slow 2s ease-in-out infinite;
+        }
+
       `}</style>
     </div>
   );

@@ -2035,9 +2035,12 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                 </div>
               </div>
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
+    );
+  })}
+</div>
       
 
   const stages = [

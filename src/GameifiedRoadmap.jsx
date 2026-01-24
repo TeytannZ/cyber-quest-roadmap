@@ -546,29 +546,29 @@ const DailyWisdomTab = () => {
     >
       {/* Dark overlay for better text readability */}
       <div className="absolute inset-0 bg-black/40"></div>
-      
-      {/* Floating candle lights effect - independent of sound */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(8)].map((_, i) => (
+
+      {/* Mystical floating particles */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {[...Array(60)].map((_, i) => (
           <div
-            key={`candle-${i}`}
-            className="absolute rounded-full animate-candle-flicker"
+            key={`wisdom-particle-${i}`}
+            className="absolute rounded-full"
             style={{
-              width: '8px',
-              height: '8px',
-              backgroundColor: '#fb923c',
-              left: `${10 + i * 12}%`,
-              top: `${20 + (i * 7.5)}%`,
-              opacity: 0.6,
-              filter: 'blur(2px)',
-              boxShadow: '0 0 10px rgba(251, 146, 60, 0.6)',
-              animation: `candleFlicker ${1.5 + (i * 0.2)}s ease-in-out infinite`,
-              animationDelay: `${i * 0.3}s`
+              width: `${2 + (i % 3)}px`,
+              height: `${2 + (i % 3)}px`,
+              backgroundColor: i % 2 === 0 ? '#fbbf24' : '#f59e0b',
+              left: `${(i * 1.7) % 100}%`,
+              top: `${(i * 5.1) % 100}%`,
+              opacity: 0.25 + ((i % 4) * 0.08),
+              filter: 'blur(1.5px)',
+              boxShadow: `0 0 10px ${i % 2 === 0 ? 'rgba(251, 191, 36, 0.4)' : 'rgba(245, 158, 11, 0.4)'}`,
+              animation: `floatParticle ${9 + (i % 6)}s ease-in-out infinite`,
+              animationDelay: `${(i * 0.18) % 7}s`
             }}
           />
         ))}
       </div>
-
+      
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Header */}
         <div className="bg-gradient-to-r from-amber-900/80 via-yellow-900/80 to-amber-900/80 backdrop-blur-sm rounded-sm p-6 mb-8 border-8 border-yellow-700/80 shadow-2xl text-center">
@@ -1280,6 +1280,7 @@ const PixelatedTitle = () => {
   const [displayedText, setDisplayedText] = useState('');
   const fullText = 'EPIC LEARNING JOURNEY';
   const audioContextRef = useRef(null);
+  const [showCursor, setShowCursor] = useState(true);
 
   useEffect(() => {
     audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
@@ -1309,6 +1310,11 @@ const PixelatedTitle = () => {
         index++;
       } else {
         clearInterval(interval);
+        // Start cursor blinking after typing is done
+        const cursorInterval = setInterval(() => {
+          setShowCursor(prev => !prev);
+        }, 530);
+        return () => clearInterval(cursorInterval);
       }
     }, 80);
 
@@ -1321,14 +1327,14 @@ const PixelatedTitle = () => {
   }, []);
 
   return (
-    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-center pixel-text text-amber-100 px-3 sm:px-4 md:px-6 border-3 sm:border-4 border-yellow-700 bg-gradient-to-br from-amber-900/60 to-yellow-900/60 backdrop-blur-sm rounded-lg py-3 sm:py-4 md:py-6 inline-block max-w-[95%] leading-tight"
+    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-center pixel-text text-amber-100 px-3 sm:px-4 md:px-6 border-3 sm:border-4 border-yellow-700 bg-gradient-to-br from-amber-900/60 to-yellow-900/60 backdrop-blur-sm rounded-lg py-3 sm:py-4 md:py-6 inline-block max-w-[95%] leading-tight whitespace-nowrap"
         style={{
           textShadow: '2px 2px 0px rgba(101, 67, 33, 0.8), -1px -1px 0px rgba(255, 215, 0, 0.3)',
           boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 0 20px rgba(255, 215, 0, 0.2)',
           imageRendering: 'pixelated'
         }}>
       {displayedText}
-      <span className="animate-blink ml-1 sm:ml-2">▮</span>
+      <span className={`ml-1 sm:ml-2 ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}>_</span>
     </h1>
   );
 };
@@ -1695,9 +1701,21 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       {/* Mission Checkpoint - Always at bottom above navigation */}
       {isMissionOpen && mission.checkpoint && (
         <div className="mt-4">
-          <div className="p-3 bg-yellow-900/30 border-4 border-yellow-500/60 rounded-lg backdrop-blur-md shadow-2xl">
+          <div 
+            className={`p-3 border-4 rounded-lg backdrop-blur-md shadow-2xl`}
+            style={{
+              background: `linear-gradient(135deg, ${selectedStage.theme.bg.replace('from-', '').split(' ')[0]}33, ${selectedStage.theme.bg.split('to-')[1]}33)`,
+              borderColor: selectedStage.theme.border.replace('border-', '')
+            }}
+          >
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-6 h-6 bg-yellow-400/80 rounded border-2 border-yellow-600 flex items-center justify-center flex-shrink-0">
+              <div 
+                className={`w-6 h-6 rounded border-2 flex items-center justify-center flex-shrink-0`}
+                style={{
+                  background: selectedStage.theme.bg.replace('from-', '').split(' ')[0],
+                  borderColor: selectedStage.theme.border.replace('border-', '')
+                }}
+              >
                 <span className="text-sm">🎯</span>
               </div>
               <div className="text-[10px] font-black pixel-text text-yellow-100 uppercase drop-shadow-lg">
@@ -2929,19 +2947,21 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       
       {activeTab === 'roadmap' && (
       <div 
-        className="h-screen p-4 sm:p-6 md:p-8 pt-20 md:pt-24 relative flex flex-col"
-        style={{ overflowX: 'hidden', overflowY: 'auto' }}
+        className="min-h-screen p-4 sm:p-6 md:p-8 pt-20 md:pt-24 relative flex flex-col"
         style={{
           backgroundImage: `url(${worldMapBackground})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
+          backgroundRepeat: 'repeat-y',
           backgroundAttachment: 'scroll',
-          imageRendering: 'pixelated'
+          imageRendering: 'pixelated',
+          overflowX: 'hidden',
+          overflowY: 'auto'
         }}
       >
-        {/* Old parchment/sepia overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-100/55 via-yellow-50/45 to-orange-100/55 pointer-events-none mix-blend-overlay"></div>
+        {/* Old paper/parchment overlay - creates aged map effect */}
+        <div className="fixed inset-0 bg-gradient-to-b from-amber-50/70 via-yellow-100/60 to-orange-50/70 pointer-events-none" 
+             style={{ backgroundColor: 'rgba(245, 222, 179, 0.4)' }}></div>
         
         {/* Aged paper texture overlay */}
         <div className="absolute inset-0 pointer-events-none opacity-20" style={{
@@ -2982,31 +3002,33 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
           
       {/* Content wrapper with relative positioning */}
       <div className="relative z-10 flex-1 flex flex-col overflow-visible">
-            
-      {!selectedStage ? (
-        /* STAGE SELECTION VIEW */
-        <div className="max-w-7xl mx-auto h-full overflow-y-auto flex flex-col">
-          {/* Floating dust particles for main menu */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-            {[...Array(50)].map((_, i) => (
+
+        {/* Enhanced floating particles for main menu */}
+          <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+            {[...Array(80)].map((_, i) => (
               <div
-                key={`menu-dust-${i}`}
+                key={`menu-particle-${i}`}
                 className="absolute rounded-full"
                 style={{
-                  width: '8px',
-                  height: '8px',
+                  width: `${3 + (i % 4)}px`,
+                  height: `${3 + (i % 4)}px`,
                   backgroundColor: '#ffd700',
-                  left: `${(i * 2.1) % 100}%`,
-                  top: `${(i * 5.3) % 100}%`,
-                  opacity: 0.5,
-                  filter: 'blur(2px)',
-                  boxShadow: '0 0 12px rgba(255, 215, 0, 0.7)',
-                  animation: `dustFloat ${10 + (i % 6)}s ease-in-out infinite`,
-                  animationDelay: `${(i * 0.2) % 6}s`
+                  left: `${(i * 1.3) % 100}%`,
+                  top: `${(i * 4.7) % 100}%`,
+                  opacity: 0.3 + ((i % 3) * 0.1),
+                  filter: 'blur(1px)',
+                  boxShadow: '0 0 8px rgba(255, 215, 0, 0.5)',
+                  animation: `floatParticle ${8 + (i % 7)}s ease-in-out infinite`,
+                  animationDelay: `${(i * 0.15) % 6}s`
                 }}
               />
             ))}
           </div>
+            
+      {!selectedStage ? (
+        /* STAGE SELECTION VIEW */
+        <div className="max-w-7xl mx-auto h-full overflow-y-auto flex flex-col">
+          
           <div className="mb-8 md:mb-16 py-4 flex items-center justify-center px-2 relative z-10">
             <PixelatedTitle />
           </div>
@@ -3147,22 +3169,15 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       
       {/* Enhanced gradient overlay */}
       <div className={`absolute inset-0 bg-gradient-to-br ${selectedStage.theme.bg} opacity-30`}></div>
-      
-      {/* Pixel Grid */}
-      <div className="absolute inset-0 opacity-5" style={{
-        backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-        backgroundSize: '20px 20px'
-      }}></div>
 
-      {/* Floating Particles */}
+      {/* Theme-matched floating particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(50)].map((_, i) => {
-          // Get color based on stage theme
+        {[...Array(70)].map((_, i) => {
           const getParticleColor = () => {
             const particleClass = selectedStage.theme.particle;
             if (particleClass.includes('green')) return '#4ade80';
             if (particleClass.includes('orange')) return '#fb923c';
-            if (particleClass.includes('amber')) return '#f59e0b';
+            if (particleClass.includes('amber')) return '#fbbf24';
             if (particleClass.includes('cyan')) return '#22d3ee';
             if (particleClass.includes('purple')) return '#a855f7';
             if (particleClass.includes('blue')) return '#3b82f6';
@@ -3178,24 +3193,30 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
           
           return (
             <div
-              key={`stage-dust-${i}`}
+              key={`stage-particle-${i}`}
               className="absolute rounded-full"
               style={{
-                width: '8px',
-                height: '8px',
+                width: `${3 + (i % 4)}px`,
+                height: `${3 + (i % 4)}px`,
                 backgroundColor: color,
-                left: `${(i * 2.1) % 100}%`,
-                top: `${(i * 5.3) % 100}%`,
-                opacity: 0.5,
-                filter: 'blur(2px)',
-                boxShadow: `0 0 12px ${color}aa`,
-                animation: `dustFloat ${10 + (i % 6)}s ease-in-out infinite`,
-                animationDelay: `${(i * 0.2) % 6}s`
+                left: `${(i * 1.5) % 100}%`,
+                top: `${(i * 4.3) % 100}%`,
+                opacity: 0.3 + ((i % 3) * 0.1),
+                filter: 'blur(1px)',
+                boxShadow: `0 0 10px ${color}66`,
+                animation: `floatParticle ${7 + (i % 8)}s ease-in-out infinite`,
+                animationDelay: `${(i * 0.12) % 5}s`
               }}
             />
           );
         })}
       </div>
+      
+      {/* Pixel Grid */}
+      <div className="absolute inset-0 opacity-5" style={{
+        backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+        backgroundSize: '20px 20px'
+      }}></div>
       
       <div className="max-w-7xl mx-auto relative z-10 flex-1 flex flex-col overflow-hidden">
         {/* Header */}
@@ -3472,6 +3493,27 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
           }
           100% {
             transform: translate(-10px, -200px) rotate(360deg);
+            opacity: 0;
+          }
+        }
+
+        @keyframes floatParticle {
+          0%, 100% {
+            transform: translate(0, 0) rotate(0deg) scale(1);
+            opacity: 0;
+          }
+          10% {
+            opacity: 0.3;
+          }
+          50% {
+            transform: translate(30px, -120px) rotate(180deg) scale(1.2);
+            opacity: 0.5;
+          }
+          90% {
+            opacity: 0.2;
+          }
+          100% {
+            transform: translate(-15px, -240px) rotate(360deg) scale(0.8);
             opacity: 0;
           }
         }

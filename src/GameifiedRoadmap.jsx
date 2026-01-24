@@ -1464,39 +1464,38 @@ const LearningRoadmap = () => {
   if (!imagesLoaded) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-black via-purple-950 to-black relative overflow-hidden flex items-center justify-center">
-        {/* Animated retro grid background */}
+        {/* Pixelated grid background */}
         <div className="absolute inset-0" style={{
           backgroundImage: `
-            linear-gradient(0deg, transparent 24%, rgba(138, 43, 226, 0.05) 25%, rgba(138, 43, 226, 0.05) 26%, transparent 27%, transparent 74%, rgba(138, 43, 226, 0.05) 75%, rgba(138, 43, 226, 0.05) 76%, transparent 77%, transparent),
-            linear-gradient(90deg, transparent 24%, rgba(138, 43, 226, 0.05) 25%, rgba(138, 43, 226, 0.05) 26%, transparent 27%, transparent 74%, rgba(138, 43, 226, 0.05) 75%, rgba(138, 43, 226, 0.05) 76%, transparent 77%, transparent)
+            repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(138, 43, 226, 0.1) 49px, rgba(138, 43, 226, 0.1) 50px),
+            repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(138, 43, 226, 0.1) 49px, rgba(138, 43, 226, 0.1) 50px)
           `,
-          backgroundSize: '50px 50px',
           animation: 'gridScroll 20s linear infinite',
           imageRendering: 'pixelated'
         }}></div>
 
-        {/* Scanlines overlay */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
+        {/* Scanlines */}
+        <div className="absolute inset-0 opacity-10" style={{
           background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)',
           animation: 'scanlines 8s linear infinite'
         }}></div>
 
-        {/* Floating pixel particles */}
+        {/* Pixelated floating blocks */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(30)].map((_, i) => (
+          {[...Array(25)].map((_, i) => (
             <div
               key={`pixel-${i}`}
               className="absolute"
               style={{
-                width: `${8 + (i % 3) * 4}px`,
-                height: `${8 + (i % 3) * 4}px`,
+                width: '16px',
+                height: '16px',
                 backgroundColor: i % 4 === 0 ? '#8b5cf6' : i % 4 === 1 ? '#ec4899' : i % 4 === 2 ? '#06b6d4' : '#fbbf24',
-                left: `${(i * 3.7) % 100}%`,
-                top: `${(i * 5.3) % 100}%`,
-                opacity: 0.6,
-                boxShadow: `0 0 ${12 + (i % 3) * 4}px currentColor`,
-                animation: `floatPixel ${8 + (i % 5)}s ease-in-out infinite`,
-                animationDelay: `${(i * 0.2) % 4}s`,
+                left: `${(i * 4.2) % 100}%`,
+                top: `${(i * 6.7) % 100}%`,
+                opacity: 0.5,
+                boxShadow: `0 0 12px currentColor`,
+                animation: `floatPixel ${10 + (i % 4)}s ease-in-out infinite`,
+                animationDelay: `${(i * 0.3) % 5}s`,
                 imageRendering: 'pixelated'
               }}
             />
@@ -1504,217 +1503,208 @@ const LearningRoadmap = () => {
         </div>
 
         <div className="relative z-10 text-center px-4">
-          {/* Pixel art game controller */}
-          <div className="mb-12 relative inline-block">
-            <div style={{ 
-              animation: 'bounce 2s ease-in-out infinite',
-              imageRendering: 'pixelated'
-            }}>
-              {/* Custom pixel art controller */}
-              <div className="relative w-64 h-64 mx-auto">
-                {/* Controller body */}
-                <div className="absolute inset-0">
-                  {/* Main body - purple gradient */}
-                  <div className="absolute top-16 left-8 right-8 bottom-8 rounded-3xl border-8 border-black" style={{
-                    background: 'linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #c084fc 100%)',
-                    boxShadow: '0 8px 0 #4c1d95, inset 0 -8px 0 rgba(0,0,0,0.3), inset 0 8px 0 rgba(255,255,255,0.2)',
-                    imageRendering: 'pixelated'
-                  }}></div>
-                  
-                  {/* D-Pad - left side */}
-                  <div className="absolute top-24 left-16">
-                    {/* Vertical bar */}
-                    <div className="absolute w-8 h-24 bg-gray-800 border-4 border-black rounded" style={{
-                      boxShadow: 'inset 0 -4px 0 rgba(0,0,0,0.5), inset 0 4px 0 rgba(255,255,255,0.2)'
-                    }}></div>
-                    {/* Horizontal bar */}
-                    <div className="absolute w-24 h-8 bg-gray-800 border-4 border-black rounded top-8 -left-8" style={{
-                      boxShadow: 'inset 0 -4px 0 rgba(0,0,0,0.5), inset 0 4px 0 rgba(255,255,255,0.2)'
-                    }}></div>
-                  </div>
-                  
-                  {/* Action buttons - right side */}
-                  <div className="absolute top-28 right-20">
-                    {/* A button - green */}
-                    <div className="absolute w-12 h-12 bg-green-500 border-4 border-black rounded-full top-12 right-0" style={{
-                      boxShadow: '0 6px 0 #166534, inset 0 -6px 0 rgba(0,0,0,0.4), inset 0 4px 0 rgba(255,255,255,0.3)'
-                    }}>
-                      <div className="absolute inset-0 flex items-center justify-center text-white font-black pixel-text text-xs">A</div>
-                    </div>
-                    {/* B button - red */}
-                    <div className="absolute w-12 h-12 bg-red-500 border-4 border-black rounded-full top-0 right-12" style={{
-                      boxShadow: '0 6px 0 #991b1b, inset 0 -6px 0 rgba(0,0,0,0.4), inset 0 4px 0 rgba(255,255,255,0.3)'
-                    }}>
-                      <div className="absolute inset-0 flex items-center justify-center text-white font-black pixel-text text-xs">B</div>
-                    </div>
-                    {/* X button - blue */}
-                    <div className="absolute w-12 h-12 bg-blue-500 border-4 border-black rounded-full top-0 -right-12" style={{
-                      boxShadow: '0 6px 0 #1e40af, inset 0 -6px 0 rgba(0,0,0,0.4), inset 0 4px 0 rgba(255,255,255,0.3)'
-                    }}>
-                      <div className="absolute inset-0 flex items-center justify-center text-white font-black pixel-text text-xs">X</div>
-                    </div>
-                    {/* Y button - yellow */}
-                    <div className="absolute w-12 h-12 bg-yellow-500 border-4 border-black rounded-full top-12 -right-24" style={{
-                      boxShadow: '0 6px 0 #a16207, inset 0 -6px 0 rgba(0,0,0,0.4), inset 0 4px 0 rgba(255,255,255,0.3)'
-                    }}>
-                      <div className="absolute inset-0 flex items-center justify-center text-white font-black pixel-text text-xs">Y</div>
-                    </div>
-                  </div>
-                  
-                  {/* Center screen */}
-                  <div className="absolute top-20 left-1/2 transform -translate-x-1/2 w-20 h-16 bg-cyan-900 border-4 border-black rounded" style={{
-                    boxShadow: 'inset 0 0 20px rgba(0,0,0,0.8), 0 4px 0 #0e7490'
-                  }}>
-                    {/* Animated loading dots */}
-                    <div className="absolute inset-0 flex items-center justify-center gap-1">
-                      {[0, 1, 2].map((i) => (
-                        <div
-                          key={i}
-                          className="w-2 h-2 bg-cyan-400 rounded-sm"
-                          style={{
-                            animation: `blink 1.5s infinite`,
-                            animationDelay: `${i * 0.2}s`,
-                            boxShadow: '0 0 8px #06b6d4'
-                          }}
-                        ></div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
+          {/* Pixel Art Game Controller - TRUE pixel art style */}
+          <div className="mb-12 relative inline-block" style={{ imageRendering: 'pixelated' }}>
+            <div style={{ animation: 'bounce 2s ease-in-out infinite' }}>
+              <svg width="256" height="256" viewBox="0 0 64 64" className="w-64 h-64" style={{ imageRendering: 'pixelated' }}>
+                {/* Controller body - pixel perfect */}
+                <rect x="8" y="20" width="48" height="28" fill="#7c3aed" stroke="#000" strokeWidth="1"/>
+                <rect x="10" y="22" width="44" height="24" fill="#8b5cf6"/>
+                <rect x="12" y="24" width="40" height="20" fill="#9333ea"/>
+                
+                {/* D-Pad - left side */}
+                <rect x="16" y="28" width="4" height="12" fill="#1f2937" stroke="#000" strokeWidth="0.5"/>
+                <rect x="14" y="32" width="8" height="4" fill="#1f2937" stroke="#000" strokeWidth="0.5"/>
+                <rect x="16" y="30" width="4" height="8" fill="#374151"/>
+                <rect x="15" y="33" width="6" height="2" fill="#374151"/>
+                
+                {/* Action buttons - right side */}
+                {/* A button - bottom right */}
+                <circle cx="46" cy="36" r="3" fill="#22c55e" stroke="#000" strokeWidth="0.5"/>
+                <circle cx="46" cy="36" r="2" fill="#4ade80"/>
+                <text x="46" y="37.5" textAnchor="middle" fontSize="3" fill="#000" fontWeight="bold" fontFamily="monospace">A</text>
+                
+                {/* B button - right */}
+                <circle cx="50" cy="32" r="3" fill="#ef4444" stroke="#000" strokeWidth="0.5"/>
+                <circle cx="50" cy="32" r="2" fill="#f87171"/>
+                <text x="50" y="33.5" textAnchor="middle" fontSize="3" fill="#000" fontWeight="bold" fontFamily="monospace">B</text>
+                
+                {/* X button - left */}
+                <circle cx="42" cy="32" r="3" fill="#3b82f6" stroke="#000" strokeWidth="0.5"/>
+                <circle cx="42" cy="32" r="2" fill="#60a5fa"/>
+                <text x="42" y="33.5" textAnchor="middle" fontSize="3" fill="#000" fontWeight="bold" fontFamily="monospace">X</text>
+                
+                {/* Y button - top */}
+                <circle cx="46" cy="28" r="3" fill="#eab308" stroke="#000" strokeWidth="0.5"/>
+                <circle cx="46" cy="28" r="2" fill="#facc15"/>
+                <text x="46" y="29.5" textAnchor="middle" fontSize="3" fill="#000" fontWeight="bold" fontFamily="monospace">Y</text>
+                
+                {/* Center screen */}
+                <rect x="26" y="28" width="12" height="8" fill="#164e63" stroke="#000" strokeWidth="1"/>
+                <rect x="27" y="29" width="10" height="6" fill="#0e7490"/>
+                
+                {/* Loading dots in screen */}
+                {[0, 1, 2].map((i) => (
+                  <rect
+                    key={i}
+                    x={29 + i * 3}
+                    y="32"
+                    width="2"
+                    height="2"
+                    fill="#06b6d4"
+                    style={{
+                      animation: `blink 1.5s infinite`,
+                      animationDelay: `${i * 0.3}s`
+                    }}
+                  />
+                ))}
+                
+                {/* Shine/highlight effects */}
+                <rect x="12" y="24" width="8" height="2" fill="#a855f7" opacity="0.6"/>
+                <rect x="12" y="24" width="4" height="4" fill="#c084fc" opacity="0.3"/>
+              </svg>
             </div>
             
-            {/* Glow rings */}
+            {/* Pixelated glow rings */}
             <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute inset-0 animate-ping opacity-20" style={{ animationDuration: '3s' }}>
-                <div className="w-64 h-64 rounded-full border-8 border-purple-500"></div>
+              <div className="absolute inset-0 animate-ping opacity-15" style={{ animationDuration: '3s' }}>
+                <div className="w-64 h-64 border-8 border-purple-500" style={{ imageRendering: 'pixelated' }}></div>
               </div>
             </div>
           </div>
 
-          {/* Loading text with retro effect */}
+          {/* Loading text - pixelated style */}
           <div className="mb-8">
             <h1 className="text-5xl font-black pixel-text mb-4" style={{
               color: '#fff',
-              textShadow: '4px 4px 0 #8b5cf6, -2px -2px 0 #ec4899',
-              animation: 'pulse 2s ease-in-out infinite'
+              textShadow: '4px 4px 0 #8b5cf6, -4px -4px 0 #ec4899',
+              animation: 'pulse 2s ease-in-out infinite',
+              imageRendering: 'pixelated'
             }}>
               LOADING
             </h1>
-            <div className="flex justify-center gap-2">
+            {/* Pixelated dots */}
+            <div className="flex justify-center gap-3">
               {[0, 1, 2].map((i) => (
                 <div
                   key={i}
-                  className="w-4 h-4 bg-white rounded-sm"
+                  className="w-4 h-4 border-2 border-black"
                   style={{
+                    backgroundColor: '#fff',
                     animation: `blink 1s infinite`,
                     animationDelay: `${i * 0.3}s`,
                     imageRendering: 'pixelated',
-                    boxShadow: '0 0 12px #fff'
+                    boxShadow: '0 0 12px #fff, inset 0 -2px 0 rgba(0,0,0,0.3)'
                   }}
                 ></div>
               ))}
             </div>
           </div>
 
-          {/* Progress bar - arcade style */}
+          {/* Progress bar - TRUE pixel art style */}
           <div className="relative w-96 max-w-full mx-auto">
-            {/* Outer frame */}
-            <div className="relative p-2 bg-black rounded-sm border-4 border-purple-600" style={{
-              boxShadow: '0 0 30px rgba(139, 92, 246, 0.6), inset 0 0 20px rgba(0,0,0,0.8)'
+            {/* Outer pixelated frame */}
+            <div className="relative p-2 bg-black border-4 border-purple-600" style={{
+              boxShadow: '0 0 30px rgba(139, 92, 246, 0.6), inset 0 0 20px rgba(0,0,0,0.8)',
+              imageRendering: 'pixelated'
             }}>
               {/* Inner frame */}
-              <div className="relative bg-gray-900 rounded-sm border-4 border-purple-800 overflow-hidden" style={{
-                boxShadow: 'inset 0 4px 8px rgba(0,0,0,0.8)'
+              <div className="relative bg-gray-900 border-4 border-purple-800 overflow-hidden" style={{
+                boxShadow: 'inset 0 4px 8px rgba(0,0,0,0.8)',
+                imageRendering: 'pixelated'
               }}>
-                {/* Background pattern */}
-                <div className="h-12 relative overflow-hidden">
-                  <div className="absolute inset-0" style={{
-                    backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 8px, rgba(139, 92, 246, 0.1) 8px, rgba(139, 92, 246, 0.1) 16px)',
-                    imageRendering: 'pixelated'
-                  }}></div>
-                  
-                  {/* Progress fill - pixelated blocks */}
-                  <div 
-                    className="h-full relative transition-all duration-300"
-                    style={{ 
-                      width: `${loadingProgress}%`,
-                      imageRendering: 'pixelated'
-                    }}
-                  >
-                    {/* Create pixelated progress blocks */}
-                    <div className="absolute inset-0 flex">
-                      {[...Array(Math.floor(loadingProgress / 5))].map((_, i) => (
-                        <div
-                          key={i}
-                          className="flex-1 border-r-2 border-black"
-                          style={{
-                            background: i % 3 === 0 ? '#8b5cf6' : i % 3 === 1 ? '#ec4899' : '#06b6d4',
-                            boxShadow: `inset 0 4px 0 rgba(255,255,255,0.4), inset 0 -4px 0 rgba(0,0,0,0.4)`,
-                            minWidth: '16px',
-                            imageRendering: 'pixelated'
-                          }}
-                        ></div>
-                      ))}
-                    </div>
+                {/* Progress container - pixelated blocks */}
+                <div className="h-12 relative overflow-hidden flex" style={{ imageRendering: 'pixelated' }}>
+                  {/* Create 20 blocks (5% each) */}
+                  {[...Array(20)].map((_, i) => {
+                    const isFilled = (i + 1) * 5 <= loadingProgress;
+                    const colors = ['#8b5cf6', '#a855f7', '#c084fc'];
+                    const color = colors[i % 3];
                     
-                    {/* Animated shimmer */}
-                    <div className="absolute inset-0 overflow-hidden">
-                      <div 
-                        className="absolute inset-0"
+                    return (
+                      <div
+                        key={i}
+                        className="flex-1 border-r-2 border-black transition-all duration-300"
                         style={{
-                          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-                          animation: 'shimmer 2s infinite',
-                          transform: 'translateX(-100%)'
+                          backgroundColor: isFilled ? color : '#1f2937',
+                          boxShadow: isFilled 
+                            ? `inset 0 4px 0 rgba(255,255,255,0.4), inset 0 -4px 0 rgba(0,0,0,0.4), 0 0 8px ${color}66`
+                            : 'inset 0 2px 0 rgba(0,0,0,0.5)',
+                          minWidth: '16px',
+                          imageRendering: 'pixelated',
+                          position: 'relative'
                         }}
-                      ></div>
-                    </div>
-                  </div>
+                      >
+                        {/* Pixel shine on filled blocks */}
+                        {isFilled && (
+                          <div 
+                            className="absolute top-0 left-0 right-0 h-1/3"
+                            style={{
+                              background: 'rgba(255,255,255,0.3)',
+                              imageRendering: 'pixelated'
+                            }}
+                          ></div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
 
-            {/* Percentage display */}
+            {/* Percentage display - pixelated boxes */}
             <div className="mt-6 flex justify-between items-center px-4">
-              <div className="bg-black border-4 border-purple-600 rounded-sm px-4 py-2" style={{
-                boxShadow: '0 0 20px rgba(139, 92, 246, 0.4)'
+              <div className="bg-black border-4 border-purple-600 px-4 py-2" style={{
+                boxShadow: '0 0 20px rgba(139, 92, 246, 0.4), inset 0 2px 0 rgba(139, 92, 246, 0.3)',
+                imageRendering: 'pixelated'
               }}>
-                <span className="text-purple-400 pixel-text text-xl font-black">{loadingProgress}%</span>
+                <span className="text-purple-400 pixel-text text-xl font-black" style={{
+                  textShadow: '2px 2px 0 rgba(0,0,0,0.5)'
+                }}>{loadingProgress}%</span>
               </div>
-              <div className="bg-black border-4 border-pink-600 rounded-sm px-4 py-2" style={{
-                boxShadow: '0 0 20px rgba(236, 72, 153, 0.4)'
+              <div className="bg-black border-4 border-pink-600 px-4 py-2" style={{
+                boxShadow: '0 0 20px rgba(236, 72, 153, 0.4), inset 0 2px 0 rgba(236, 72, 153, 0.3)',
+                imageRendering: 'pixelated'
               }}>
-                <span className="text-pink-400 pixel-text text-xs font-black animate-pulse">
+                <span className="text-pink-400 pixel-text text-xs font-black animate-pulse" style={{
+                  textShadow: '2px 2px 0 rgba(0,0,0,0.5)'
+                }}>
                   {loadingProgress < 100 ? 'LOADING...' : 'READY!'}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Level indicators */}
+          {/* Level indicators - pixel blocks */}
           <div className="mt-10 flex justify-center gap-3">
-            {[...Array(10)].map((_, i) => (
-              <div 
-                key={i}
-                className="w-6 h-6 border-4 border-black rounded-sm"
-                style={{
-                  backgroundColor: i < (loadingProgress / 10) ? '#8b5cf6' : '#374151',
-                  boxShadow: i < (loadingProgress / 10) 
-                    ? '0 0 16px #8b5cf6, inset 0 2px 0 rgba(255,255,255,0.4)' 
-                    : 'inset 0 2px 0 rgba(0,0,0,0.5)',
-                  transition: 'all 0.3s',
-                  imageRendering: 'pixelated'
-                }}
-              ></div>
-            ))}
+            {[...Array(10)].map((_, i) => {
+              const isActive = i < (loadingProgress / 10);
+              return (
+                <div 
+                  key={i}
+                  className="w-8 h-8 border-4 border-black"
+                  style={{
+                    backgroundColor: isActive ? '#8b5cf6' : '#374151',
+                    boxShadow: isActive 
+                      ? '0 0 16px #8b5cf6, inset 0 4px 0 rgba(255,255,255,0.4), inset 0 -4px 0 rgba(0,0,0,0.5)' 
+                      : 'inset 0 4px 0 rgba(0,0,0,0.5)',
+                    transition: 'all 0.3s',
+                    imageRendering: 'pixelated'
+                  }}
+                >
+                  {isActive && (
+                    <div className="w-full h-1/3 bg-white/30" style={{ imageRendering: 'pixelated' }}></div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* Additional animations */}
         <style jsx>{`
           @keyframes gridScroll {
-            from { transform: translate(0, 0); }
-            to { transform: translate(50px, 50px); }
+            from { backgroundPosition: 0 0; }
+            to { backgroundPosition: 50px 50px; }
           }
           @keyframes floatPixel {
             0%, 100% {
@@ -1722,13 +1712,9 @@ const LearningRoadmap = () => {
               opacity: 0.3;
             }
             50% {
-              transform: translateY(-30px) rotate(180deg);
-              opacity: 0.8;
+              transform: translateY(-40px) rotate(180deg);
+              opacity: 0.7;
             }
-          }
-          @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(200%); }
           }
         `}</style>
       </div>
@@ -3572,7 +3558,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                   <div 
                     className="relative overflow-hidden rounded-sm border-4 border-black/50"
                     style={{
-                      background: 'linear-gradient(180deg, #1a1a1aee 0%, #0a0a0aee 100%)',
+                      background: 'linear-gradient(180deg, #1a1a1a99 0%, #0a0a0a99 100%)',
                       boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.1), inset 0 -2px 0 rgba(0,0,0,0.5)'
                     }}
                   >
@@ -3589,7 +3575,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                     <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2" style={{ borderColor: selectedStage.theme.particle.replace('bg-', '') }}></div>
                     <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2" style={{ borderColor: selectedStage.theme.particle.replace('bg-', '') }}></div>
                     <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2" style={{ borderColor: selectedStage.theme.particle.replace('bg-', '') }}></div>
-                    <div className="relative z-10 p-3">
+                    <div className="relative z-10 p-3 bg-black/20 backdrop-blur-sm">
                       <div className="flex items-center gap-3 mb-3">
                         <div className="relative w-8 h-8 flex-shrink-0" style={{ imageRendering: 'pixelated' }}>
                           <div className="absolute inset-0 rounded-sm border-3 border-black transform rotate-45" style={{

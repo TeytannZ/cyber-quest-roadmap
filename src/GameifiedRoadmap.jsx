@@ -1356,9 +1356,32 @@ const LearningRoadmap = () => {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const audioContextRef = useRef(null);
 
+  // Force user interaction to unlock audio immediately on mount
+  useEffect(() => {
+    const unlockAudio = () => {
+      if (audioContextRef.current?.state === 'suspended') {
+        audioContextRef.current.resume();
+      }
+    };
+    
+    // Try to unlock on first render
+    unlockAudio();
+    
+    // Add listeners for immediate unlock
+    window.addEventListener('touchstart', unlockAudio, { once: true, passive: true });
+    window.addEventListener('click', unlockAudio, { once: true });
+    window.addEventListener('keydown', unlockAudio, { once: true });
+    
+    return () => {
+      window.removeEventListener('touchstart', unlockAudio);
+      window.removeEventListener('click', unlockAudio);
+      window.removeEventListener('keydown', unlockAudio);
+    };
+  }, []);
+  
   // Preload all images and initialize audio
   useEffect(() => {
-    // Initialize audio context immediately and aggressively
+  // Initialize audio context immediately and aggressively
     audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
     
     // Force audio context to start
@@ -1404,7 +1427,7 @@ const LearningRoadmap = () => {
     }, 1000);
     
     setTimeout(() => clearInterval(interval), 5000);
-
+  
     // Collect all images to preload
     const allImages = [
       libraryBackground,
@@ -1429,34 +1452,52 @@ const LearningRoadmap = () => {
       s11_m1,
       s12_m1, s12_m2, s12_m3, s12_m4
     ];
-
+  
     let loadedCount = 0;
     const totalImages = allImages.length;
-
+  
     const imagePromises = allImages.map((src) => {
       return new Promise((resolve) => {
         const img = new Image();
+        
+        // Force image to be cached
+        img.crossOrigin = 'anonymous';
+        
         img.onload = () => {
+          loadedCount++;
+          setLoadingProgress(Math.round((loadedCount / totalImages) * 100));
+          
+          // Add small delay to ensure image is actually cached
+          setTimeout(resolve, 10);
+        };
+        img.onerror = () => {
+          console.error('Failed to load image:', src);
           loadedCount++;
           setLoadingProgress(Math.round((loadedCount / totalImages) * 100));
           resolve();
         };
-        img.onerror = () => {
-          loadedCount++;
-          setLoadingProgress(Math.round((loadedCount / totalImages) * 100));
-          resolve(); // Still resolve even on error
-        };
+        
+        // Set src after handlers are attached
         img.src = src;
+        
+        // Force decode for better performance
+        if (img.decode) {
+          img.decode().catch(() => {});
+        }
       });
     });
-
+  
     Promise.all(imagePromises).then(() => {
-      setImagesLoaded(true);
+      // Add extra delay to ensure all images are fully loaded
+      setTimeout(() => {
+        setImagesLoaded(true);
+      }, 300);
     });
-
+  
     return () => {
       document.removeEventListener('click', wakeAudio);
       document.removeEventListener('keydown', wakeAudio);
+      document.removeEventListener('touchstart', wakeAudio);
     };
   }, []);
 
@@ -1825,9 +1866,40 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                     className={`
                       w-6 h-6 rounded border-3 border-black flex-shrink-0
                       flex items-center justify-center cursor-pointer
-                      ${isCompleted ? 'bg-green-400' : 'bg-white/50 hover:bg-white/70'}
                       transition-all duration-300 hover:scale-110 active:scale-95
                     `}
+                    style={{
+                      backgroundColor: isCompleted 
+                        ? selectedStage.id === 1 ? '#4ade80' :
+                          selectedStage.id === 2 ? '#fb923c' :
+                          selectedStage.id === 3 ? '#fbbf24' :
+                          selectedStage.id === 4 ? '#22d3ee' :
+                          selectedStage.id === 5 ? '#a855f7' :
+                          selectedStage.id === 6 ? '#3b82f6' :
+                          selectedStage.id === 7 ? '#14b8a6' :
+                          selectedStage.id === 8 ? '#ef4444' :
+                          selectedStage.id === 9 ? '#64748b' :
+                          selectedStage.id === 10 ? '#6366f1' :
+                          selectedStage.id === 11 ? '#6b7280' :
+                          '#dc2626'
+                        : 'rgba(255, 255, 255, 0.5)',
+                      boxShadow: isCompleted 
+                        ? `0 0 12px ${
+                            selectedStage.id === 1 ? '#4ade8088' :
+                            selectedStage.id === 2 ? '#fb923c88' :
+                            selectedStage.id === 3 ? '#fbbf2488' :
+                            selectedStage.id === 4 ? '#22d3ee88' :
+                            selectedStage.id === 5 ? '#a855f788' :
+                            selectedStage.id === 6 ? '#3b82f688' :
+                            selectedStage.id === 7 ? '#14b8a688' :
+                            selectedStage.id === 8 ? '#ef444488' :
+                            selectedStage.id === 9 ? '#64748b88' :
+                            selectedStage.id === 10 ? '#6366f188' :
+                            selectedStage.id === 11 ? '#6b728088' :
+                            '#dc262688'
+                          }`
+                        : 'none'
+                    }}
                   >
                     {isCompleted && (
                       <span className="text-black font-black text-sm">✓</span>
@@ -3558,7 +3630,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                   <div 
                     className="relative overflow-hidden rounded-sm border-4 border-black/50"
                     style={{
-                      background: 'linear-gradient(180deg, #1a1a1a99 0%, #0a0a0a99 100%)',
+                      background: 'linear-gradient(180deg, #1a1a1a66 0%, #0a0a0a66 100%)', // Changed from 99 to 66 for more transparency
                       boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.1), inset 0 -2px 0 rgba(0,0,0,0.5)'
                     }}
                   >

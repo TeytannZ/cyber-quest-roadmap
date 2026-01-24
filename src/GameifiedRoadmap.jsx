@@ -3648,22 +3648,22 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                 <div 
                   className="relative rounded-sm p-1 animate-pulse-slow"
                   style={{
-                    background: selectedStage.id === 1 ? 'linear-gradient(135deg, #15803d, #84cc16)' :
-                               selectedStage.id === 2 ? 'linear-gradient(135deg, #ea580c, #f59e0b)' :
-                               selectedStage.id === 3 ? 'linear-gradient(135deg, #b45309, #eab308)' :
-                               selectedStage.id === 4 ? 'linear-gradient(135deg, #0e7490, #06b6d4)' :
-                               selectedStage.id === 5 ? 'linear-gradient(135deg, #6b21a8, #a855f7)' :
-                               selectedStage.id === 6 ? 'linear-gradient(135deg, #1e40af, #3b82f6)' :
-                               selectedStage.id === 7 ? 'linear-gradient(135deg, #115e59, #14b8a6)' :
-                               selectedStage.id === 8 ? 'linear-gradient(135deg, #991b1b, #ef4444)' :
-                               selectedStage.id === 9 ? 'linear-gradient(135deg, #1e293b, #64748b)' :
-                               selectedStage.id === 10 ? 'linear-gradient(135deg, #4338ca, #7c3aed)' :
-                               selectedStage.id === 11 ? 'linear-gradient(135deg, #111827, #4b5563)' :
-                               'linear-gradient(135deg, #7f1d1d, #dc2626)',
+                    background: selectedStage.id === 1 ? 'linear-gradient(135deg, rgba(21, 128, 61, 0.3), rgba(132, 204, 22, 0.3))' :
+                               selectedStage.id === 2 ? 'linear-gradient(135deg, rgba(234, 88, 12, 0.3), rgba(245, 158, 11, 0.3))' :
+                               selectedStage.id === 3 ? 'linear-gradient(135deg, rgba(180, 83, 9, 0.3), rgba(234, 179, 8, 0.3))' :
+                               selectedStage.id === 4 ? 'linear-gradient(135deg, rgba(14, 116, 144, 0.3), rgba(6, 182, 212, 0.3))' :
+                               selectedStage.id === 5 ? 'linear-gradient(135deg, rgba(107, 33, 168, 0.3), rgba(168, 85, 247, 0.3))' :
+                               selectedStage.id === 6 ? 'linear-gradient(135deg, rgba(30, 64, 175, 0.3), rgba(59, 130, 246, 0.3))' :
+                               selectedStage.id === 7 ? 'linear-gradient(135deg, rgba(17, 94, 89, 0.3), rgba(20, 184, 166, 0.3))' :
+                               selectedStage.id === 8 ? 'linear-gradient(135deg, rgba(153, 27, 27, 0.3), rgba(239, 68, 68, 0.3))' :
+                               selectedStage.id === 9 ? 'linear-gradient(135deg, rgba(30, 41, 59, 0.3), rgba(100, 116, 139, 0.3))' :
+                               selectedStage.id === 10 ? 'linear-gradient(135deg, rgba(67, 56, 202, 0.3), rgba(124, 58, 237, 0.3))' :
+                               selectedStage.id === 11 ? 'linear-gradient(135deg, rgba(17, 24, 39, 0.3), rgba(75, 85, 99, 0.3))' :
+                               'linear-gradient(135deg, rgba(127, 29, 29, 0.3), rgba(220, 38, 38, 0.3))',
                     boxShadow: `
-                      0 0 20px ${selectedStage.theme.particle.replace('bg-', '')}44,
-                      0 0 40px ${selectedStage.theme.particle.replace('bg-', '')}22,
-                      inset 0 0 20px ${selectedStage.theme.particle.replace('bg-', '')}11
+                      0 0 20px ${selectedStage.theme.particle.replace('bg-', '')}22,
+                      0 0 40px ${selectedStage.theme.particle.replace('bg-', '')}11,
+                      inset 0 0 20px ${selectedStage.theme.particle.replace('bg-', '')}08
                     `,
                     imageRendering: 'pixelated'
                   }}

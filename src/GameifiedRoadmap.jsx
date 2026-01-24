@@ -1507,159 +1507,135 @@ const LearningRoadmap = () => {
   // Show loading screen while images load
   if (!imagesLoaded) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-purple-950 to-black relative overflow-hidden flex items-center justify-center">
-        {/* Pixelated grid background */}
-        <div className="absolute inset-0" style={{
-          backgroundImage: `
-            repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(138, 43, 226, 0.1) 49px, rgba(138, 43, 226, 0.1) 50px),
-            repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(138, 43, 226, 0.1) 49px, rgba(138, 43, 226, 0.1) 50px)
-          `,
-          animation: 'gridScroll 20s linear infinite',
-          imageRendering: 'pixelated'
-        }}></div>
-
-        {/* Scanlines */}
-        <div className="absolute inset-0 opacity-10" style={{
-          background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)',
-          animation: 'scanlines 8s linear infinite'
-        }}></div>
-
-        {/* Pixelated floating blocks */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(25)].map((_, i) => (
+      <div className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center">
+        {/* Pixelated starfield background */}
+        <div className="absolute inset-0">
+          {[...Array(100)].map((_, i) => (
             <div
-              key={`pixel-${i}`}
+              key={`star-${i}`}
               className="absolute"
               style={{
-                width: '16px',
-                height: '16px',
-                backgroundColor: i % 4 === 0 ? '#8b5cf6' : i % 4 === 1 ? '#ec4899' : i % 4 === 2 ? '#06b6d4' : '#fbbf24',
-                left: `${(i * 4.2) % 100}%`,
-                top: `${(i * 6.7) % 100}%`,
-                opacity: 0.5,
-                boxShadow: `0 0 12px currentColor`,
-                animation: `floatPixel ${10 + (i % 4)}s ease-in-out infinite`,
-                animationDelay: `${(i * 0.3) % 5}s`,
+                width: i % 5 === 0 ? '3px' : '2px',
+                height: i % 5 === 0 ? '3px' : '2px',
+                backgroundColor: i % 3 === 0 ? '#8b5cf6' : i % 3 === 1 ? '#ec4899' : '#fbbf24',
+                left: `${(i * 9.7) % 100}%`,
+                top: `${(i * 7.3) % 100}%`,
+                opacity: 0.3 + (i % 5) * 0.15,
+                boxShadow: `0 0 ${i % 5 === 0 ? '8px' : '4px'} currentColor`,
+                animation: `twinkle ${2 + (i % 3)}s ease-in-out infinite`,
+                animationDelay: `${(i * 0.1) % 3}s`,
                 imageRendering: 'pixelated'
               }}
             />
           ))}
         </div>
-
+  
+        {/* Pixelated grid floor effect */}
+        <div className="absolute bottom-0 left-0 right-0 h-1/2 opacity-20" style={{
+          background: 'linear-gradient(to top, #8b5cf6 0%, transparent 100%)',
+          backgroundImage: `
+            repeating-linear-gradient(0deg, transparent, transparent 19px, #8b5cf6 19px, #8b5cf6 20px),
+            repeating-linear-gradient(90deg, transparent, transparent 19px, #8b5cf6 19px, #8b5cf6 20px)
+          `,
+          perspective: '500px',
+          transform: 'rotateX(60deg)',
+          transformOrigin: 'bottom',
+          imageRendering: 'pixelated'
+        }}></div>
+  
         <div className="relative z-10 text-center px-4">
-          {/* Pixel Art Game Controller - TRUE pixel art style */}
-          <div className="mb-12 relative inline-block" style={{ imageRendering: 'pixelated' }}>
-            <div style={{ animation: 'bounce 2s ease-in-out infinite' }}>
-              <svg width="256" height="256" viewBox="0 0 64 64" className="w-64 h-64" style={{ imageRendering: 'pixelated' }}>
-                {/* Controller body - pixel perfect */}
-                <rect x="8" y="20" width="48" height="28" fill="#7c3aed" stroke="#000" strokeWidth="1"/>
-                <rect x="10" y="22" width="44" height="24" fill="#8b5cf6"/>
-                <rect x="12" y="24" width="40" height="20" fill="#9333ea"/>
+          {/* Pixelated Treasure Chest Icon */}
+          <div className="mb-12 relative inline-block">
+            <svg width="200" height="200" viewBox="0 0 80 80" className="w-48 h-48 md:w-64 md:h-64" style={{ imageRendering: 'pixelated' }}>
+              {/* Chest base - dark wood */}
+              <rect x="15" y="45" width="50" height="25" fill="#3e2723" stroke="#000" strokeWidth="2"/>
+              <rect x="17" y="47" width="46" height="21" fill="#5d4037"/>
+              
+              {/* Chest lid */}
+              <g className={loadingProgress < 100 ? 'animate-float' : ''}>
+                <rect x="15" y="30" width="50" height="15" fill="#4e342e" stroke="#000" strokeWidth="2"/>
+                <rect x="17" y="32" width="46" height="11" fill="#6d4c41"/>
                 
-                {/* D-Pad - left side */}
-                <rect x="16" y="28" width="4" height="12" fill="#1f2937" stroke="#000" strokeWidth="0.5"/>
-                <rect x="14" y="32" width="8" height="4" fill="#1f2937" stroke="#000" strokeWidth="0.5"/>
-                <rect x="16" y="30" width="4" height="8" fill="#374151"/>
-                <rect x="15" y="33" width="6" height="2" fill="#374151"/>
+                {/* Lock on lid */}
+                <rect x="37" y="38" width="6" height="8" fill="#fbbf24" stroke="#000" strokeWidth="1"/>
+                <circle cx="40" cy="42" r="2" fill="#1a1a1a"/>
                 
-                {/* Action buttons - right side */}
-                {/* A button - bottom right */}
-                <circle cx="46" cy="36" r="3" fill="#22c55e" stroke="#000" strokeWidth="0.5"/>
-                <circle cx="46" cy="36" r="2" fill="#4ade80"/>
-                <text x="46" y="37.5" textAnchor="middle" fontSize="3" fill="#000" fontWeight="bold" fontFamily="monospace">A</text>
-                
-                {/* B button - right */}
-                <circle cx="50" cy="32" r="3" fill="#ef4444" stroke="#000" strokeWidth="0.5"/>
-                <circle cx="50" cy="32" r="2" fill="#f87171"/>
-                <text x="50" y="33.5" textAnchor="middle" fontSize="3" fill="#000" fontWeight="bold" fontFamily="monospace">B</text>
-                
-                {/* X button - left */}
-                <circle cx="42" cy="32" r="3" fill="#3b82f6" stroke="#000" strokeWidth="0.5"/>
-                <circle cx="42" cy="32" r="2" fill="#60a5fa"/>
-                <text x="42" y="33.5" textAnchor="middle" fontSize="3" fill="#000" fontWeight="bold" fontFamily="monospace">X</text>
-                
-                {/* Y button - top */}
-                <circle cx="46" cy="28" r="3" fill="#eab308" stroke="#000" strokeWidth="0.5"/>
-                <circle cx="46" cy="28" r="2" fill="#facc15"/>
-                <text x="46" y="29.5" textAnchor="middle" fontSize="3" fill="#000" fontWeight="bold" fontFamily="monospace">Y</text>
-                
-                {/* Center screen */}
-                <rect x="26" y="28" width="12" height="8" fill="#164e63" stroke="#000" strokeWidth="1"/>
-                <rect x="27" y="29" width="10" height="6" fill="#0e7490"/>
-                
-                {/* Loading dots in screen */}
-                {[0, 1, 2].map((i) => (
-                  <rect
-                    key={i}
-                    x={29 + i * 3}
-                    y="32"
-                    width="2"
-                    height="2"
-                    fill="#06b6d4"
-                    style={{
-                      animation: `blink 1.5s infinite`,
-                      animationDelay: `${i * 0.3}s`
-                    }}
-                  />
-                ))}
-                
-                {/* Shine/highlight effects */}
-                <rect x="12" y="24" width="8" height="2" fill="#a855f7" opacity="0.6"/>
-                <rect x="12" y="24" width="4" height="4" fill="#c084fc" opacity="0.3"/>
-              </svg>
-            </div>
+                {/* Lid decorative bands */}
+                <rect x="15" y="35" width="50" height="2" fill="#8d6e63"/>
+                <rect x="15" y="40" width="50" height="2" fill="#8d6e63"/>
+              </g>
+              
+              {/* Chest corner metalwork */}
+              <rect x="13" y="45" width="3" height="25" fill="#78909c"/>
+              <rect x="64" y="45" width="3" height="25" fill="#78909c"/>
+              <rect x="15" y="68" width="50" height="3" fill="#546e7a"/>
+              
+              {/* Glowing particles when loading */}
+              {loadingProgress > 0 && loadingProgress < 100 && (
+                <>
+                  {[...Array(8)].map((_, i) => (
+                    <rect
+                      key={i}
+                      x={35 + Math.cos(i * 0.785) * 25}
+                      y={40 + Math.sin(i * 0.785) * 25}
+                      width="3"
+                      height="3"
+                      fill={i % 3 === 0 ? '#fbbf24' : i % 3 === 1 ? '#8b5cf6' : '#ec4899'}
+                      style={{
+                        animation: `float ${1.5 + i * 0.2}s ease-in-out infinite`,
+                        animationDelay: `${i * 0.1}s`,
+                        filter: `drop-shadow(0 0 4px currentColor)`
+                      }}
+                    />
+                  ))}
+                </>
+              )}
+              
+              {/* Open chest with treasure when complete */}
+              {loadingProgress === 100 && (
+                <g style={{ animation: 'fadeIn 0.5s ease-out' }}>
+                  {/* Gems/coins popping out */}
+                  <circle cx="30" cy="25" r="3" fill="#fbbf24" style={{ filter: 'drop-shadow(0 0 6px #fbbf24)' }}/>
+                  <circle cx="50" cy="20" r="3" fill="#8b5cf6" style={{ filter: 'drop-shadow(0 0 6px #8b5cf6)' }}/>
+                  <circle cx="40" cy="22" r="4" fill="#ec4899" style={{ filter: 'drop-shadow(0 0 6px #ec4899)' }}/>
+                  <rect x="35" y="28" width="4" height="4" fill="#22d3ee" transform="rotate(45 37 30)" style={{ filter: 'drop-shadow(0 0 6px #22d3ee)' }}/>
+                </g>
+              )}
+            </svg>
             
-            {/* Pixelated glow rings */}
-            <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute inset-0 animate-ping opacity-15" style={{ animationDuration: '3s' }}>
-                <div className="w-64 h-64 border-8 border-purple-500" style={{ imageRendering: 'pixelated' }}></div>
-              </div>
-            </div>
+            {/* Glow effect */}
+            <div 
+              className="absolute inset-0 blur-2xl -z-10"
+              style={{
+                background: 'radial-gradient(circle, #8b5cf660 0%, transparent 70%)',
+                animation: 'pulse 2s ease-in-out infinite'
+              }}
+            />
           </div>
-
-          {/* Loading text - pixelated style */}
+  
+          {/* Loading text */}
           <div className="mb-8">
-            <h1 className="text-5xl font-black pixel-text mb-4" style={{
+            <h1 className="text-4xl md:text-5xl font-black pixel-text mb-4" style={{
               color: '#fff',
-              textShadow: '4px 4px 0 #8b5cf6, -4px -4px 0 #ec4899',
+              textShadow: '4px 4px 0 #8b5cf6, -2px -2px 0 #ec4899',
               animation: 'pulse 2s ease-in-out infinite',
               imageRendering: 'pixelated'
             }}>
-              LOADING
+              {loadingProgress < 100 ? 'LOADING QUEST' : 'QUEST READY!'}
             </h1>
-            {/* Pixelated dots */}
-            <div className="flex justify-center gap-3">
-              {[0, 1, 2].map((i) => (
-                <div
-                  key={i}
-                  className="w-4 h-4 border-2 border-black"
-                  style={{
-                    backgroundColor: '#fff',
-                    animation: `blink 1s infinite`,
-                    animationDelay: `${i * 0.3}s`,
-                    imageRendering: 'pixelated',
-                    boxShadow: '0 0 12px #fff, inset 0 -2px 0 rgba(0,0,0,0.3)'
-                  }}
-                ></div>
-              ))}
-            </div>
           </div>
-
-          {/* Progress bar - TRUE pixel art style */}
-          <div className="relative w-96 max-w-full mx-auto">
-            {/* Outer pixelated frame */}
+  
+          {/* Progress bar - pixelated style */}
+          <div className="relative w-96 max-w-full mx-auto mb-8">
             <div className="relative p-2 bg-black border-4 border-purple-600" style={{
               boxShadow: '0 0 30px rgba(139, 92, 246, 0.6), inset 0 0 20px rgba(0,0,0,0.8)',
               imageRendering: 'pixelated'
             }}>
-              {/* Inner frame */}
               <div className="relative bg-gray-900 border-4 border-purple-800 overflow-hidden" style={{
                 boxShadow: 'inset 0 4px 8px rgba(0,0,0,0.8)',
                 imageRendering: 'pixelated'
               }}>
-                {/* Progress container - pixelated blocks */}
                 <div className="h-12 relative overflow-hidden flex" style={{ imageRendering: 'pixelated' }}>
-                  {/* Create 20 blocks (5% each) */}
                   {[...Array(20)].map((_, i) => {
                     const isFilled = (i + 1) * 5 <= loadingProgress;
                     const colors = ['#8b5cf6', '#a855f7', '#c084fc'];
@@ -1679,7 +1655,6 @@ const LearningRoadmap = () => {
                           position: 'relative'
                         }}
                       >
-                        {/* Pixel shine on filled blocks */}
                         {isFilled && (
                           <div 
                             className="absolute top-0 left-0 right-0 h-1/3"
@@ -1695,43 +1670,35 @@ const LearningRoadmap = () => {
                 </div>
               </div>
             </div>
-
-            {/* Percentage display - pixelated boxes */}
-            <div className="mt-6 flex justify-between items-center px-4">
-              <div className="bg-black border-4 border-purple-600 px-4 py-2" style={{
+  
+            {/* Percentage display */}
+            <div className="mt-6 flex justify-center">
+              <div className="bg-black border-4 border-purple-600 px-6 py-3" style={{
                 boxShadow: '0 0 20px rgba(139, 92, 246, 0.4), inset 0 2px 0 rgba(139, 92, 246, 0.3)',
                 imageRendering: 'pixelated'
               }}>
-                <span className="text-purple-400 pixel-text text-xl font-black" style={{
+                <span className="text-purple-400 pixel-text text-2xl font-black" style={{
                   textShadow: '2px 2px 0 rgba(0,0,0,0.5)'
                 }}>{loadingProgress}%</span>
               </div>
-              <div className="bg-black border-4 border-pink-600 px-4 py-2" style={{
-                boxShadow: '0 0 20px rgba(236, 72, 153, 0.4), inset 0 2px 0 rgba(236, 72, 153, 0.3)',
-                imageRendering: 'pixelated'
-              }}>
-                <span className="text-pink-400 pixel-text text-xs font-black animate-pulse" style={{
-                  textShadow: '2px 2px 0 rgba(0,0,0,0.5)'
-                }}>
-                  {loadingProgress < 100 ? 'LOADING...' : 'READY!'}
-                </span>
-              </div>
             </div>
           </div>
-
-          {/* Level indicators - pixel blocks */}
-          <div className="mt-10 flex justify-center gap-3">
-            {[...Array(10)].map((_, i) => {
-              const isActive = i < (loadingProgress / 10);
+  
+          {/* Loading stages indicator */}
+          <div className="flex justify-center gap-2 flex-wrap">
+            {[...Array(12)].map((_, i) => {
+              const isActive = i < (loadingProgress / 8.33);
+              const colors = ['#4ade80', '#fb923c', '#fbbf24', '#22d3ee', '#a855f7', '#3b82f6', '#14b8a6', '#ef4444', '#64748b', '#6366f1', '#6b7280', '#dc2626'];
+              
               return (
                 <div 
                   key={i}
-                  className="w-8 h-8 border-4 border-black"
+                  className="w-6 h-6 border-3 border-black"
                   style={{
-                    backgroundColor: isActive ? '#8b5cf6' : '#374151',
+                    backgroundColor: isActive ? colors[i] : '#1f2937',
                     boxShadow: isActive 
-                      ? '0 0 16px #8b5cf6, inset 0 4px 0 rgba(255,255,255,0.4), inset 0 -4px 0 rgba(0,0,0,0.5)' 
-                      : 'inset 0 4px 0 rgba(0,0,0,0.5)',
+                      ? `0 0 12px ${colors[i]}, inset 0 3px 0 rgba(255,255,255,0.4), inset 0 -3px 0 rgba(0,0,0,0.5)` 
+                      : 'inset 0 3px 0 rgba(0,0,0,0.5)',
                     transition: 'all 0.3s',
                     imageRendering: 'pixelated'
                   }}
@@ -1744,21 +1711,11 @@ const LearningRoadmap = () => {
             })}
           </div>
         </div>
-
+  
         <style jsx>{`
-          @keyframes gridScroll {
-            from { backgroundPosition: 0 0; }
-            to { backgroundPosition: 50px 50px; }
-          }
-          @keyframes floatPixel {
-            0%, 100% {
-              transform: translateY(0) rotate(0deg);
-              opacity: 0.3;
-            }
-            50% {
-              transform: translateY(-40px) rotate(180deg);
-              opacity: 0.7;
-            }
+          @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
           }
         `}</style>
       </div>
@@ -1841,7 +1798,6 @@ const LearningRoadmap = () => {
       <div 
         className="fixed inset-0 z-[9999] flex items-center justify-center"
         onClick={(e) => {
-          // Close if clicking outside the card (after animation complete)
           if (e.target === e.currentTarget && animationStep >= 2) {
             onClose();
           }
@@ -1852,43 +1808,76 @@ const LearningRoadmap = () => {
           animation: 'fadeIn 0.5s ease-out'
         }}
       >
-        {/* Pixelated particle effects */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(60)].map((_, i) => {
-            const angle = (i / 60) * Math.PI * 2;
-            const distance = 150 + (i % 3) * 50;
-            const spiralOffset = (i % 5) * 30;
-            
-            return (
-              <div
-                key={`unlock-particle-${i}`}
-                className="absolute"
-                style={{
-                  width: `${6 + (i % 3) * 2}px`,
-                  height: `${6 + (i % 3) * 2}px`,
-                  backgroundColor: stageColor,
-                  left: '50%',
-                  top: '50%',
-                  opacity: animationStep >= 2 ? 1 : 0.8,
-                  transform: animationStep >= 2 
-                    ? `translate(${Math.cos(angle) * distance + spiralOffset}px, ${Math.sin(angle) * distance + spiralOffset}px) scale(0) rotate(${angle * 180}deg)` 
-                    : 'translate(-50%, -50%) scale(1) rotate(0deg)',
-                  transition: `all ${0.8 + (i % 5) * 0.1}s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${i * 0.015}s`,
-                  boxShadow: animationStep >= 2 ? `0 0 20px ${stageColor}, 0 0 40px ${stageColor}88` : `0 0 12px ${stageColor}`,
-                  imageRendering: 'pixelated',
-                  pointerEvents: 'none'
-                }}
-              />
-            );
-          })}
-        </div>
+        {/* Explosion particles - only show during step 2 */}
+        {animationStep === 2 && (
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(80)].map((_, i) => {
+              const angle = (i / 80) * Math.PI * 2;
+              const distance = 200 + (i % 4) * 80;
+              const size = 4 + (i % 4) * 3;
+              
+              return (
+                <div
+                  key={`explosion-particle-${i}`}
+                  className="absolute"
+                  style={{
+                    width: `${size}px`,
+                    height: `${size}px`,
+                    backgroundColor: stageColor,
+                    left: '50%',
+                    top: '50%',
+                    opacity: 1,
+                    transform: `translate(-50%, -50%) scale(1)`,
+                    animation: `explode ${0.6 + (i % 3) * 0.2}s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`,
+                    animationDelay: `${i * 0.008}s`,
+                    boxShadow: `0 0 20px ${stageColor}`,
+                    imageRendering: 'pixelated',
+                    '--angle': `${angle}rad`,
+                    '--distance': `${distance}px`
+                  }}
+                />
+              );
+            })}
+          </div>
+        )}
         
-        {/* Stage card */}
+        {/* Orbiting particles - continuous after unlock */}
+        {animationStep >= 2 && (
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(30)].map((_, i) => {
+              const angle = (i / 30) * Math.PI * 2;
+              const radius = 350;
+              
+              return (
+                <div
+                  key={`orbit-particle-${i}`}
+                  className="absolute"
+                  style={{
+                    width: '6px',
+                    height: '6px',
+                    backgroundColor: stageColor,
+                    left: '50%',
+                    top: '50%',
+                    opacity: 0.6,
+                    boxShadow: `0 0 12px ${stageColor}`,
+                    imageRendering: 'pixelated',
+                    animation: `orbit ${4 + (i % 3)}s linear infinite`,
+                    animationDelay: `${i * 0.1}s`,
+                    '--orbit-radius': `${radius}px`,
+                    '--orbit-angle': `${angle}rad`
+                  }}
+                />
+              );
+            })}
+          </div>
+        )}
+        
+        {/* Stage card container */}
         <div 
           className="relative group"
           style={{
-            transform: animationStep >= 2 ? 'scale(1)' : 'scale(0.95)',
-            opacity: 1,
+            opacity: animationStep === 0 ? 0 : 1,
+            transform: animationStep === 0 ? 'scale(0.8)' : 'scale(1)',
             transition: 'all 0.5s ease-out'
           }}
         >
@@ -1897,7 +1886,6 @@ const LearningRoadmap = () => {
             onClick={() => {
               if (animationStep >= 2) {
                 onClose();
-                // Navigate to the unlocked stage
                 const stageToOpen = stages.find(s => s.id === stage.id);
                 if (stageToOpen) {
                   playSound(stageToOpen.sound.freq, 0.3, stageToOpen.sound.type);
@@ -1910,7 +1898,7 @@ const LearningRoadmap = () => {
             className={`relative p-8 rounded-lg border-8 overflow-hidden ${animationStep >= 2 ? 'cursor-pointer' : 'cursor-default'}`}
             style={{
               width: '400px',
-              height: '500px',
+              height: '520px',
               backgroundImage: `url(${stage.stageBg})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
@@ -1919,7 +1907,6 @@ const LearningRoadmap = () => {
                 ? `0 0 60px ${stageColor}cc, inset 0 0 60px rgba(0,0,0,0.5)` 
                 : `0 0 40px ${stageColor}88, inset 0 0 60px rgba(0,0,0,0.5)`,
               imageRendering: 'pixelated',
-              transform: animationStep >= 2 ? 'scale(1)' : 'scale(0.98)',
               transition: 'all 0.3s ease-out'
             }}
           >
@@ -1941,69 +1928,75 @@ const LearningRoadmap = () => {
             <div className="relative z-10 h-full flex flex-col items-center justify-center">
               {/* Stage icon */}
               <div className="mb-6 transform" style={{
-                animation: animationStep >= 1 ? 'float 2s ease-in-out infinite' : 'none'
+                animation: 'float 2s ease-in-out infinite'
               }}>
                 <PixelArt type={stage.pixelArt} className="w-32 h-32" />
               </div>
               
-              {/* Lock (disappears when breaking) */}
-              <div 
-                className="mb-6 relative"
-                style={{
-                  opacity: animationStep >= 2 ? 0 : 1,
-                  transform: animationStep >= 2 ? 'scale(0) rotate(180deg)' : 'scale(1) rotate(0deg)',
-                  transition: 'all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)'
-                }}
-              >
-                <PixelatedLock isBreaking={animationStep === 1} stageColor={stageColor} />
-                
-                {/* Glow effect */}
+              {/* Lock - only shows in step 0 and 1 */}
+              {animationStep < 2 && (
                 <div 
-                  className="absolute inset-0 blur-xl"
+                  className="mb-6 relative"
                   style={{
-                    background: `radial-gradient(circle, ${stageColor}60 0%, transparent 70%)`,
-                    animation: 'pulse 2s ease-in-out infinite'
-                  }}
-                />
-              </div>
-              
-              {/* Stage title - appears after lock breaks */}
-              <div 
-                className="text-center"
-                style={{
-                  opacity: animationStep >= 2 ? 1 : 0,
-                  transform: animationStep >= 2 ? 'translateY(0)' : 'translateY(30px)',
-                  transition: 'all 0.5s ease-out 0.3s'
-                }}
-              >
-                <div 
-                  className="px-6 py-3 rounded-lg border-4 mb-4"
-                  style={{
-                    background: `linear-gradient(135deg, ${stageColor}40, ${stageColor}20)`,
-                    borderColor: stageColor,
-                    boxShadow: `0 0 20px ${stageColor}60`,
-                    backdropFilter: 'blur(10px)'
+                    opacity: 1,
+                    transform: 'scale(1)',
+                    transition: 'none'
                   }}
                 >
-                  <div className="text-4xl font-black pixel-text text-white mb-2"
-                       style={{ textShadow: `0 0 20px ${stageColor}, 2px 2px 0 #000` }}>
-                    STAGE {stage.id}
+                  <PixelatedLock isBreaking={animationStep === 1} stageColor={stageColor} />
+                  
+                  {/* Glow effect */}
+                  <div 
+                    className="absolute inset-0 blur-xl"
+                    style={{
+                      background: `radial-gradient(circle, ${stageColor}60 0%, transparent 70%)`,
+                      animation: animationStep === 1 ? 'pulse 0.3s ease-in-out infinite' : 'pulse 2s ease-in-out infinite'
+                    }}
+                  />
+                </div>
+              )}
+              
+              {/* Stage title - appears after lock breaks */}
+              {animationStep >= 2 && (
+                <div 
+                  className="text-center w-full px-4"
+                  style={{
+                    animation: 'fadeInUp 0.5s ease-out'
+                  }}
+                >
+                  <div 
+                    className="px-6 py-3 rounded-lg border-4 mb-4 inline-block"
+                    style={{
+                      background: `linear-gradient(135deg, ${stageColor}40, ${stageColor}20)`,
+                      borderColor: stageColor,
+                      boxShadow: `0 0 20px ${stageColor}60`,
+                      backdropFilter: 'blur(10px)'
+                    }}
+                  >
+                    <div className="text-4xl font-black pixel-text text-white mb-2"
+                         style={{ textShadow: `0 0 20px ${stageColor}, 2px 2px 0 #000` }}>
+                      STAGE {stage.id}
+                    </div>
+                    <div className="text-xs font-black pixel-text"
+                         style={{ color: stageColor, textShadow: '1px 1px 0 #000' }}>
+                      UNLOCKED!
+                    </div>
                   </div>
-                  <div className="text-xs font-black pixel-text"
-                       style={{ color: stageColor, textShadow: '1px 1px 0 #000' }}>
-                    UNLOCKED!
+                  
+                  <div className="w-full px-8">
+                    <div className="text-[10px] md:text-xs font-black pixel-text text-white leading-relaxed text-center break-words"
+                         style={{ 
+                           textShadow: '2px 2px 0 #000',
+                           maxWidth: '100%',
+                           overflowWrap: 'break-word',
+                           wordWrap: 'break-word',
+                           hyphens: 'auto'
+                         }}>
+                      {stage.title}
+                    </div>
                   </div>
                 </div>
-                
-                <div className="text-xs font-black pixel-text text-white px-6 leading-tight text-center max-w-full"
-                 style={{ 
-                   textShadow: '2px 2px 0 #000',
-                   wordBreak: 'break-word',
-                   hyphens: 'auto'
-                 }}>
-              {stage.title}
-            </div>
-              </div>
+              )}
             </div>
             
             {/* Corner decorations */}
@@ -2031,11 +2024,17 @@ const LearningRoadmap = () => {
           />
         </div>
         
-        {/* "Click to Enter" text at bottom - appears after animation completes */}
+        {/* "Click to Enter" text directly below card */}
         {animationStep >= 2 && (
           <div 
-            className="absolute bottom-16 left-1/2 transform -translate-x-1/2 pixel-text text-white text-xs animate-pulse"
-            style={{ textShadow: `0 0 10px ${stageColor}`, pointerEvents: 'none' }}
+            className="absolute pixel-text text-white text-xs animate-pulse"
+            style={{ 
+              textShadow: `0 0 10px ${stageColor}`, 
+              pointerEvents: 'none',
+              top: 'calc(50% + 280px)',
+              left: '50%',
+              transform: 'translateX(-50%)'
+            }}
           >
             ▼ CLICK TO ENTER STAGE ▼
           </div>
@@ -3538,29 +3537,68 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
   };
   
   const playLockBreakSound = () => {
-    if (!audioContextRef.current) return;
+  if (!audioContextRef.current) return;
+  
+  const ctx = audioContextRef.current;
+  const now = ctx.currentTime;
+  
+  // Lock breaking crack sound
+  for (let i = 0; i < 3; i++) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
     
-    const ctx = audioContextRef.current;
-    const now = ctx.currentTime;
+    osc.connect(gain);
+    gain.connect(ctx.destination);
     
-    // Shattering glass effect
-    for (let i = 0; i < 8; i++) {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      
-      osc.type = 'square';
-      osc.frequency.value = 2000 + Math.random() * 1000;
-      
-      gain.gain.setValueAtTime(0.15, now + i * 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.02 + 0.1);
-      
-      osc.start(now + i * 0.02);
-      osc.stop(now + i * 0.02 + 0.1);
-    }
-  };
+    osc.type = 'square';
+    osc.frequency.value = 800 - i * 200;
+    
+    gain.gain.setValueAtTime(0.2, now + i * 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.05 + 0.15);
+    
+    osc.start(now + i * 0.05);
+    osc.stop(now + i * 0.05 + 0.15);
+  }
+};
+
+const playExplosionSound = () => {
+  if (!audioContextRef.current) return;
+  
+  const ctx = audioContextRef.current;
+  const now = ctx.currentTime;
+  
+  // Explosion bass boom
+  const boom = ctx.createOscillator();
+  const boomGain = ctx.createGain();
+  boom.connect(boomGain);
+  boomGain.connect(ctx.destination);
+  boom.type = 'sine';
+  boom.frequency.setValueAtTime(100, now);
+  boom.frequency.exponentialRampToValueAtTime(40, now + 0.3);
+  boomGain.gain.setValueAtTime(0.5, now);
+  boomGain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+  boom.start(now);
+  boom.stop(now + 0.3);
+  
+  // Sparkle/shimmer sound
+  for (let i = 0; i < 12; i++) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    
+    osc.type = 'sine';
+    osc.frequency.value = 1500 + Math.random() * 1500;
+    
+    gain.gain.setValueAtTime(0, now + i * 0.03);
+    gain.gain.linearRampToValueAtTime(0.15, now + i * 0.03 + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.03 + 0.2);
+    
+    osc.start(now + i * 0.03);
+    osc.stop(now + i * 0.03 + 0.2);
+  }
+};
   
   const handleTaskComplete = (stage, missionIdx, taskIdx) => {
     const key = `${stage.id}-${missionIdx}-${taskIdx}`;
@@ -3608,10 +3646,13 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
             playUnlockSound();
             
             // Animation sequence
-            setTimeout(() => setUnlockAnimationStep(1), 1000);
+            setTimeout(() => setUnlockAnimationStep(1), 800);  // Lock starts shaking
             setTimeout(() => {
               playLockBreakSound();
-              setUnlockAnimationStep(2);
+            }, 1800);  // Lock break sound
+            setTimeout(() => {
+              setUnlockAnimationStep(2);  // Lock disappears, explosion happens
+              playExplosionSound();
             }, 2000);
             // Don't auto-close anymore - let user click to enter
           }
@@ -4122,44 +4163,47 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                     <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2" style={{ borderColor: selectedStage.theme.particle.replace('bg-', '') }}></div>
                     <div className="relative z-10 p-3 bg-black/10 backdrop-blur-sm">
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="relative w-8 h-8 flex-shrink-0" style={{ imageRendering: 'pixelated' }}>
-                          <div className="absolute inset-0 rounded-sm border-3 border-black transform rotate-45" style={{
-                            background: selectedStage.id === 1 ? 'linear-gradient(135deg, #15803d, #84cc16)' :
-                                       selectedStage.id === 2 ? 'linear-gradient(135deg, #ea580c, #f59e0b)' :
-                                       selectedStage.id === 3 ? 'linear-gradient(135deg, #b45309, #eab308)' :
-                                       selectedStage.id === 4 ? 'linear-gradient(135deg, #0e7490, #06b6d4)' :
-                                       selectedStage.id === 5 ? 'linear-gradient(135deg, #6b21a8, #a855f7)' :
-                                       selectedStage.id === 6 ? 'linear-gradient(135deg, #1e40af, #3b82f6)' :
-                                       selectedStage.id === 7 ? 'linear-gradient(135deg, #115e59, #14b8a6)' :
-                                       selectedStage.id === 8 ? 'linear-gradient(135deg, #991b1b, #ef4444)' :
-                                       selectedStage.id === 9 ? 'linear-gradient(135deg, #1e293b, #64748b)' :
-                                       selectedStage.id === 10 ? 'linear-gradient(135deg, #4338ca, #7c3aed)' :
-                                       selectedStage.id === 11 ? 'linear-gradient(135deg, #111827, #4b5563)' :
-                                       'linear-gradient(135deg, #7f1d1d, #dc2626)',
-                            boxShadow: `0 0 15px ${selectedStage.theme.particle.replace('bg-', '')}66`
-                          }}></div>
-                          <div className="relative w-full h-full flex items-center justify-center">
-                            <span className="text-lg drop-shadow-lg" style={{ filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.8))' }}>🎯</span>
-                          </div>
+                        {/* Pixelated scroll icon */}
+                        <div className="relative flex-shrink-0">
+                          <svg width="40" height="40" viewBox="0 0 40 40" style={{ imageRendering: 'pixelated' }}>
+                            {/* Scroll paper */}
+                            <rect x="8" y="6" width="24" height="28" fill="#f5e6d3" stroke="#000" strokeWidth="1.5"/>
+                            <rect x="10" y="8" width="20" height="24" fill="#faf0e6"/>
+                            
+                            {/* Scroll rolls */}
+                            <rect x="6" y="4" width="4" height="4" fill="#8b7355" stroke="#000" strokeWidth="1"/>
+                            <rect x="30" y="4" width="4" height="4" fill="#8b7355" stroke="#000" strokeWidth="1"/>
+                            <rect x="6" y="32" width="4" height="4" fill="#8b7355" stroke="#000" strokeWidth="1"/>
+                            <rect x="30" y="32" width="4" height="4" fill="#8b7355" stroke="#000" strokeWidth="1"/>
+                            
+                            {/* Text lines */}
+                            <rect x="12" y="12" width="16" height="2" fill="#3e2723" opacity="0.6"/>
+                            <rect x="12" y="16" width="12" height="2" fill="#3e2723" opacity="0.6"/>
+                            <rect x="12" y="20" width="14" height="2" fill="#3e2723" opacity="0.6"/>
+                            <rect x="12" y="24" width="10" height="2" fill="#3e2723" opacity="0.6"/>
+                            
+                            {/* Decorative seal */}
+                            <circle cx="20" cy="28" r="3" fill="#fbbf24" stroke="#000" strokeWidth="1"/>
+                            <circle cx="20" cy="28" r="1.5" fill="#f59e0b"/>
+                          </svg>
+                          
+                          {/* Glow */}
+                          <div 
+                            className="absolute inset-0 blur-lg -z-10"
+                            style={{
+                              background: 'radial-gradient(circle, #fbbf2460 0%, transparent 70%)',
+                              animation: 'pulse 2s ease-in-out infinite'
+                            }}
+                          />
                         </div>
+                        
                         <div className="flex-1">
                           <div className="text-[10px] font-black pixel-text uppercase tracking-wider px-2 py-1 inline-block rounded-sm border-2 border-black text-white" style={{
-                            background: selectedStage.id === 1 ? 'linear-gradient(90deg, #15803d, #84cc16)' :
-                                       selectedStage.id === 2 ? 'linear-gradient(90deg, #ea580c, #f59e0b)' :
-                                       selectedStage.id === 3 ? 'linear-gradient(90deg, #b45309, #eab308)' :
-                                       selectedStage.id === 4 ? 'linear-gradient(90deg, #0e7490, #06b6d4)' :
-                                       selectedStage.id === 5 ? 'linear-gradient(90deg, #6b21a8, #a855f7)' :
-                                       selectedStage.id === 6 ? 'linear-gradient(90deg, #1e40af, #3b82f6)' :
-                                       selectedStage.id === 7 ? 'linear-gradient(90deg, #115e59, #14b8a6)' :
-                                       selectedStage.id === 8 ? 'linear-gradient(90deg, #991b1b, #ef4444)' :
-                                       selectedStage.id === 9 ? 'linear-gradient(90deg, #1e293b, #64748b)' :
-                                       selectedStage.id === 10 ? 'linear-gradient(90deg, #4338ca, #7c3aed)' :
-                                       selectedStage.id === 11 ? 'linear-gradient(90deg, #111827, #4b5563)' :
-                                       'linear-gradient(90deg, #7f1d1d, #dc2626)',
+                            background: 'linear-gradient(90deg, #b45309, #eab308)',
                             textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
-                            boxShadow: `0 0 10px ${selectedStage.theme.particle.replace('bg-', '')}44, inset 0 1px 0 rgba(255,255,255,0.2)`
+                            boxShadow: '0 0 10px #fbbf2444, inset 0 1px 0 rgba(255,255,255,0.2)'
                           }}>
-                            {selectedStage.missions[currentMissionIndex].checkpoint.title}
+                            {currentQuote.category.toUpperCase()}
                           </div>
                         </div>
                       </div>
@@ -4508,6 +4552,36 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
           animation: pulse-slow 2s ease-in-out infinite;
         }
 
+        @keyframes explode {
+          0% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+          }
+          100% {
+            transform: translate(calc(-50% + cos(var(--angle)) * var(--distance)), calc(-50% + sin(var(--angle)) * var(--distance))) scale(0);
+            opacity: 0;
+          }
+        }
+        
+        @keyframes orbit {
+          0% {
+            transform: translate(calc(-50% + cos(var(--orbit-angle)) * var(--orbit-radius)), calc(-50% + sin(var(--orbit-angle)) * var(--orbit-radius)));
+          }
+          100% {
+            transform: translate(calc(-50% + cos(var(--orbit-angle) + 6.28319) * var(--orbit-radius)), calc(-50% + sin(var(--orbit-angle) + 6.28319) * var(--orbit-radius)));
+          }
+        }
+        
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
       `}</style>
     </div>
   );

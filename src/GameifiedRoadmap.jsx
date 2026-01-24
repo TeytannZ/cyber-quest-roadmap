@@ -1704,37 +1704,29 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       {/* Mission Checkpoint - Always at bottom above navigation */}
       {isMissionOpen && mission.checkpoint && (
         <div className="mt-4">
-          <div className="p-3 border-4 rounded-lg backdrop-blur-md shadow-2xl"
-            style={{
-              backgroundColor: `${selectedStage.theme.particle}40`,
-              borderColor: selectedStage.theme.particle
-            }}
+          <div 
+            className={`p-3 border-4 rounded-lg backdrop-blur-md shadow-2xl bg-gradient-to-br ${selectedStage.theme.card} ${selectedStage.theme.border}`}
+            style={{ opacity: 0.85 }}
           >
             <div className="flex items-center gap-2 mb-2">
               <div 
-                className={`w-6 h-6 rounded border-2 flex items-center justify-center flex-shrink-0`}
-                style={{
-                  background: selectedStage.theme.bg.replace('from-', '').split(' ')[0],
-                  borderColor: selectedStage.theme.border.replace('border-', '')
-                }}
+                className={`w-6 h-6 rounded border-2 flex items-center justify-center flex-shrink-0 bg-gradient-to-br ${selectedStage.theme.bg} ${selectedStage.theme.border}`}
               >
                 <span className="text-sm">🎯</span>
               </div>
-              <div className="text-[10px] font-black pixel-text text-white uppercase drop-shadow-lg">
+              <div className="text-[10px] font-black pixel-text text-gray-900 uppercase drop-shadow-lg">
                 {mission.checkpoint.title}
               </div>
             </div>
-            <div className="text-[9px] pixel-text text-white space-y-1">
+            <div className="text-[9px] pixel-text text-gray-800 space-y-1">
               {mission.checkpoint.requirements.map((req, idx) => (
-                <div key={idx} 
-                  className="flex items-start gap-1 border p-1.5 rounded backdrop-blur-sm"
-                  style={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                    borderColor: `${selectedStage.theme.particle}50`
-                  }}
+                <div 
+                  key={idx} 
+                  className={`flex items-start gap-1 border-2 p-1.5 rounded backdrop-blur-sm ${selectedStage.theme.border}`}
+                  style={{ backgroundColor: 'rgba(0, 0, 0, 0.15)' }}
                 >
-                  <span className="flex-shrink-0 drop-shadow" style={{ color: selectedStage.theme.particle }}>□</span>
-                  <span className="flex-1 drop-shadow">{req}</span>
+                  <span className={`flex-shrink-0 drop-shadow font-black`} style={{ color: selectedStage.theme.particle }}>□</span>
+                  <span className="flex-1 drop-shadow font-bold">{req}</span>
                 </div>
               ))}
             </div>
@@ -3080,7 +3072,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                     className={`
                       relative cursor-pointer p-6 rounded-lg border-4 
                       ${stage.theme.border}
-                      overflow-visible
+                      overflow-hidden
                       transform transition-all duration-500
                       ${isHovered ? 'scale-100 -translate-y-2' : 'scale-95'}
                       shadow-2xl ${stage.theme.glow}
@@ -3093,7 +3085,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                   >
                     {/* Stage card background image */}
                     <div 
-                      className="absolute inset-0 opacity-80"
+                      className="absolute inset-0 opacity-80 rounded-lg"
                       style={{
                         backgroundImage: `url(${stage.stageBg})`,
                         backgroundSize: 'cover',
@@ -3140,8 +3132,14 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
           </div>
 
           {/* Footer */}
-          <div className="mt-16 text-center text-purple-300">
-            <p className="text-sm font-semibold pixel-text">🎮 CLICK EACH STAGE TO BEGIN YOUR QUEST 🎮</p>
+          <div className="mt-16 mb-8 text-center relative z-10">
+            <div className="inline-block bg-gradient-to-r from-amber-900/70 via-yellow-900/70 to-amber-900/70 backdrop-blur-sm px-8 py-4 rounded-lg border-4 border-yellow-700 shadow-2xl">
+              <p className="text-sm md:text-base font-black pixel-text text-amber-100 drop-shadow-lg" style={{
+                textShadow: '2px 2px 0px rgba(101, 67, 33, 0.8), -1px -1px 0px rgba(255, 215, 0, 0.3)'
+              }}>
+                🎮 CLICK EACH STAGE TO BEGIN YOUR QUEST 🎮
+              </p>
+            </div>
           </div>
         </div>
       ) : (

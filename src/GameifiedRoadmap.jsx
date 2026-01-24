@@ -1701,90 +1701,140 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
       )}
 
-      {/* Mission Checkpoint - Unique style per stage */}
+      {/* Mission Checkpoint - Pixel Perfect Gaming Style */}
       {isMissionOpen && mission.checkpoint && (
         <div className="mt-4">
+          {/* Outer glow container */}
           <div 
-            className={`p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden`}
+            className="relative rounded-sm p-1 animate-pulse-slow"
             style={{
-              background: selectedStage.id === 1 ? 'linear-gradient(135deg, #15803ddd, #84cc16dd)' :
-                         selectedStage.id === 2 ? 'linear-gradient(135deg, #ea580cdd, #f59e0bdd)' :
-                         selectedStage.id === 3 ? 'linear-gradient(135deg, #b45309dd, #f59e0bdd)' :
-                         selectedStage.id === 4 ? 'linear-gradient(135deg, #0e7490dd, #0284c7dd)' :
-                         selectedStage.id === 5 ? 'linear-gradient(135deg, #6b21a8dd, #7e22cedd)' :
-                         selectedStage.id === 6 ? 'linear-gradient(135deg, #1e40afdd, #1e3a8add)' :
-                         selectedStage.id === 7 ? 'linear-gradient(135deg, #115e59dd, #0891b2dd)' :
-                         selectedStage.id === 8 ? 'linear-gradient(135deg, #991b1bdd, #c2410cdd)' :
-                         selectedStage.id === 9 ? 'linear-gradient(135deg, #1e293bdd, #27272add)' :
-                         selectedStage.id === 10 ? 'linear-gradient(135deg, #3730a3dd, #5b21b6dd)' :
-                         selectedStage.id === 11 ? 'linear-gradient(135deg, #111827dd, #18181bdd)' :
-                         'linear-gradient(135deg, #000000dd, #7f1d1ddd)',
-              borderColor: selectedStage.id === 1 ? '#16a34a' :
-                          selectedStage.id === 2 ? '#ea580c' :
-                          selectedStage.id === 3 ? '#b45309' :
-                          selectedStage.id === 4 ? '#0891b2' :
-                          selectedStage.id === 5 ? '#7e22ce' :
-                          selectedStage.id === 6 ? '#1e40af' :
-                          selectedStage.id === 7 ? '#0891b2' :
-                          selectedStage.id === 8 ? '#991b1b' :
-                          selectedStage.id === 9 ? '#1e293b' :
-                          selectedStage.id === 10 ? '#4338ca' :
-                          selectedStage.id === 11 ? '#000000' :
-                          '#7f1d1d',
-              boxShadow: selectedStage.id === 1 ? '0 0 30px rgba(34, 197, 94, 0.3)' :
-                        selectedStage.id === 2 ? '0 0 30px rgba(251, 146, 60, 0.3)' :
-                        selectedStage.id === 3 ? '0 0 30px rgba(251, 191, 36, 0.3)' :
-                        selectedStage.id === 4 ? '0 0 30px rgba(34, 211, 238, 0.3)' :
-                        selectedStage.id === 5 ? '0 0 30px rgba(168, 85, 247, 0.3)' :
-                        selectedStage.id === 6 ? '0 0 30px rgba(59, 130, 246, 0.3)' :
-                        selectedStage.id === 7 ? '0 0 30px rgba(20, 184, 166, 0.3)' :
-                        selectedStage.id === 8 ? '0 0 30px rgba(239, 68, 68, 0.3)' :
-                        selectedStage.id === 9 ? '0 0 30px rgba(100, 116, 139, 0.3)' :
-                        selectedStage.id === 10 ? '0 0 30px rgba(99, 102, 241, 0.3)' :
-                        selectedStage.id === 11 ? '0 0 30px rgba(107, 114, 128, 0.3)' :
-                        '0 0 30px rgba(239, 68, 68, 0.5)'
+              background: `linear-gradient(135deg, ${selectedStage.theme.bg.split(' ')[0].replace('from-', '')}, ${selectedStage.theme.bg.split(' ')[2].replace('to-', '')})`,
+              boxShadow: `
+                0 0 20px ${selectedStage.theme.particle.replace('bg-', '')}44,
+                0 0 40px ${selectedStage.theme.particle.replace('bg-', '')}22,
+                inset 0 0 20px ${selectedStage.theme.particle.replace('bg-', '')}11
+              `,
+              imageRendering: 'pixelated'
             }}
           >
-            {/* Subtle pattern overlay */}
-            <div className="absolute inset-0 opacity-10" style={{
-              backgroundImage: 'linear-gradient(45deg, rgba(0,0,0,0.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.1)), linear-gradient(45deg, rgba(0,0,0,0.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.1))',
-              backgroundSize: '20px 20px',
-              backgroundPosition: '0 0, 10px 10px'
-            }}></div>
-            
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-3">
-                <div 
-                  className={`w-8 h-8 rounded-lg border-3 flex items-center justify-center flex-shrink-0 shadow-lg`}
-                  style={{
-                    background: `linear-gradient(135deg, ${selectedStage.theme.bg.split(' ')[0].replace('from-', '')}, ${selectedStage.theme.bg.split(' ')[1].replace('via-', '')})`,
-                    borderColor: 'rgba(255, 255, 255, 0.5)'
-                  }}
-                >
-                  <span className="text-lg">🎯</span>
-                </div>
-                <div className="text-xs font-black pixel-text text-white uppercase drop-shadow-lg tracking-wide">
-                  {mission.checkpoint.title}
-                </div>
-              </div>
-              <div className="text-[9px] pixel-text space-y-2">
-                {mission.checkpoint.requirements.map((req, idx) => (
+            {/* Main checkpoint container */}
+            <div 
+              className="relative overflow-hidden rounded-sm border-4 border-black/50"
+              style={{
+                background: 'linear-gradient(180deg, #1a1a1aee 0%, #0a0a0aee 100%)',
+                boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.1), inset 0 -2px 0 rgba(0,0,0,0.5)'
+              }}
+            >
+              {/* Animated scanline effect */}
+              <div 
+                className="absolute inset-0 pointer-events-none opacity-20"
+                style={{
+                  background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)',
+                  animation: 'scanlines 8s linear infinite'
+                }}
+              ></div>
+              
+              {/* Pixel grid overlay */}
+              <div 
+                className="absolute inset-0 pointer-events-none opacity-5"
+                style={{
+                  backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+                  backgroundSize: '8px 8px',
+                  imageRendering: 'pixelated'
+                }}
+              ></div>
+
+              {/* Corner decorations - pixel style */}
+              <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2" style={{ borderColor: selectedStage.theme.particle.replace('bg-', '') }}></div>
+              <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2" style={{ borderColor: selectedStage.theme.particle.replace('bg-', '') }}></div>
+              <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2" style={{ borderColor: selectedStage.theme.particle.replace('bg-', '') }}></div>
+              <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2" style={{ borderColor: selectedStage.theme.particle.replace('bg-', '') }}></div>
+
+              <div className="relative z-10 p-4">
+                {/* Header with pixel art badge */}
+                <div className="flex items-center gap-3 mb-4">
                   <div 
-                    key={idx} 
-                    className="flex items-start gap-2 bg-black/40 border-2 p-2 rounded-lg backdrop-blur-sm shadow-md hover:bg-black/50 transition-all duration-200"
-                    style={{
-                      borderColor: 'rgba(255, 255, 255, 0.3)'
-                    }}
+                    className="relative w-10 h-10 flex-shrink-0"
+                    style={{ imageRendering: 'pixelated' }}
                   >
-                    <span 
-                      className="flex-shrink-0 font-black text-base leading-none mt-0.5" 
-                      style={{ color: selectedStage.theme.particle }}
-                    >
-                      ▸
-                    </span>
-                    <span className="flex-1 text-white font-bold leading-relaxed">{req}</span>
+                    {/* Pixel art badge background */}
+                    <div 
+                      className="absolute inset-0 rounded-sm border-3 border-black transform rotate-45"
+                      style={{
+                        background: `linear-gradient(135deg, ${selectedStage.theme.bg.split(' ')[0].replace('from-', '')}, ${selectedStage.theme.bg.split(' ')[2].replace('to-', '')})`,
+                        boxShadow: `0 0 15px ${selectedStage.theme.particle.replace('bg-', '')}66`
+                      }}
+                    ></div>
+                    <div className="relative w-full h-full flex items-center justify-center">
+                      <span className="text-xl drop-shadow-lg" style={{ filter: 'drop-shadow(0 0 8px rgba(0,0,0,0.8))' }}>🎯</span>
+                    </div>
                   </div>
-                ))}
+                  
+                  <div className="flex-1">
+                    <div 
+                      className="text-xs font-black pixel-text uppercase tracking-wider px-3 py-1 inline-block rounded-sm border-2 border-black"
+                      style={{
+                        background: `linear-gradient(90deg, ${selectedStage.theme.bg.split(' ')[0].replace('from-', '')}, ${selectedStage.theme.bg.split(' ')[2].replace('to-', '')})`,
+                        textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
+                        boxShadow: `0 0 10px ${selectedStage.theme.particle.replace('bg-', '')}44, inset 0 1px 0 rgba(255,255,255,0.2)`
+                      }}
+                    >
+                      {mission.checkpoint.title}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Requirements list - arcade style */}
+                <div className="space-y-2">
+                  {mission.checkpoint.requirements.map((req, idx) => (
+                    <div 
+                      key={idx}
+                      className="group relative"
+                      style={{
+                        animation: `slideIn 0.3s ease-out ${idx * 0.1}s forwards`,
+                        opacity: 0
+                      }}
+                    >
+                      {/* Requirement container */}
+                      <div 
+                        className="relative flex items-start gap-2 p-2 rounded-sm border-2 transition-all duration-300 hover:scale-102"
+                        style={{
+                          background: 'linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.4) 100%)',
+                          borderColor: `${selectedStage.theme.particle.replace('bg-', '')}40`,
+                          boxShadow: `inset 0 1px 0 rgba(255,255,255,0.1), 0 0 0 1px rgba(0,0,0,0.5)`
+                        }}
+                      >
+                        {/* Pixel bullet point */}
+                        <div 
+                          className="flex-shrink-0 w-4 h-4 mt-0.5 relative"
+                          style={{ imageRendering: 'pixelated' }}
+                        >
+                          <div 
+                            className="absolute inset-0 rounded-sm border-2 border-black"
+                            style={{
+                              background: selectedStage.theme.particle.replace('bg-', ''),
+                              boxShadow: `0 0 8px ${selectedStage.theme.particle.replace('bg-', '')}88`
+                            }}
+                          ></div>
+                          <div className="absolute inset-1 rounded-sm bg-white/20"></div>
+                        </div>
+                        
+                        <span className="flex-1 text-white font-bold leading-relaxed pixel-text text-[9px] drop-shadow-md">
+                          {req}
+                        </span>
+
+                        {/* Hover glow effect */}
+                        <div 
+                          className="absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                          style={{
+                            background: `linear-gradient(90deg, ${selectedStage.theme.particle.replace('bg-', '')}10, transparent)`,
+                            boxShadow: `inset 0 0 10px ${selectedStage.theme.particle.replace('bg-', '')}20`
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -3227,7 +3277,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
       ) : (
   /* STAGE DETAIL VIEW - Single Mission at a Time */
-  <div className="h-screen relative flex flex-col overflow-hidden">
+  <div className="relative flex flex-col overflow-hidden" style={{ height: '90vh' }}>
     {/* Transition Overlay */}
     <div className={`
       fixed inset-0 bg-black z-50 pointer-events-none transition-opacity duration-300

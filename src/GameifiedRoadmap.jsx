@@ -483,10 +483,8 @@ const DailyWisdomTab = () => {
     oscillator.connect(gainNode);
     gainNode.connect(audioContextRef.current.destination);
     
-    // Randomize frequency for varied "talking" sound
     oscillator.frequency.value = 200 + Math.random() * 100;
     oscillator.type = 'square';
-    
     gainNode.gain.value = 0.08;
     
     oscillator.start();
@@ -508,7 +506,6 @@ const DailyWisdomTab = () => {
       if (index < fullText.length) {
         setDisplayedText(fullText.substring(0, index + 1));
         
-        // Play sound every 2 characters (not on spaces)
         if (index % 2 === 0 && fullText[index] !== ' ') {
           playDialogueSound();
         }
@@ -518,7 +515,7 @@ const DailyWisdomTab = () => {
         clearInterval(typingIntervalRef.current);
         setIsTyping(false);
       }
-    }, 30); // Speed of typing (30ms per character)
+    }, 30);
   };
 
   const generateNewQuote = () => {
@@ -544,7 +541,6 @@ const DailyWisdomTab = () => {
         backgroundRepeat: 'no-repeat'
       }}
     >
-      {/* Dark overlay for better text readability */}
       <div className="absolute inset-0 bg-black/40"></div>
 
       {/* Mystical floating particles */}
@@ -569,26 +565,72 @@ const DailyWisdomTab = () => {
         ))}
       </div>
       
-      <div className="max-w-5xl mx-auto relative z-10">
-        {/* Header */}
+      <div className="max-w-6xl mx-auto relative z-10">
+        {/* Header with Pixelated Scroll Icon */}
         <div className="bg-gradient-to-r from-amber-900/80 via-yellow-900/80 to-amber-900/80 backdrop-blur-sm rounded-sm p-6 mb-8 border-8 border-yellow-700/80 shadow-2xl text-center">
-          <h1 className="text-4xl font-black text-yellow-200 pixel-text mb-2">
-            📜 THE WISE ONE SPEAKS
-          </h1>
+          <div className="flex items-center justify-center gap-4 mb-3">
+            {/* Pixelated Scroll Icon */}
+            <svg width="48" height="48" viewBox="0 0 48 48" style={{ imageRendering: 'pixelated' }}>
+              <rect x="8" y="6" width="32" height="36" fill="#f5e6d3" stroke="#000" strokeWidth="2"/>
+              <rect x="10" y="8" width="28" height="32" fill="#faf0e6"/>
+              <rect x="6" y="4" width="5" height="5" fill="#8b7355" stroke="#000" strokeWidth="1.5"/>
+              <rect x="37" y="4" width="5" height="5" fill="#8b7355" stroke="#000" strokeWidth="1.5"/>
+              <rect x="6" y="39" width="5" height="5" fill="#8b7355" stroke="#000" strokeWidth="1.5"/>
+              <rect x="37" y="39" width="5" height="5" fill="#8b7355" stroke="#000" strokeWidth="1.5"/>
+              <rect x="14" y="14" width="20" height="3" fill="#3e2723" opacity="0.6"/>
+              <rect x="14" y="20" width="16" height="3" fill="#3e2723" opacity="0.6"/>
+              <rect x="14" y="26" width="18" height="3" fill="#3e2723" opacity="0.6"/>
+              <circle cx="24" cy="34" r="4" fill="#fbbf24" stroke="#000" strokeWidth="1.5"/>
+              <circle cx="24" cy="34" r="2" fill="#f59e0b"/>
+            </svg>
+            
+            <h1 className="text-4xl font-black text-yellow-200 pixel-text">
+              THE WISE ONE SPEAKS
+            </h1>
+            
+            <svg width="48" height="48" viewBox="0 0 48 48" style={{ imageRendering: 'pixelated' }}>
+              <rect x="8" y="6" width="32" height="36" fill="#f5e6d3" stroke="#000" strokeWidth="2"/>
+              <rect x="10" y="8" width="28" height="32" fill="#faf0e6"/>
+              <rect x="6" y="4" width="5" height="5" fill="#8b7355" stroke="#000" strokeWidth="1.5"/>
+              <rect x="37" y="4" width="5" height="5" fill="#8b7355" stroke="#000" strokeWidth="1.5"/>
+              <rect x="6" y="39" width="5" height="5" fill="#8b7355" stroke="#000" strokeWidth="1.5"/>
+              <rect x="37" y="39" width="5" height="5" fill="#8b7355" stroke="#000" strokeWidth="1.5"/>
+              <rect x="14" y="14" width="20" height="3" fill="#3e2723" opacity="0.6"/>
+              <rect x="14" y="20" width="16" height="3" fill="#3e2723" opacity="0.6"/>
+              <rect x="14" y="26" width="18" height="3" fill="#3e2723" opacity="0.6"/>
+              <circle cx="24" cy="34" r="4" fill="#fbbf24" stroke="#000" strokeWidth="1.5"/>
+              <circle cx="24" cy="34" r="2" fill="#f59e0b"/>
+            </svg>
+          </div>
           <p className="text-yellow-300/90 pixel-text text-xs">Seek wisdom from the ancient keeper of knowledge</p>
         </div>
 
-        {/* Quote Display Box */}
-        <div className="bg-gradient-to-br from-amber-950/90 via-stone-900/90 to-amber-950/90 backdrop-blur-md rounded-sm p-8 border-8 border-amber-700/90 shadow-2xl relative min-h-[400px]">
-          {/* Decorative corners */}
+        {/* Quote Display Box - Better Layout */}
+        <div className="bg-gradient-to-br from-amber-950/70 via-stone-900/70 to-amber-950/70 backdrop-blur-md rounded-sm p-6 border-8 border-amber-700/90 shadow-2xl relative">
           <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-yellow-500"></div>
           <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-yellow-500"></div>
           <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-yellow-500"></div>
           <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-yellow-500"></div>
 
-          <div className="flex items-start gap-6">
-            {/* Quote Text Area */}
-            <div className="flex-1 relative">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Wise Man Image - Left Side */}
+            <div className="md:col-span-1 flex items-center justify-center">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/30 to-yellow-500/30 rounded-lg blur-xl animate-pulse"></div>
+                <img 
+                  src={currentWiseMan}
+                  alt="Wise One"
+                  className="relative w-48 h-48 md:w-56 md:h-56 object-cover rounded-lg border-6 border-amber-600 shadow-2xl"
+                  style={{ 
+                    imageRendering: 'pixelated',
+                    filter: 'drop-shadow(0 0 20px rgba(251, 191, 36, 0.6))'
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Quote Text - Right Side */}
+            <div className="md:col-span-2 flex flex-col justify-center">
               {currentQuote && (
                 <>
                   <div className="mb-4">
@@ -597,8 +639,7 @@ const DailyWisdomTab = () => {
                     </span>
                   </div>
                   
-                  {/* Quote text with typewriter effect */}
-                  <div className="bg-stone-950/60 border-4 border-amber-800/60 rounded-sm p-6 min-h-[250px] relative">
+                  <div className="bg-stone-950/60 border-4 border-amber-800/60 rounded-sm p-6 min-h-[200px] relative">
                     <pre className="text-amber-100 pixel-text text-xs leading-relaxed whitespace-pre-wrap font-mono">
                       {displayedText}
                       {isTyping && <span className="animate-pulse">▮</span>}
@@ -607,58 +648,69 @@ const DailyWisdomTab = () => {
                 </>
               )}
             </div>
-
-            {/* Wise Man Character - On the right */}
-            <div className="flex-shrink-0">
-              <div className="relative">
-                <img 
-                  src={currentWiseMan}
-                  alt="Wise One"
-                  className="w-48 h-48 object-cover rounded-lg border-6 border-amber-700/80 shadow-2xl"
-                  style={{ 
-                    imageRendering: 'pixelated',
-                    filter: 'drop-shadow(0 0 20px rgba(251, 191, 36, 0.4))'
-                  }}
-                />
-                {/* Glowing aura effect */}
-                <div className="absolute inset-0 bg-gradient-to-t from-amber-500/20 to-transparent rounded-lg animate-pulse"></div>
-              </div>
-            </div>
           </div>
         </div>
 
-        {/* New Quote Button */}
+        {/* New Quote Button with Pixelated Crystal Ball */}
         <div className="mt-8 text-center">
           <button
             onClick={generateNewQuote}
             disabled={isTyping}
             className={`
-              px-8 py-4 bg-gradient-to-r from-amber-700 to-yellow-600 
+              group px-8 py-4 bg-gradient-to-r from-amber-700 to-yellow-600 
               hover:from-amber-600 hover:to-yellow-500 
               text-white font-black rounded-sm border-4 border-amber-900 
               pixel-text text-sm transform hover:scale-105 transition-all duration-300 
-              shadow-lg hover:shadow-2xl
+              shadow-lg hover:shadow-2xl inline-flex items-center gap-3
               ${isTyping ? 'opacity-50 cursor-not-allowed' : ''}
             `}
           >
-            {isTyping ? '📖 THE WISE ONE IS SPEAKING...' : '🔮 SEEK NEW WISDOM'}
+            {/* Pixelated Crystal Ball */}
+            <svg width="32" height="32" viewBox="0 0 32 32" style={{ imageRendering: 'pixelated' }}>
+              <circle cx="16" cy="14" r="10" fill="#a78bfa" stroke="#000" strokeWidth="2"/>
+              <circle cx="16" cy="14" r="8" fill="#c4b5fd"/>
+              <circle cx="12" cy="11" r="3" fill="#e9d5ff" opacity="0.8"/>
+              <ellipse cx="16" cy="14" rx="5" ry="3" fill="#ddd6fe" opacity="0.6"/>
+              <rect x="10" y="24" width="12" height="2" fill="#7c3aed"/>
+              <rect x="8" y="26" width="16" height="3" fill="#6d28d9"/>
+              <rect x="6" y="29" width="20" height="2" fill="#5b21b6"/>
+              {[...Array(5)].map((_, i) => (
+                <rect
+                  key={i}
+                  x={12 + i * 2}
+                  y={10 + i}
+                  width="1"
+                  height="1"
+                  fill="#fff"
+                  opacity="0.7"
+                  className="group-hover:animate-pulse"
+                />
+              ))}
+            </svg>
+            
+            {isTyping ? 'THE WISE ONE IS SPEAKING...' : 'SEEK NEW WISDOM'}
           </button>
         </div>
 
-        {/* Quote Counter */}
+        {/* Quote Counter with Pixelated Book */}
         <div className="mt-8 text-center">
-          <div className="inline-block bg-stone-900/60 px-6 py-3 rounded-sm border-2 border-amber-700/50 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-3 bg-stone-900/60 px-6 py-3 rounded-sm border-2 border-amber-700/50 backdrop-blur-sm">
+            {/* Pixelated Book Icon */}
+            <svg width="32" height="32" viewBox="0 0 32 32" style={{ imageRendering: 'pixelated' }}>
+              <rect x="6" y="4" width="20" height="24" fill="#8b4513" stroke="#000" strokeWidth="2"/>
+              <rect x="8" y="6" width="16" height="20" fill="#a0522d"/>
+              <rect x="6" y="4" width="3" height="24" fill="#654321"/>
+              <rect x="10" y="10" width="12" height="2" fill="#d2691e" opacity="0.6"/>
+              <rect x="10" y="14" width="10" height="2" fill="#d2691e" opacity="0.6"/>
+              <rect x="10" y="18" width="11" height="2" fill="#d2691e" opacity="0.6"/>
+            </svg>
+            
             <p className="text-amber-300 pixel-text text-[10px]">
-              📚 {quotes.length} WISDOMS IN THE ANCIENT LIBRARY
+              {quotes.length} WISDOMS IN THE ANCIENT LIBRARY
             </p>
           </div>
         </div>
       </div>
-
-      {/* Additional CSS for candle flicker animation */}
-      <style jsx>{`
-        
-      `}</style>
     </div>
   );
 };
@@ -941,29 +993,66 @@ const AchievementsTab = ({ completedTasks, stages }) => {
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {projects.map((project, idx) => {
-            const isCompleted = false; // You can enhance this later
+            // Check if this project is completed
+            const stage = stages.find(s => s.id === project.phase);
+            let isCompleted = false;
+            
+            if (stage) {
+              // Check all tasks in this stage
+              let allTasksComplete = true;
+              stage.missions.forEach((mission, mIdx) => {
+                mission.tasks.forEach((task, tIdx) => {
+                  const taskKey = `${stage.id}-${mIdx}-${tIdx}`;
+                  if (!completedTasks[taskKey]) {
+                    allTasksComplete = false;
+                  }
+                });
+              });
+              isCompleted = allTasksComplete;
+            }
+            
+            // Get stage theme colors
+            const getStageColors = (phaseId) => {
+              const colorMap = {
+                1: { bg: 'rgba(74, 222, 128, 0.25)', border: 'rgba(74, 222, 128, 0.8)', shadow: 'rgba(74, 222, 128, 0.3)', emoji: '#4ade80' },
+                2: { bg: 'rgba(251, 146, 60, 0.25)', border: 'rgba(251, 146, 60, 0.8)', shadow: 'rgba(251, 146, 60, 0.3)', emoji: '#fb923c' },
+                3: { bg: 'rgba(251, 191, 36, 0.25)', border: 'rgba(251, 191, 36, 0.8)', shadow: 'rgba(251, 191, 36, 0.3)', emoji: '#fbbf24' },
+                4: { bg: 'rgba(34, 211, 238, 0.25)', border: 'rgba(34, 211, 238, 0.8)', shadow: 'rgba(34, 211, 238, 0.3)', emoji: '#22d3ee' },
+                5: { bg: 'rgba(168, 85, 247, 0.25)', border: 'rgba(168, 85, 247, 0.8)', shadow: 'rgba(168, 85, 247, 0.3)', emoji: '#a855f7' },
+                6: { bg: 'rgba(59, 130, 246, 0.25)', border: 'rgba(59, 130, 246, 0.8)', shadow: 'rgba(59, 130, 246, 0.3)', emoji: '#3b82f6' },
+                7: { bg: 'rgba(20, 184, 166, 0.25)', border: 'rgba(20, 184, 166, 0.8)', shadow: 'rgba(20, 184, 166, 0.3)', emoji: '#14b8a6' },
+                8: { bg: 'rgba(239, 68, 68, 0.25)', border: 'rgba(239, 68, 68, 0.8)', shadow: 'rgba(239, 68, 68, 0.3)', emoji: '#ef4444' },
+                9: { bg: 'rgba(100, 116, 139, 0.25)', border: 'rgba(100, 116, 139, 0.8)', shadow: 'rgba(100, 116, 139, 0.3)', emoji: '#64748b' },
+                10: { bg: 'rgba(99, 102, 241, 0.25)', border: 'rgba(99, 102, 241, 0.8)', shadow: 'rgba(99, 102, 241, 0.3)', emoji: '#6366f1' },
+                11: { bg: 'rgba(107, 114, 128, 0.25)', border: 'rgba(107, 114, 128, 0.8)', shadow: 'rgba(107, 114, 128, 0.3)', emoji: '#6b7280' },
+                12: { bg: 'rgba(220, 38, 38, 0.25)', border: 'rgba(220, 38, 38, 0.8)', shadow: 'rgba(220, 38, 38, 0.3)', emoji: '#dc2626' }
+              };
+              return colorMap[phaseId] || { bg: 'rgba(100, 116, 139, 0.25)', border: 'rgba(100, 116, 139, 0.8)', shadow: 'rgba(100, 116, 139, 0.3)', emoji: '#64748b' };
+            };
+            
+            const colors = getStageColors(project.phase);
             
             return (
               <div
                 key={idx}
-                className={`
-                  bg-black/60 backdrop-blur rounded-sm p-4 border-4 transition-all duration-300
-                  ${isCompleted 
-                    ? 'border-green-500/80 shadow-lg shadow-green-500/50' 
-                    : 'border-white/30 hover:border-white/60'
-                  }
-                  transform hover:scale-105
-                `}
+                className="bg-black/60 backdrop-blur rounded-sm p-4 border-4 transition-all duration-300 transform hover:scale-105"
                 style={{
+                  background: isCompleted ? `linear-gradient(135deg, ${colors.bg}, ${colors.bg})` : 'rgba(0, 0, 0, 0.6)',
+                  borderColor: isCompleted ? colors.border : 'rgba(255, 255, 255, 0.3)',
+                  boxShadow: isCompleted ? `0 4px 12px ${colors.shadow}` : 'none',
                   animation: `slideIn 0.5s ease-out ${idx * 0.05}s forwards`,
                   opacity: 0
                 }}
               >
                 <div className="flex items-start gap-3">
-                  <div className={`
-                    w-12 h-12 rounded-sm border-3 flex items-center justify-center text-2xl flex-shrink-0
-                    ${isCompleted ? 'bg-green-600 border-green-400' : 'bg-gray-700 border-gray-500'}
-                  `}>
+                  <div 
+                    className="w-12 h-12 rounded-sm border-3 flex items-center justify-center text-2xl flex-shrink-0"
+                    style={{
+                      backgroundColor: isCompleted ? colors.emoji : '#374151',
+                      borderColor: isCompleted ? colors.border : '#4b5563',
+                      boxShadow: isCompleted ? `0 0 12px ${colors.shadow}` : 'none'
+                    }}
+                  >
                     {project.emoji}
                   </div>
                   
@@ -979,13 +1068,19 @@ const AchievementsTab = ({ completedTasks, stages }) => {
                       </div>
                       
                       {isCompleted && (
-                        <div className="w-6 h-6 bg-yellow-400 rounded-sm border-2 border-yellow-600 flex items-center justify-center">
-                          <span className="text-xs">✓</span>
+                        <div 
+                          className="w-6 h-6 rounded-sm border-2 flex items-center justify-center"
+                          style={{
+                            backgroundColor: '#fbbf24',
+                            borderColor: '#f59e0b',
+                            boxShadow: '0 0 8px rgba(251, 191, 36, 0.6)'
+                          }}
+                        >
+                          <span className="text-xs font-black">✓</span>
                         </div>
                       )}
                     </div>
                     
-                    {/* Placeholder for links */}
                     <div className="space-y-1">
                       <div className="bg-white/5 px-2 py-1 rounded text-[8px] pixel-text text-gray-500">
                         GitHub: [add link]
@@ -1625,78 +1720,17 @@ const LearningRoadmap = () => {
             />
           </div>
   
-          {/* Loading text - fully pixelated and centered */}
-          <div className="mb-8 flex flex-col items-center justify-center">
-            <div className="relative inline-block">
-              {/* Pixelated title background */}
-              <div className="absolute inset-0 -z-10" style={{
-                background: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
-                filter: 'blur(20px)',
-                opacity: 0.6
-              }}></div>
-              
-              {/* Main pixelated title - centered */}
-              <div className="flex justify-center">
-                <svg width="320" height="60" viewBox="0 0 320 60" className="w-full max-w-sm" style={{ imageRendering: 'pixelated' }}>
-                  {/* "LOADING" in pixel blocks - centered */}
-                  {/* L */}
-                  <rect x="10" y="10" width="6" height="30" fill="#fff"/>
-                  <rect x="10" y="34" width="18" height="6" fill="#fff"/>
-                  
-                  {/* O */}
-                  <rect x="38" y="10" width="18" height="6" fill="#fff"/>
-                  <rect x="38" y="34" width="18" height="6" fill="#fff"/>
-                  <rect x="38" y="16" width="6" height="18" fill="#fff"/>
-                  <rect x="50" y="16" width="6" height="18" fill="#fff"/>
-                  
-                  {/* A */}
-                  <rect x="66" y="10" width="18" height="6" fill="#fff"/>
-                  <rect x="66" y="16" width="6" height="24" fill="#fff"/>
-                  <rect x="78" y="16" width="6" height="24" fill="#fff"/>
-                  <rect x="66" y="24" width="18" height="6" fill="#fff"/>
-                  
-                  {/* D */}
-                  <rect x="94" y="10" width="12" height="6" fill="#fff"/>
-                  <rect x="94" y="34" width="12" height="6" fill="#fff"/>
-                  <rect x="94" y="16" width="6" height="18" fill="#fff"/>
-                  <rect x="106" y="16" width="6" height="18" fill="#fff"/>
-                  
-                  {/* I */}
-                  <rect x="122" y="10" width="6" height="30" fill="#fff"/>
-                  
-                  {/* N */}
-                  <rect x="138" y="10" width="6" height="30" fill="#fff"/>
-                  <rect x="144" y="16" width="6" height="6" fill="#fff"/>
-                  <rect x="150" y="22" width="6" height="6" fill="#fff"/>
-                  <rect x="156" y="10" width="6" height="30" fill="#fff"/>
-                  
-                  {/* G */}
-                  <rect x="172" y="10" width="18" height="6" fill="#fff"/>
-                  <rect x="172" y="34" width="18" height="6" fill="#fff"/>
-                  <rect x="172" y="16" width="6" height="18" fill="#fff"/>
-                  <rect x="184" y="28" width="6" height="6" fill="#fff"/>
-                  <rect x="178" y="24" width="12" height="6" fill="#fff"/>
-                  
-                  {/* Drop shadow effect */}
-                  {[...Array(10)].map((_, i) => (
-                    <g key={i} opacity="0.3">
-                      <rect x={14 + i * 18} y="44" width="6" height="3" fill="#8b5cf6"/>
-                    </g>
-                  ))}
-                </svg>
-              </div>
-            </div>
-            
-            {loadingProgress === 100 && (
-              <h2 className="text-2xl md:text-3xl font-black pixel-text mt-4" style={{
-                color: '#4ade80',
-                textShadow: '3px 3px 0 #22c55e, -2px -2px 0 #4ade80',
-                animation: 'pulse 2s ease-in-out infinite',
-                imageRendering: 'pixelated'
-              }}>
-                READY!
-              </h2>
-            )}
+          {/* Loading text - simple centered pixel text */}
+          <div className="mb-8">
+            <h1 className="text-4xl md:text-5xl font-black pixel-text text-center mb-4" style={{
+              color: '#fff',
+              textShadow: '4px 4px 0 #10b981, -2px -2px 0 #34d399',
+              animation: 'pulse 2s ease-in-out infinite',
+              imageRendering: 'pixelated',
+              letterSpacing: '0.1em'
+            }}>
+              {loadingProgress < 100 ? 'LOADING QUEST' : 'QUEST READY!'}
+            </h1>
           </div>
   
           {/* Progress bar - pixelated style */}
@@ -4396,12 +4430,12 @@ const playExplosionSound = () => {
                               borderColor: `${selectedStage.theme.particle.replace('bg-', '')}40`,
                               boxShadow: `inset 0 1px 0 rgba(255,255,255,0.1), 0 0 0 1px rgba(0,0,0,0.5)`
                             }}>
-                              <div className="flex-shrink-0 w-3 h-3 mt-0.5 relative" style={{ imageRendering: 'pixelated' }}>
-                                <div className="absolute inset-0 rounded-sm border-2 border-black" style={{
+                              <div className="flex-shrink-0 w-4 h-4 mt-0.5 relative" style={{ imageRendering: 'pixelated' }}>
+                                <div className="absolute inset-0 rounded-sm border-2 border-white" style={{
                                   background: selectedStage.theme.particle.replace('bg-', ''),
-                                  boxShadow: `0 0 8px ${selectedStage.theme.particle.replace('bg-', '')}88`
+                                  boxShadow: `0 0 12px ${selectedStage.theme.particle.replace('bg-', '')}, inset 0 2px 0 rgba(255,255,255,0.5), inset 0 -2px 0 rgba(0,0,0,0.3)`
                                 }}></div>
-                                <div className="absolute inset-1 rounded-sm bg-white/20"></div>
+                                <div className="absolute inset-1 rounded-sm bg-white/30"></div>
                               </div>
                               <span className="flex-1 text-white font-bold leading-relaxed pixel-text text-[8px] drop-shadow-md">{req}</span>
                               <div className="absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{

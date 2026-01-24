@@ -1591,14 +1591,26 @@ const LearningRoadmap = () => {
                 </>
               )}
               
-              {/* Open chest with treasure when complete */}
+              {/* Open chest with treasure when complete - stays visible longer */}
               {loadingProgress === 100 && (
-                <g style={{ animation: 'fadeIn 0.5s ease-out' }}>
+                <g style={{ animation: 'fadeIn 0.5s ease-out, stayVisible 3s forwards' }}>
                   {/* Gems/coins popping out */}
-                  <circle cx="30" cy="25" r="3" fill="#fbbf24" style={{ filter: 'drop-shadow(0 0 6px #fbbf24)' }}/>
-                  <circle cx="50" cy="20" r="3" fill="#8b5cf6" style={{ filter: 'drop-shadow(0 0 6px #8b5cf6)' }}/>
-                  <circle cx="40" cy="22" r="4" fill="#ec4899" style={{ filter: 'drop-shadow(0 0 6px #ec4899)' }}/>
-                  <rect x="35" y="28" width="4" height="4" fill="#22d3ee" transform="rotate(45 37 30)" style={{ filter: 'drop-shadow(0 0 6px #22d3ee)' }}/>
+                  <circle cx="30" cy="25" r="3" fill="#fbbf24" style={{ 
+                    filter: 'drop-shadow(0 0 6px #fbbf24)',
+                    animation: 'bounce 1s ease-out infinite'
+                  }}/>
+                  <circle cx="50" cy="20" r="3" fill="#8b5cf6" style={{ 
+                    filter: 'drop-shadow(0 0 6px #8b5cf6)',
+                    animation: 'bounce 1s ease-out 0.2s infinite'
+                  }}/>
+                  <circle cx="40" cy="22" r="4" fill="#ec4899" style={{ 
+                    filter: 'drop-shadow(0 0 6px #ec4899)',
+                    animation: 'bounce 1s ease-out 0.1s infinite'
+                  }}/>
+                  <rect x="35" y="28" width="4" height="4" fill="#22d3ee" transform="rotate(45 37 30)" style={{ 
+                    filter: 'drop-shadow(0 0 6px #22d3ee)',
+                    animation: 'bounce 1s ease-out 0.3s infinite'
+                  }}/>
                 </g>
               )}
             </svg>
@@ -1613,16 +1625,76 @@ const LearningRoadmap = () => {
             />
           </div>
   
-          {/* Loading text */}
+          {/* Loading text - fully pixelated */}
           <div className="mb-8">
-            <h1 className="text-4xl md:text-5xl font-black pixel-text mb-4" style={{
-              color: '#fff',
-              textShadow: '4px 4px 0 #8b5cf6, -2px -2px 0 #ec4899',
+            <div className="relative inline-block">
+              {/* Pixelated title background */}
+              <div className="absolute inset-0 -z-10" style={{
+                background: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
+                filter: 'blur(20px)',
+                opacity: 0.6
+              }}></div>
+              
+              {/* Main pixelated title */}
+              <svg width="400" height="80" viewBox="0 0 400 80" className="w-full max-w-md" style={{ imageRendering: 'pixelated' }}>
+                {/* "LOADING" in pixel blocks */}
+                {/* L */}
+                <rect x="20" y="20" width="8" height="40" fill="#fff"/>
+                <rect x="20" y="52" width="24" height="8" fill="#fff"/>
+                
+                {/* O */}
+                <rect x="56" y="20" width="24" height="8" fill="#fff"/>
+                <rect x="56" y="52" width="24" height="8" fill="#fff"/>
+                <rect x="56" y="28" width="8" height="24" fill="#fff"/>
+                <rect x="72" y="28" width="8" height="24" fill="#fff"/>
+                
+                {/* A */}
+                <rect x="92" y="20" width="24" height="8" fill="#fff"/>
+                <rect x="92" y="28" width="8" height="32" fill="#fff"/>
+                <rect x="108" y="28" width="8" height="32" fill="#fff"/>
+                <rect x="92" y="36" width="24" height="8" fill="#fff"/>
+                
+                {/* D */}
+                <rect x="128" y="20" width="16" height="8" fill="#fff"/>
+                <rect x="128" y="52" width="16" height="8" fill="#fff"/>
+                <rect x="128" y="28" width="8" height="24" fill="#fff"/>
+                <rect x="144" y="28" width="8" height="24" fill="#fff"/>
+                
+                {/* I */}
+                <rect x="164" y="20" width="8" height="40" fill="#fff"/>
+                
+                {/* N */}
+                <rect x="184" y="20" width="8" height="40" fill="#fff"/>
+                <rect x="192" y="28" width="8" height="8" fill="#fff"/>
+                <rect x="200" y="36" width="8" height="8" fill="#fff"/>
+                <rect x="208" y="20" width="8" height="40" fill="#fff"/>
+                
+                {/* G */}
+                <rect x="228" y="20" width="24" height="8" fill="#fff"/>
+                <rect x="228" y="52" width="24" height="8" fill="#fff"/>
+                <rect x="228" y="28" width="8" height="24" fill="#fff"/>
+                <rect x="244" y="44" width="8" height="8" fill="#fff"/>
+                <rect x="236" y="36" width="16" height="8" fill="#fff"/>
+                
+                {/* Drop shadow effect */}
+                {[...Array(13)].map((_, i) => (
+                  <g key={i} opacity="0.3">
+                    <rect x={24 + i * 18} y="64" width="8" height="4" fill="#8b5cf6"/>
+                  </g>
+                ))}
+              </svg>
+            </div>
+            
+            <h2 className="text-2xl md:text-3xl font-black pixel-text mt-4" style={{
+              color: loadingProgress < 100 ? '#8b5cf6' : '#4ade80',
+              textShadow: loadingProgress < 100 
+                ? '3px 3px 0 #ec4899, -2px -2px 0 #8b5cf6' 
+                : '3px 3px 0 #22c55e, -2px -2px 0 #4ade80',
               animation: 'pulse 2s ease-in-out infinite',
               imageRendering: 'pixelated'
             }}>
-              {loadingProgress < 100 ? 'LOADING QUEST' : 'QUEST READY!'}
-            </h1>
+              {loadingProgress < 100 ? '' : 'READY!'}
+            </h2>
           </div>
   
           {/* Progress bar - pixelated style */}
@@ -2963,43 +3035,137 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       },
       sound: { freq: 698.46, type: 'square' },
       missions: [
-        { 
+        {
           name: "Week 1: Tailwind CSS",
-          description: "5-10 hours total",
+          duration: "5-10 hours total",
+          emoji: "🎭",
+          taskSound: { freq: 720, type: 'square' },
           tasks: [
-            "Tailwind Setup (1 hour)",
-            "Tailwind Basics (2-3 hours)",
-            "Practice: Rebuild Previous Project (2-4 hours)"
+            {
+              title: "Tailwind Setup",
+              time: "1 hour",
+              details: ["Install Tailwind", "Configure tailwind.config.js"],
+              resource: { name: "Tailwind Docs", url: "https://tailwindcss.com/docs" }
+            },
+            {
+              title: "Tailwind Basics",
+              time: "2-3 hours",
+              details: ["Learn utility classes", "Practice layouts"],
+              resource: { name: "Practice", url: null }
+            },
+            {
+              title: "Practice: Rebuild Previous Project",
+              time: "2-4 hours",
+              details: ["Rebuild a previous project with Tailwind", "Compare approaches"],
+              resource: { name: "Practice", url: null }
+            }
           ],
-          missionEmoji: "🎭",
-          taskSound: { freq: 720, type: 'square' }
+          checkpoint: {
+            title: "Week 1 Checkpoint",
+            requirements: [
+              "Tailwind is installed",
+              "You can use utility classes",
+              "Project rebuilt successfully"
+            ]
+          }
         },
-        { 
+        {
           name: "Week 2: E-commerce Product Page",
-          description: "5-10 hours total",
+          duration: "5-10 hours total",
+          emoji: "🌸",
+          taskSound: { freq: 780, type: 'square' },
           tasks: [
-            "Setup & Planning (0.5 hours)",
-            "Product Gallery Component (2-3 hours)",
-            "Product Info Component (1.5-2 hours)",
-            "Cart State Management (1.5-2 hours)",
-            "Styling & Responsive (1-2 hours)"
+            {
+              title: "Setup & Planning",
+              time: "0.5 hours",
+              details: ["Plan component structure", "Design layout"],
+              resource: { name: "Practice", url: null }
+            },
+            {
+              title: "Product Gallery Component",
+              time: "2-3 hours",
+              details: ["Image carousel", "Thumbnail navigation"],
+              resource: { name: "Practice", url: null }
+            },
+            {
+              title: "Product Info Component",
+              time: "1.5-2 hours",
+              details: ["Product details", "Price, description"],
+              resource: { name: "Practice", url: null }
+            },
+            {
+              title: "Cart State Management",
+              time: "1.5-2 hours",
+              details: ["Add to cart", "Quantity controls"],
+              resource: { name: "Practice", url: null }
+            },
+            {
+              title: "Styling & Responsive",
+              time: "1-2 hours",
+              details: ["Tailwind styling", "Mobile responsive"],
+              resource: { name: "Practice", url: null }
+            }
           ],
-          missionEmoji: "🌸",
-          taskSound: { freq: 780, type: 'square' }
+          checkpoint: {
+            title: "Week 2 Checkpoint",
+            requirements: [
+              "Product page complete",
+              "Cart functionality works",
+              "Fully responsive"
+            ]
+          }
         },
-        { 
+        {
           name: "Week 3: Dashboard/Admin Panel",
-          description: "5-10 hours total",
+          duration: "5-10 hours total",
+          emoji: "🎨",
+          taskSound: { freq: 820, type: 'square' },
           tasks: [
-            "Setup & Planning (0.5 hours)",
-            "Sidebar Navigation (1.5-2 hours)",
-            "Dashboard Header (1 hour)",
-            "Data Table Component (2-3 hours)",
-            "Charts Integration (Optional) (1-2 hours)",
-            "Final Polish & Deploy (1-2 hours)"
+            {
+              title: "Setup & Planning",
+              time: "0.5 hours",
+              details: ["Plan dashboard layout", "Component structure"],
+              resource: { name: "Practice", url: null }
+            },
+            {
+              title: "Sidebar Navigation",
+              time: "1.5-2 hours",
+              details: ["Build sidebar", "Navigation links"],
+              resource: { name: "Practice", url: null }
+            },
+            {
+              title: "Dashboard Header",
+              time: "1 hour",
+              details: ["User profile", "Search bar"],
+              resource: { name: "Practice", url: null }
+            },
+            {
+              title: "Data Table Component",
+              time: "2-3 hours",
+              details: ["Display data", "Sorting, filtering"],
+              resource: { name: "Practice", url: null }
+            },
+            {
+              title: "Charts Integration (Optional)",
+              time: "1-2 hours",
+              details: ["Add charts library", "Display data visualizations"],
+              resource: { name: "Recharts", url: "https://recharts.org/" }
+            },
+            {
+              title: "Final Polish & Deploy",
+              time: "1-2 hours",
+              details: ["Polish UI", "Deploy project"],
+              resource: { name: "Practice", url: null }
+            }
           ],
-          missionEmoji: "🎨",
-          taskSound: { freq: 820, type: 'square' }
+          checkpoint: {
+            title: "Week 3 Checkpoint",
+            requirements: [
+              "Dashboard complete",
+              "All components functional",
+              "Deployed successfully"
+            ]
+          }
         }
       ]
     },
@@ -4162,29 +4328,28 @@ const playExplosionSound = () => {
                     <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2" style={{ borderColor: selectedStage.theme.particle.replace('bg-', '') }}></div>
                     <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2" style={{ borderColor: selectedStage.theme.particle.replace('bg-', '') }}></div>
                     <div className="relative z-10 p-3 bg-black/10 backdrop-blur-sm">
-                      <div className="flex items-center gap-3 mb-3">
+                      <div className="mb-4">
                         {/* Pixelated scroll icon */}
-                        <div className="relative flex-shrink-0">
-                          <svg width="40" height="40" viewBox="0 0 40 40" style={{ imageRendering: 'pixelated' }}>
+                        <div className="relative inline-block mb-2">
+                          <svg width="32" height="32" viewBox="0 0 32 32" style={{ imageRendering: 'pixelated' }}>
                             {/* Scroll paper */}
-                            <rect x="8" y="6" width="24" height="28" fill="#f5e6d3" stroke="#000" strokeWidth="1.5"/>
-                            <rect x="10" y="8" width="20" height="24" fill="#faf0e6"/>
+                            <rect x="6" y="4" width="20" height="24" fill="#f5e6d3" stroke="#000" strokeWidth="1.5"/>
+                            <rect x="8" y="6" width="16" height="20" fill="#faf0e6"/>
                             
                             {/* Scroll rolls */}
-                            <rect x="6" y="4" width="4" height="4" fill="#8b7355" stroke="#000" strokeWidth="1"/>
-                            <rect x="30" y="4" width="4" height="4" fill="#8b7355" stroke="#000" strokeWidth="1"/>
-                            <rect x="6" y="32" width="4" height="4" fill="#8b7355" stroke="#000" strokeWidth="1"/>
-                            <rect x="30" y="32" width="4" height="4" fill="#8b7355" stroke="#000" strokeWidth="1"/>
+                            <rect x="4" y="2" width="3" height="3" fill="#8b7355" stroke="#000" strokeWidth="1"/>
+                            <rect x="25" y="2" width="3" height="3" fill="#8b7355" stroke="#000" strokeWidth="1"/>
+                            <rect x="4" y="27" width="3" height="3" fill="#8b7355" stroke="#000" strokeWidth="1"/>
+                            <rect x="25" y="27" width="3" height="3" fill="#8b7355" stroke="#000" strokeWidth="1"/>
                             
                             {/* Text lines */}
-                            <rect x="12" y="12" width="16" height="2" fill="#3e2723" opacity="0.6"/>
-                            <rect x="12" y="16" width="12" height="2" fill="#3e2723" opacity="0.6"/>
-                            <rect x="12" y="20" width="14" height="2" fill="#3e2723" opacity="0.6"/>
-                            <rect x="12" y="24" width="10" height="2" fill="#3e2723" opacity="0.6"/>
+                            <rect x="10" y="10" width="12" height="2" fill="#3e2723" opacity="0.6"/>
+                            <rect x="10" y="14" width="9" height="2" fill="#3e2723" opacity="0.6"/>
+                            <rect x="10" y="18" width="11" height="2" fill="#3e2723" opacity="0.6"/>
                             
                             {/* Decorative seal */}
-                            <circle cx="20" cy="28" r="3" fill="#fbbf24" stroke="#000" strokeWidth="1"/>
-                            <circle cx="20" cy="28" r="1.5" fill="#f59e0b"/>
+                            <circle cx="16" cy="22" r="2.5" fill="#fbbf24" stroke="#000" strokeWidth="1"/>
+                            <circle cx="16" cy="22" r="1.2" fill="#f59e0b"/>
                           </svg>
                           
                           {/* Glow */}
@@ -4197,15 +4362,9 @@ const playExplosionSound = () => {
                           />
                         </div>
                         
-                        <div className="flex-1">
-                          <div className="text-[10px] font-black pixel-text uppercase tracking-wider px-2 py-1 inline-block rounded-sm border-2 border-black text-white" style={{
-                            background: 'linear-gradient(90deg, #b45309, #eab308)',
-                            textShadow: '2px 2px 0px rgba(0,0,0,0.8)',
-                            boxShadow: '0 0 10px #fbbf2444, inset 0 1px 0 rgba(255,255,255,0.2)'
-                          }}>
-                            {currentQuote.category.toUpperCase()}
-                          </div>
-                        </div>
+                        <span className="px-3 py-1 bg-amber-800/50 border-2 border-amber-600 rounded-sm pixel-text text-[9px] text-amber-200">
+                          {currentQuote.category.toUpperCase()}
+                        </span>
                       </div>
                       <div className="space-y-2">
                         {selectedStage.missions[currentMissionIndex].checkpoint.requirements.map((req, idx) => (
@@ -4582,6 +4741,15 @@ const playExplosionSound = () => {
             transform: translateY(0);
           }
         }
+        @keyframes bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+        
+        @keyframes stayVisible {
+          0%, 90% { opacity: 1; }
+          100% { opacity: 1; }
+}
       `}</style>
     </div>
   );

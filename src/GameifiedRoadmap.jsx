@@ -1326,7 +1326,6 @@ const PixelatedTitle = () => {
     };
   }, []);
 
-  return (
     return (
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-center pixel-text text-amber-100 px-3 sm:px-4 md:px-6 border-3 sm:border-4 border-yellow-700 bg-gradient-to-br from-amber-900/60 to-yellow-900/60 backdrop-blur-sm rounded-lg py-3 sm:py-4 md:py-6 inline-block max-w-[95%] leading-tight"
           style={{

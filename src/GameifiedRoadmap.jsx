@@ -1705,30 +1705,53 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       {isMissionOpen && mission.checkpoint && (
         <div className="mt-4">
           <div 
-            className={`p-3 border-4 rounded-lg backdrop-blur-md shadow-2xl bg-gradient-to-br ${selectedStage.theme.card} ${selectedStage.theme.border}`}
-            style={{ opacity: 0.85 }}
+            className={`p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden`}
+            style={{
+              background: `linear-gradient(135deg, ${selectedStage.theme.bg.split(' ')[0].replace('from-', '')}dd, ${selectedStage.theme.bg.split(' ')[2].replace('to-', '')}dd)`,
+              borderColor: selectedStage.theme.border.replace('border-', '')
+            }}
           >
-            <div className="flex items-center gap-2 mb-2">
-              <div 
-                className={`w-6 h-6 rounded border-2 flex items-center justify-center flex-shrink-0 bg-gradient-to-br ${selectedStage.theme.bg} ${selectedStage.theme.border}`}
-              >
-                <span className="text-sm">🎯</span>
-              </div>
-              <div className="text-[10px] font-black pixel-text text-gray-900 uppercase drop-shadow-lg">
-                {mission.checkpoint.title}
-              </div>
-            </div>
-            <div className="text-[9px] pixel-text text-gray-800 space-y-1">
-              {mission.checkpoint.requirements.map((req, idx) => (
+            {/* Subtle pattern overlay */}
+            <div className="absolute inset-0 opacity-10" style={{
+              backgroundImage: 'linear-gradient(45deg, rgba(0,0,0,0.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.1)), linear-gradient(45deg, rgba(0,0,0,0.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.1))',
+              backgroundSize: '20px 20px',
+              backgroundPosition: '0 0, 10px 10px'
+            }}></div>
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-3">
                 <div 
-                  key={idx} 
-                  className={`flex items-start gap-1 border-2 p-1.5 rounded backdrop-blur-sm ${selectedStage.theme.border}`}
-                  style={{ backgroundColor: 'rgba(0, 0, 0, 0.15)' }}
+                  className={`w-8 h-8 rounded-lg border-3 flex items-center justify-center flex-shrink-0 shadow-lg`}
+                  style={{
+                    background: `linear-gradient(135deg, ${selectedStage.theme.bg.split(' ')[0].replace('from-', '')}, ${selectedStage.theme.bg.split(' ')[1].replace('via-', '')})`,
+                    borderColor: 'rgba(255, 255, 255, 0.5)'
+                  }}
                 >
-                  <span className={`flex-shrink-0 drop-shadow font-black`} style={{ color: selectedStage.theme.particle }}>□</span>
-                  <span className="flex-1 drop-shadow font-bold">{req}</span>
+                  <span className="text-lg">🎯</span>
                 </div>
-              ))}
+                <div className="text-xs font-black pixel-text text-white uppercase drop-shadow-lg tracking-wide">
+                  {mission.checkpoint.title}
+                </div>
+              </div>
+              <div className="text-[9px] pixel-text space-y-2">
+                {mission.checkpoint.requirements.map((req, idx) => (
+                  <div 
+                    key={idx} 
+                    className="flex items-start gap-2 bg-black/40 border-2 p-2 rounded-lg backdrop-blur-sm shadow-md hover:bg-black/50 transition-all duration-200"
+                    style={{
+                      borderColor: 'rgba(255, 255, 255, 0.3)'
+                    }}
+                  >
+                    <span 
+                      className="flex-shrink-0 font-black text-base leading-none mt-0.5" 
+                      style={{ color: selectedStage.theme.particle }}
+                    >
+                      ▸
+                    </span>
+                    <span className="flex-1 text-white font-bold leading-relaxed">{req}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -3144,7 +3167,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
       ) : (
   /* STAGE DETAIL VIEW - Single Mission at a Time */
-  <div className="h-full relative flex flex-col">
+  <div className="h-screen relative flex flex-col overflow-hidden">
     {/* Transition Overlay */}
     <div className={`
       fixed inset-0 bg-black z-50 pointer-events-none transition-opacity duration-300
@@ -3156,18 +3179,19 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
       </div>
     </div>
-
+  
     {/* Mission Background */}
     <div 
-      className="flex-1 p-4 md:p-8 relative overflow-hidden transition-all duration-500 flex flex-col"
+      className="absolute inset-0 z-0"
       style={{
         backgroundImage: `url(${selectedStage.missionBackgrounds[currentMissionIndex]})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'scroll',
+        backgroundAttachment: 'fixed',
         imageRendering: 'pixelated',
-        opacity: isTransitioning ? 0.5 : 1
+        opacity: isTransitioning ? 0.5 : 1,
+        transition: 'opacity 0.5s'
       }}
     >
       {/* Dark overlay */}
@@ -3175,7 +3199,13 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       
       {/* Enhanced gradient overlay */}
       <div className={`absolute inset-0 bg-gradient-to-br ${selectedStage.theme.bg} opacity-30`}></div>
-
+      
+      {/* Pixel Grid */}
+      <div className="fixed inset-0 opacity-5 pointer-events-none" style={{
+        backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+        backgroundSize: '20px 20px'
+      }}></div>
+  
       {/* Theme-matched floating particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(110)].map((_, i) => {
@@ -3217,16 +3247,12 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
           );
         })}
       </div>
-      
-      {/* Pixel Grid */}
-      <div className="fixed inset-0 opacity-5 pointer-events-none" style={{
-        backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-        backgroundSize: '20px 20px'
-      }}></div>
-      
-      <div className="max-w-7xl mx-auto relative z-10 flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+    </div>
+    
+    <div className="relative z-10 h-full flex flex-col p-4 md:p-8 overflow-hidden">
+      <div className="max-w-7xl mx-auto w-full h-full flex flex-col overflow-hidden">
+        {/* Header - Fixed */}
+        <div className="flex items-center justify-between mb-4 flex-shrink-0">
           <button
             onClick={handleCloseStage}
             className="px-4 md:px-6 py-2 md:py-3 bg-black/70 hover:bg-black/90 text-white font-black rounded-sm backdrop-blur transition-all duration-300 hover:scale-105 border-3 md:border-4 border-white/50 pixel-text active:scale-95 text-[10px] md:text-xs"
@@ -3242,19 +3268,19 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
             </span>
           </div>
         </div>
-
-        {/* Stage Title Card */}
-        <div className="bg-black/60 backdrop-blur rounded-sm p-4 md:p-8 mb-4 md:mb-8 border-4 md:border-8 border-white/80 shadow-2xl">
+  
+        {/* Stage Title Card - Fixed */}
+        <div className="bg-black/60 backdrop-blur rounded-sm p-4 md:p-6 mb-4 border-4 md:border-6 border-white/80 shadow-2xl flex-shrink-0">
           <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
             <div className="transform animate-float flex-shrink-0">
-              <PixelArt type={selectedStage.pixelArt} className="w-20 h-20 md:w-32 md:h-32" />
+              <PixelArt type={selectedStage.pixelArt} className="w-16 h-16 md:w-24 md:h-24" />
             </div>
             
             <div className="flex-1 text-center md:text-left">
-              <h1 className="text-2xl md:text-4xl lg:text-5xl font-black mb-2 md:mb-3 text-white pixel-text drop-shadow-lg uppercase tracking-wider">
+              <h1 className="text-xl md:text-3xl lg:text-4xl font-black mb-2 text-white pixel-text drop-shadow-lg uppercase tracking-wider">
                 {selectedStage.title}
               </h1>
-              <div className="flex flex-wrap gap-2 md:gap-3 items-center justify-center md:justify-start">
+              <div className="flex flex-wrap gap-2 items-center justify-center md:justify-start">
                 <div className="px-3 md:px-4 py-1 md:py-2 bg-white/20 rounded-sm border-2 border-white/40 pixel-text text-white font-bold text-[8px] md:text-xs">
                   {selectedStage.missions[currentMissionIndex].name}
                 </div>
@@ -3265,7 +3291,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
               <img 
                 src={selectedStage.characterImage}
                 alt={`Character Stage ${selectedStage.id}`}
-                className="h-24 md:h-32 lg:h-40 w-auto object-contain rounded-lg border-4 border-white/50 transition-transform duration-300 hover:scale-110"
+                className="h-20 md:h-24 lg:h-32 w-auto object-contain rounded-lg border-4 border-white/50 transition-transform duration-300 hover:scale-110"
                 style={{ 
                   imageRendering: 'auto',
                   filter: 'drop-shadow(0 0 20px rgba(0,0,0,0.5))'
@@ -3274,26 +3300,24 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
             </div>
           </div>
         </div>
-
-        {/* Current Mission - Scrollable */}
-        <div className="flex-1 overflow-y-auto pr-2 flex flex-col">
-          <div className="flex-1">
-            <MissionCard 
-              mission={selectedStage.missions[currentMissionIndex]}
-              mIdx={currentMissionIndex}
-              selectedStage={selectedStage}
-              selectedMission={`${selectedStage.id}-${currentMissionIndex}`}
-              completedTasks={completedTasks}
-              expandedTasks={expandedTasks}   
-              setExpandedTasks={setExpandedTasks}   
-              handleMissionClick={() => {}}
-              handleTaskComplete={handleTaskComplete}
-            />
-          </div>
+  
+        {/* Current Mission - Scrollable Only This Section */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden pr-2 min-h-0">
+          <MissionCard 
+            mission={selectedStage.missions[currentMissionIndex]}
+            mIdx={currentMissionIndex}
+            selectedStage={selectedStage}
+            selectedMission={`${selectedStage.id}-${currentMissionIndex}`}
+            completedTasks={completedTasks}
+            expandedTasks={expandedTasks}   
+            setExpandedTasks={setExpandedTasks}   
+            handleMissionClick={() => {}}
+            handleTaskComplete={handleTaskComplete}
+          />
         </div>
         
         {/* Navigation Buttons - Fixed at bottom */}
-        <div className="sticky bottom-0 left-0 right-0 bg-black/80 backdrop-blur-lg border-t-4 border-white/30 p-3 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 z-20 mt-4">
+        <div className="bg-black/80 backdrop-blur-lg border-t-4 border-white/30 p-3 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 mt-4 flex-shrink-0 rounded-sm">
           <button
             onClick={handlePreviousMission}
             disabled={selectedStage.id === 1 && currentMissionIndex === 0}
@@ -3310,11 +3334,11 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
             <span className="hidden sm:inline">&lt;&lt; PREVIOUS</span>
             <span className="sm:hidden">&lt;&lt; PREV</span>
           </button>
-
+  
           <div className="text-center pixel-text text-white text-[10px] md:text-xs bg-black/50 px-3 md:px-4 py-2 rounded-sm border-2 border-white/30 whitespace-nowrap">
             MISSION {currentMissionIndex + 1} / {selectedStage.missions.length}
           </div>
-
+  
           <button
             onClick={handleNextMission}
             disabled={selectedStage.id === 12 && currentMissionIndex === selectedStage.missions.length - 1}

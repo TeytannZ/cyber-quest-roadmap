@@ -1704,61 +1704,341 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       {/* Mission Checkpoint - Always at bottom above navigation */}
       {isMissionOpen && mission.checkpoint && (
         <div className="mt-4">
-          <div 
-            className={`p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden`}
-            style={{
-              background: `linear-gradient(135deg, ${selectedStage.theme.bg.split(' ')[0].replace('from-', '')}dd, ${selectedStage.theme.bg.split(' ')[2].replace('to-', '')}dd)`,
-              borderColor: selectedStage.theme.border.replace('border-', '')
-            }}
-          >
-            {/* Subtle pattern overlay */}
-            <div className="absolute inset-0 opacity-10" style={{
-              backgroundImage: 'linear-gradient(45deg, rgba(0,0,0,0.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.1)), linear-gradient(45deg, rgba(0,0,0,0.1) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.1) 75%, rgba(0,0,0,0.1))',
-              backgroundSize: '20px 20px',
-              backgroundPosition: '0 0, 10px 10px'
-            }}></div>
-            
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-3">
-                <div 
-                  className={`w-8 h-8 rounded-lg border-3 flex items-center justify-center flex-shrink-0 shadow-lg`}
-                  style={{
-                    background: `linear-gradient(135deg, ${selectedStage.theme.bg.split(' ')[0].replace('from-', '')}, ${selectedStage.theme.bg.split(' ')[1].replace('via-', '')})`,
-                    borderColor: 'rgba(255, 255, 255, 0.5)'
-                  }}
-                >
-                  <span className="text-lg">🎯</span>
-                </div>
-                <div className="text-xs font-black pixel-text text-white uppercase drop-shadow-lg tracking-wide">
-                  {mission.checkpoint.title}
-                </div>
-              </div>
-              <div className="text-[9px] pixel-text space-y-2">
-                {mission.checkpoint.requirements.map((req, idx) => (
-                  <div 
-                    key={idx} 
-                    className="flex items-start gap-2 bg-black/40 border-2 p-2 rounded-lg backdrop-blur-sm shadow-md hover:bg-black/50 transition-all duration-200"
-                    style={{
-                      borderColor: 'rgba(255, 255, 255, 0.3)'
-                    }}
-                  >
-                    <span 
-                      className="flex-shrink-0 font-black text-base leading-none mt-0.5" 
-                      style={{ color: selectedStage.theme.particle }}
-                    >
-                      ▸
-                    </span>
-                    <span className="flex-1 text-white font-bold leading-relaxed">{req}</span>
+          {/* Stage 1: Green/Nature Theme */}
+          {selectedStage.id === 1 && (
+            <div className="p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden border-green-600 bg-gradient-to-br from-green-700/90 to-emerald-600/90">
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.1) 10px, rgba(255,255,255,0.1) 20px)'
+              }}></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg border-3 border-white/70 flex items-center justify-center flex-shrink-0 shadow-lg bg-gradient-to-br from-green-500 to-lime-600">
+                    <span className="text-lg">🎯</span>
                   </div>
-                ))}
+                  <div className="text-xs font-black pixel-text text-white uppercase drop-shadow-lg tracking-wide">
+                    {mission.checkpoint.title}
+                  </div>
+                </div>
+                <div className="text-[9px] pixel-text space-y-2">
+                  {mission.checkpoint.requirements.map((req, idx) => (
+                    <div key={idx} className="flex items-start gap-2 bg-green-900/50 border-2 border-green-400/40 p-2 rounded-lg backdrop-blur-sm shadow-md hover:bg-green-900/70 transition-all duration-200">
+                      <span className="flex-shrink-0 font-black text-base leading-none mt-0.5 text-lime-400">▸</span>
+                      <span className="flex-1 text-green-50 font-bold leading-relaxed">{req}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
+          )}
+      
+          {/* Stage 2: Orange/Lightning Theme */}
+          {selectedStage.id === 2 && (
+            <div className="p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden border-orange-600 bg-gradient-to-br from-yellow-600/90 to-orange-700/90">
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 1px)',
+                backgroundSize: '15px 15px'
+              }}></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg border-3 border-white/70 flex items-center justify-center flex-shrink-0 shadow-lg bg-gradient-to-br from-yellow-500 to-orange-600">
+                    <span className="text-lg">🎯</span>
+                  </div>
+                  <div className="text-xs font-black pixel-text text-white uppercase drop-shadow-lg tracking-wide">
+                    {mission.checkpoint.title}
+                  </div>
+                </div>
+                <div className="text-[9px] pixel-text space-y-2">
+                  {mission.checkpoint.requirements.map((req, idx) => (
+                    <div key={idx} className="flex items-start gap-2 bg-orange-900/50 border-2 border-yellow-400/40 p-2 rounded-lg backdrop-blur-sm shadow-md hover:bg-orange-900/70 transition-all duration-200">
+                      <span className="flex-shrink-0 font-black text-base leading-none mt-0.5 text-yellow-400">⚡</span>
+                      <span className="flex-1 text-orange-50 font-bold leading-relaxed">{req}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+      
+          {/* Stage 3: Amber/Diamond Theme */}
+          {selectedStage.id === 3 && (
+            <div className="p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden border-amber-700 bg-gradient-to-br from-amber-700/90 to-orange-800/90">
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: 'linear-gradient(45deg, transparent 48%, rgba(255,255,255,0.2) 49%, rgba(255,255,255,0.2) 51%, transparent 52%)',
+                backgroundSize: '30px 30px'
+              }}></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg border-3 border-white/70 flex items-center justify-center flex-shrink-0 shadow-lg bg-gradient-to-br from-amber-500 to-yellow-700">
+                    <span className="text-lg">🎯</span>
+                  </div>
+                  <div className="text-xs font-black pixel-text text-white uppercase drop-shadow-lg tracking-wide">
+                    {mission.checkpoint.title}
+                  </div>
+                </div>
+                <div className="text-[9px] pixel-text space-y-2">
+                  {mission.checkpoint.requirements.map((req, idx) => (
+                    <div key={idx} className="flex items-start gap-2 bg-amber-900/50 border-2 border-amber-400/40 p-2 rounded-lg backdrop-blur-sm shadow-md hover:bg-amber-900/70 transition-all duration-200">
+                      <span className="flex-shrink-0 font-black text-base leading-none mt-0.5 text-amber-300">💎</span>
+                      <span className="flex-1 text-amber-50 font-bold leading-relaxed">{req}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+      
+          {/* Stage 4: Cyan/Blue Theme */}
+          {selectedStage.id === 4 && (
+            <div className="p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden border-cyan-600 bg-gradient-to-br from-cyan-700/90 to-blue-700/90">
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 15px, rgba(255,255,255,0.1) 15px, rgba(255,255,255,0.1) 30px)'
+              }}></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg border-3 border-white/70 flex items-center justify-center flex-shrink-0 shadow-lg bg-gradient-to-br from-cyan-500 to-blue-600">
+                    <span className="text-lg">🎯</span>
+                  </div>
+                  <div className="text-xs font-black pixel-text text-white uppercase drop-shadow-lg tracking-wide">
+                    {mission.checkpoint.title}
+                  </div>
+                </div>
+                <div className="text-[9px] pixel-text space-y-2">
+                  {mission.checkpoint.requirements.map((req, idx) => (
+                    <div key={idx} className="flex items-start gap-2 bg-cyan-900/50 border-2 border-cyan-400/40 p-2 rounded-lg backdrop-blur-sm shadow-md hover:bg-cyan-900/70 transition-all duration-200">
+                      <span className="flex-shrink-0 font-black text-base leading-none mt-0.5 text-cyan-300">🎨</span>
+                      <span className="flex-1 text-cyan-50 font-bold leading-relaxed">{req}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+      
+          {/* Stage 5: Purple Theme */}
+          {selectedStage.id === 5 && (
+            <div className="p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden border-purple-700 bg-gradient-to-br from-purple-800/90 to-violet-700/90">
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: 'repeating-conic-gradient(from 0deg, transparent 0deg 90deg, rgba(255,255,255,0.1) 90deg 180deg)',
+                backgroundSize: '40px 40px'
+              }}></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg border-3 border-white/70 flex items-center justify-center flex-shrink-0 shadow-lg bg-gradient-to-br from-purple-600 to-violet-700">
+                    <span className="text-lg">🎯</span>
+                  </div>
+                  <div className="text-xs font-black pixel-text text-white uppercase drop-shadow-lg tracking-wide">
+                    {mission.checkpoint.title}
+                  </div>
+                </div>
+                <div className="text-[9px] pixel-text space-y-2">
+                  {mission.checkpoint.requirements.map((req, idx) => (
+                    <div key={idx} className="flex items-start gap-2 bg-purple-900/50 border-2 border-purple-400/40 p-2 rounded-lg backdrop-blur-sm shadow-md hover:bg-purple-900/70 transition-all duration-200">
+                      <span className="flex-shrink-0 font-black text-base leading-none mt-0.5 text-purple-300">⚙️</span>
+                      <span className="flex-1 text-purple-50 font-bold leading-relaxed">{req}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+      
+          {/* Stage 6: Blue Database Theme */}
+          {selectedStage.id === 6 && (
+            <div className="p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden border-blue-800 bg-gradient-to-br from-blue-800/90 to-indigo-700/90">
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: 'linear-gradient(0deg, transparent 24%, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.1) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0.1) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.1) 26%, transparent 27%, transparent 74%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0.1) 76%, transparent 77%, transparent)',
+                backgroundSize: '50px 50px'
+              }}></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg border-3 border-white/70 flex items-center justify-center flex-shrink-0 shadow-lg bg-gradient-to-br from-blue-600 to-indigo-700">
+                    <span className="text-lg">🎯</span>
+                  </div>
+                  <div className="text-xs font-black pixel-text text-white uppercase drop-shadow-lg tracking-wide">
+                    {mission.checkpoint.title}
+                  </div>
+                </div>
+                <div className="text-[9px] pixel-text space-y-2">
+                  {mission.checkpoint.requirements.map((req, idx) => (
+                    <div key={idx} className="flex items-start gap-2 bg-blue-950/50 border-2 border-blue-400/40 p-2 rounded-lg backdrop-blur-sm shadow-md hover:bg-blue-950/70 transition-all duration-200">
+                      <span className="flex-shrink-0 font-black text-base leading-none mt-0.5 text-blue-300">💾</span>
+                      <span className="flex-1 text-blue-50 font-bold leading-relaxed">{req}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+      
+          {/* Stage 7: Teal Theme */}
+          {selectedStage.id === 7 && (
+            <div className="p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden border-teal-800 bg-gradient-to-br from-teal-800/90 to-cyan-800/90">
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(255,255,255,0.2) 2%, transparent 2%), radial-gradient(circle at 75% 75%, rgba(255,255,255,0.2) 2%, transparent 2%)',
+                backgroundSize: '25px 25px'
+              }}></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg border-3 border-white/70 flex items-center justify-center flex-shrink-0 shadow-lg bg-gradient-to-br from-teal-600 to-cyan-700">
+                    <span className="text-lg">🎯</span>
+                  </div>
+                  <div className="text-xs font-black pixel-text text-white uppercase drop-shadow-lg tracking-wide">
+                    {mission.checkpoint.title}
+                  </div>
+                </div>
+                <div className="text-[9px] pixel-text space-y-2">
+                  {mission.checkpoint.requirements.map((req, idx) => (
+                    <div key={idx} className="flex items-start gap-2 bg-teal-900/50 border-2 border-teal-400/40 p-2 rounded-lg backdrop-blur-sm shadow-md hover:bg-teal-900/70 transition-all duration-200">
+                      <span className="flex-shrink-0 font-black text-base leading-none mt-0.5 text-teal-300">🔗</span>
+                      <span className="flex-1 text-teal-50 font-bold leading-relaxed">{req}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+      
+          {/* Stage 8: Red Security Theme */}
+          {selectedStage.id === 8 && (
+            <div className="p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden border-red-800 bg-gradient-to-br from-red-800/90 to-orange-900/90">
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.1) 5px, rgba(255,255,255,0.1) 10px), repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(255,255,255,0.1) 5px, rgba(255,255,255,0.1) 10px)'
+              }}></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg border-3 border-white/70 flex items-center justify-center flex-shrink-0 shadow-lg bg-gradient-to-br from-red-600 to-orange-700">
+                    <span className="text-lg">🎯</span>
+                  </div>
+                  <div className="text-xs font-black pixel-text text-white uppercase drop-shadow-lg tracking-wide">
+                    {mission.checkpoint.title}
+                  </div>
+                </div>
+                <div className="text-[9px] pixel-text space-y-2">
+                  {mission.checkpoint.requirements.map((req, idx) => (
+                    <div key={idx} className="flex items-start gap-2 bg-red-950/50 border-2 border-red-400/40 p-2 rounded-lg backdrop-blur-sm shadow-md hover:bg-red-950/70 transition-all duration-200">
+                      <span className="flex-shrink-0 font-black text-base leading-none mt-0.5 text-red-300">🛡️</span>
+                      <span className="flex-1 text-red-50 font-bold leading-relaxed">{req}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+      
+          {/* Stage 9: Slate/Gray Theme */}
+          {selectedStage.id === 9 && (
+            <div className="p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden border-slate-900 bg-gradient-to-br from-slate-800/90 to-gray-800/90">
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: 'linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%, rgba(255,255,255,0.05)), linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%, rgba(255,255,255,0.05))',
+                backgroundSize: '20px 20px',
+                backgroundPosition: '0 0, 10px 10px'
+              }}></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg border-3 border-white/70 flex items-center justify-center flex-shrink-0 shadow-lg bg-gradient-to-br from-slate-700 to-gray-800">
+                    <span className="text-lg">🎯</span>
+                  </div>
+                  <div className="text-xs font-black pixel-text text-white uppercase drop-shadow-lg tracking-wide">
+                    {mission.checkpoint.title}
+                  </div>
+                </div>
+                <div className="text-[9px] pixel-text space-y-2">
+                  {mission.checkpoint.requirements.map((req, idx) => (
+                    <div key={idx} className="flex items-start gap-2 bg-slate-950/50 border-2 border-slate-400/40 p-2 rounded-lg backdrop-blur-sm shadow-md hover:bg-slate-950/70 transition-all duration-200">
+                      <span className="flex-shrink-0 font-black text-base leading-none mt-0.5 text-slate-300">📚</span>
+                      <span className="flex-1 text-slate-50 font-bold leading-relaxed">{req}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+      
+          {/* Stage 10: Indigo/Purple Real-Time Theme */}
+          {selectedStage.id === 10 && (
+            <div className="p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden border-indigo-950 bg-gradient-to-br from-indigo-900/90 to-purple-900/90">
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.15) 10%, transparent 10%)',
+                backgroundSize: '20px 20px'
+              }}></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg border-3 border-white/70 flex items-center justify-center flex-shrink-0 shadow-lg bg-gradient-to-br from-indigo-700 to-purple-800">
+                    <span className="text-lg">🎯</span>
+                  </div>
+                  <div className="text-xs font-black pixel-text text-white uppercase drop-shadow-lg tracking-wide">
+                    {mission.checkpoint.title}
+                  </div>
+                </div>
+                <div className="text-[9px] pixel-text space-y-2">
+                  {mission.checkpoint.requirements.map((req, idx) => (
+                    <div key={idx} className="flex items-start gap-2 bg-indigo-950/50 border-2 border-indigo-400/40 p-2 rounded-lg backdrop-blur-sm shadow-md hover:bg-indigo-950/70 transition-all duration-200">
+                      <span className="flex-shrink-0 font-black text-base leading-none mt-0.5 text-indigo-300">📡</span>
+                      <span className="flex-1 text-indigo-50 font-bold leading-relaxed">{req}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+      
+          {/* Stage 11: Gray DevOps Theme */}
+          {selectedStage.id === 11 && (
+            <div className="p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden border-black bg-gradient-to-br from-gray-900/90 to-slate-900/90">
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: 'linear-gradient(90deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%), linear-gradient(0deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%)',
+                backgroundSize: '10px 10px'
+              }}></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg border-3 border-white/70 flex items-center justify-center flex-shrink-0 shadow-lg bg-gradient-to-br from-gray-700 to-slate-800">
+                    <span className="text-lg">🎯</span>
+                  </div>
+                  <div className="text-xs font-black pixel-text text-white uppercase drop-shadow-lg tracking-wide">
+                    {mission.checkpoint.title}
+                  </div>
+                </div>
+                <div className="text-[9px] pixel-text space-y-2">
+                  {mission.checkpoint.requirements.map((req, idx) => (
+                    <div key={idx} className="flex items-start gap-2 bg-black/50 border-2 border-gray-400/40 p-2 rounded-lg backdrop-blur-sm shadow-md hover:bg-black/70 transition-all duration-200">
+                      <span className="flex-shrink-0 font-black text-base leading-none mt-0.5 text-gray-300">🚀</span>
+                      <span className="flex-1 text-gray-50 font-bold leading-relaxed">{req}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+      
+          {/* Stage 12: Red/Purple Capstone Theme */}
+          {selectedStage.id === 12 && (
+            <div className="p-4 border-4 rounded-lg backdrop-blur-md shadow-2xl relative overflow-hidden border-red-950 bg-gradient-to-br from-black/90 via-red-950/90 to-purple-950/90">
+              <div className="absolute inset-0 opacity-10" style={{
+                backgroundImage: 'radial-gradient(ellipse at center, rgba(255,0,0,0.2) 0%, transparent 50%), repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(128,0,128,0.1) 10px, rgba(128,0,128,0.1) 20px)'
+              }}></div>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg border-3 border-red-400/70 flex items-center justify-center flex-shrink-0 shadow-lg bg-gradient-to-br from-red-700 to-purple-800">
+                    <span className="text-lg">👑</span>
+                  </div>
+                  <div className="text-xs font-black pixel-text text-red-200 uppercase drop-shadow-lg tracking-wide">
+                    {mission.checkpoint.title}
+                  </div>
+                </div>
+                <div className="text-[9px] pixel-text space-y-2">
+                  {mission.checkpoint.requirements.map((req, idx) => (
+                    <div key={idx} className="flex items-start gap-2 bg-black/60 border-2 border-red-500/40 p-2 rounded-lg backdrop-blur-sm shadow-md hover:bg-black/80 transition-all duration-200">
+                      <span className="flex-shrink-0 font-black text-base leading-none mt-0.5 text-red-400">💀</span>
+                      <span className="flex-1 text-red-100 font-bold leading-relaxed">{req}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
-    </div>
-  );
-};
+      
 
   const stages = [
     {
@@ -3139,7 +3419,10 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                       </h2>
                   
                       {/* Click indicator */}
-                      <div className="text-center text-[10px] md:text-xs font-black mt-3 md:mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pixel-text">
+                      <div 
+                        className="text-center text-[10px] md:text-xs font-black mt-3 md:mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pixel-text drop-shadow-lg"
+                        style={{ color: stage.theme.particle }}
+                      >
                         &gt; CLICK TO ENTER &lt;
                       </div>
                     </div>
@@ -3252,7 +3535,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
     <div className="relative z-10 h-full flex flex-col p-4 md:p-8 overflow-hidden">
       <div className="max-w-7xl mx-auto w-full h-full flex flex-col overflow-hidden">
         {/* Header - Fixed */}
-        <div className="flex items-center justify-between mb-4 flex-shrink-0">
+        <div className="flex items-center justify-between mb-2 flex-shrink-0">
           <button
             onClick={handleCloseStage}
             className="px-4 md:px-6 py-2 md:py-3 bg-black/70 hover:bg-black/90 text-white font-black rounded-sm backdrop-blur transition-all duration-300 hover:scale-105 border-3 md:border-4 border-white/50 pixel-text active:scale-95 text-[10px] md:text-xs"
@@ -3270,28 +3553,28 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
   
         {/* Stage Title Card - Fixed */}
-        <div className="bg-black/60 backdrop-blur rounded-sm p-4 md:p-6 mb-4 border-4 md:border-6 border-white/80 shadow-2xl flex-shrink-0">
-          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6">
+        <div className="bg-black/60 backdrop-blur rounded-sm p-3 md:p-4 mb-3 border-3 md:border-4 border-white/80 shadow-2xl flex-shrink-0">
+          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
             <div className="transform animate-float flex-shrink-0">
-              <PixelArt type={selectedStage.pixelArt} className="w-16 h-16 md:w-24 md:h-24" />
+              <PixelArt type={selectedStage.pixelArt} className="w-12 h-12 md:w-16 md:h-16" />
             </div>
             
             <div className="flex-1 text-center md:text-left">
-              <h1 className="text-xl md:text-3xl lg:text-4xl font-black mb-2 text-white pixel-text drop-shadow-lg uppercase tracking-wider">
+              <h1 className="text-lg md:text-2xl lg:text-3xl font-black mb-1 text-white pixel-text drop-shadow-lg uppercase tracking-wider leading-tight">
                 {selectedStage.title}
               </h1>
               <div className="flex flex-wrap gap-2 items-center justify-center md:justify-start">
-                <div className="px-3 md:px-4 py-1 md:py-2 bg-white/20 rounded-sm border-2 border-white/40 pixel-text text-white font-bold text-[8px] md:text-xs">
+                <div className="px-2 md:px-3 py-1 bg-white/20 rounded-sm border-2 border-white/40 pixel-text text-white font-bold text-[7px] md:text-[9px]">
                   {selectedStage.missions[currentMissionIndex].name}
                 </div>
               </div>
             </div>
             
-            <div className="hidden md:block flex-shrink-0 animate-float">
+            <div className="hidden lg:block flex-shrink-0 animate-float">
               <img 
                 src={selectedStage.characterImage}
                 alt={`Character Stage ${selectedStage.id}`}
-                className="h-20 md:h-24 lg:h-32 w-auto object-contain rounded-lg border-4 border-white/50 transition-transform duration-300 hover:scale-110"
+                className="h-16 lg:h-20 w-auto object-contain rounded-lg border-3 border-white/50 transition-transform duration-300 hover:scale-110"
                 style={{ 
                   imageRendering: 'auto',
                   filter: 'drop-shadow(0 0 20px rgba(0,0,0,0.5))'
@@ -3317,7 +3600,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         </div>
         
         {/* Navigation Buttons - Fixed at bottom */}
-        <div className="bg-black/80 backdrop-blur-lg border-t-4 border-white/30 p-3 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 mt-4 flex-shrink-0 rounded-sm">
+        <div className="bg-black/80 backdrop-blur-lg border-t-3 border-white/30 p-2 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-3 mt-2 flex-shrink-0 rounded-sm">
           <button
             onClick={handlePreviousMission}
             disabled={selectedStage.id === 1 && currentMissionIndex === 0}

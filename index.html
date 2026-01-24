@@ -4,9 +4,85 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quest for Cyber Mastery</title>
+    
+    <!-- Preload critical images for faster loading -->
+    <link rel="preload" as="image" href="/src/images/world_map.png" />
+    <link rel="preload" as="image" href="/src/images/library_background.png" />
+    <link rel="preload" as="image" href="/src/images/phase1.jpg" />
+    <link rel="preload" as="image" href="/src/images/phase2.jpg" />
+    <link rel="preload" as="image" href="/src/images/phase3.jpg" />
+    <link rel="preload" as="image" href="/src/images/phase4.jpg" />
+    <link rel="preload" as="image" href="/src/images/stage1.png" />
+    <link rel="preload" as="image" href="/src/images/stage2.png" />
+    <link rel="preload" as="image" href="/src/images/stage3.png" />
+    <link rel="preload" as="image" href="/src/images/stage4.png" />
+    
+    <!-- Google Fonts for Pixel Text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <style>
+      /* Prevent flash of unstyled content */
+      body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        background: #000;
+      }
+      
+      #root {
+        min-height: 100vh;
+      }
+      
+      /* Loading indicator while React loads */
+      .initial-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #000000 0%, #1a0033 50%, #000000 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      }
+      
+      .initial-loader-text {
+        font-family: 'Press Start 2P', cursive;
+        color: #8b5cf6;
+        font-size: 12px;
+        animation: pulse 2s ease-in-out infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 1; }
+      }
+    </style>
   </head>
   <body>
+    <!-- Initial loading screen (removed once React loads) -->
+    <div class="initial-loader" id="initial-loader">
+      <div class="initial-loader-text">LOADING...</div>
+    </div>
+    
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    
+    <script>
+      // Remove initial loader once React mounts
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const loader = document.getElementById('initial-loader');
+          if (loader) {
+            loader.style.opacity = '0';
+            loader.style.transition = 'opacity 0.5s';
+            setTimeout(() => loader.remove(), 500);
+          }
+        }, 100);
+      });
+    </script>
   </body>
 </html>

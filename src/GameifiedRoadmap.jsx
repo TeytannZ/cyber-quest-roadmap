@@ -1851,12 +1851,54 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                 className={`
                   rounded-lg relative overflow-hidden
                   border-3 backdrop-blur-md
-                  ${isCompleted 
-                    ? 'bg-gradient-to-br from-green-500/30 to-emerald-500/30 border-green-400/80 shadow-lg shadow-green-500/20' 
-                    : 'bg-white/15 border-white/40 hover:border-white/60 hover:bg-white/20'
-                  }
                   transform transition-all duration-300 hover:scale-102
                 `}
+                style={{
+                  background: isCompleted 
+                    ? selectedStage.id === 1 ? 'linear-gradient(135deg, rgba(74, 222, 128, 0.25), rgba(52, 211, 153, 0.25))' :
+                      selectedStage.id === 2 ? 'linear-gradient(135deg, rgba(251, 146, 60, 0.25), rgba(245, 158, 11, 0.25))' :
+                      selectedStage.id === 3 ? 'linear-gradient(135deg, rgba(251, 191, 36, 0.25), rgba(234, 179, 8, 0.25))' :
+                      selectedStage.id === 4 ? 'linear-gradient(135deg, rgba(34, 211, 238, 0.25), rgba(6, 182, 212, 0.25))' :
+                      selectedStage.id === 5 ? 'linear-gradient(135deg, rgba(168, 85, 247, 0.25), rgba(147, 51, 234, 0.25))' :
+                      selectedStage.id === 6 ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(37, 99, 235, 0.25))' :
+                      selectedStage.id === 7 ? 'linear-gradient(135deg, rgba(20, 184, 166, 0.25), rgba(13, 148, 136, 0.25))' :
+                      selectedStage.id === 8 ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(220, 38, 38, 0.25))' :
+                      selectedStage.id === 9 ? 'linear-gradient(135deg, rgba(100, 116, 139, 0.25), rgba(71, 85, 105, 0.25))' :
+                      selectedStage.id === 10 ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(124, 58, 237, 0.25))' :
+                      selectedStage.id === 11 ? 'linear-gradient(135deg, rgba(107, 114, 128, 0.25), rgba(75, 85, 99, 0.25))' :
+                      'linear-gradient(135deg, rgba(220, 38, 38, 0.25), rgba(185, 28, 28, 0.25))'
+                    : 'rgba(255, 255, 255, 0.15)',
+                  borderColor: isCompleted 
+                    ? selectedStage.id === 1 ? 'rgba(74, 222, 128, 0.8)' :
+                      selectedStage.id === 2 ? 'rgba(251, 146, 60, 0.8)' :
+                      selectedStage.id === 3 ? 'rgba(251, 191, 36, 0.8)' :
+                      selectedStage.id === 4 ? 'rgba(34, 211, 238, 0.8)' :
+                      selectedStage.id === 5 ? 'rgba(168, 85, 247, 0.8)' :
+                      selectedStage.id === 6 ? 'rgba(59, 130, 246, 0.8)' :
+                      selectedStage.id === 7 ? 'rgba(20, 184, 166, 0.8)' :
+                      selectedStage.id === 8 ? 'rgba(239, 68, 68, 0.8)' :
+                      selectedStage.id === 9 ? 'rgba(100, 116, 139, 0.8)' :
+                      selectedStage.id === 10 ? 'rgba(99, 102, 241, 0.8)' :
+                      selectedStage.id === 11 ? 'rgba(107, 114, 128, 0.8)' :
+                      'rgba(220, 38, 38, 0.8)'
+                    : 'rgba(255, 255, 255, 0.4)',
+                  boxShadow: isCompleted 
+                    ? `0 4px 12px ${
+                        selectedStage.id === 1 ? 'rgba(74, 222, 128, 0.2)' :
+                        selectedStage.id === 2 ? 'rgba(251, 146, 60, 0.2)' :
+                        selectedStage.id === 3 ? 'rgba(251, 191, 36, 0.2)' :
+                        selectedStage.id === 4 ? 'rgba(34, 211, 238, 0.2)' :
+                        selectedStage.id === 5 ? 'rgba(168, 85, 247, 0.2)' :
+                        selectedStage.id === 6 ? 'rgba(59, 130, 246, 0.2)' :
+                        selectedStage.id === 7 ? 'rgba(20, 184, 166, 0.2)' :
+                        selectedStage.id === 8 ? 'rgba(239, 68, 68, 0.2)' :
+                        selectedStage.id === 9 ? 'rgba(100, 116, 139, 0.2)' :
+                        selectedStage.id === 10 ? 'rgba(99, 102, 241, 0.2)' :
+                        selectedStage.id === 11 ? 'rgba(107, 114, 128, 0.2)' :
+                        'rgba(220, 38, 38, 0.2)'
+                      }`
+                    : 'none'
+                }}
               >
                 {/* Task Header - Compact */}
                 <div className="p-3 flex items-start gap-2">
@@ -3630,7 +3672,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                   <div 
                     className="relative overflow-hidden rounded-sm border-4 border-black/50"
                     style={{
-                      background: 'linear-gradient(180deg, #1a1a1a66 0%, #0a0a0a66 100%)', // Changed from 99 to 66 for more transparency
+                      background: 'linear-gradient(180deg, rgba(26, 26, 26, 0.3) 0%, rgba(10, 10, 10, 0.3) 100%)',
+                      backdropFilter: 'blur(8px)',
                       boxShadow: 'inset 0 2px 0 rgba(255,255,255,0.1), inset 0 -2px 0 rgba(0,0,0,0.5)'
                     }}
                   >
@@ -3647,7 +3690,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
                     <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2" style={{ borderColor: selectedStage.theme.particle.replace('bg-', '') }}></div>
                     <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2" style={{ borderColor: selectedStage.theme.particle.replace('bg-', '') }}></div>
                     <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2" style={{ borderColor: selectedStage.theme.particle.replace('bg-', '') }}></div>
-                    <div className="relative z-10 p-3 bg-black/20 backdrop-blur-sm">
+                    <div className="relative z-10 p-3 bg-black/10 backdrop-blur-sm">
                       <div className="flex items-center gap-3 mb-3">
                         <div className="relative w-8 h-8 flex-shrink-0" style={{ imageRendering: 'pixelated' }}>
                           <div className="absolute inset-0 rounded-sm border-3 border-black transform rotate-45" style={{

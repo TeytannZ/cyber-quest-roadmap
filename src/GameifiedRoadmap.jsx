@@ -549,19 +549,19 @@ const DailyWisdomTab = () => {
 
       {/* Mystical floating particles */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {[...Array(60)].map((_, i) => (
+        {[...Array(100)].map((_, i) => (
           <div
             key={`wisdom-particle-${i}`}
             className="absolute rounded-full"
             style={{
-              width: `${2 + (i % 3)}px`,
-              height: `${2 + (i % 3)}px`,
+              width: `${3 + (i % 4)}px`,
+              height: `${3 + (i % 4)}px`,
               backgroundColor: i % 2 === 0 ? '#fbbf24' : '#f59e0b',
               left: `${(i * 1.7) % 100}%`,
               top: `${(i * 5.1) % 100}%`,
-              opacity: 0.25 + ((i % 4) * 0.08),
+              opacity: 0.3 + ((i % 4) * 0.1),
               filter: 'blur(1.5px)',
-              boxShadow: `0 0 10px ${i % 2 === 0 ? 'rgba(251, 191, 36, 0.4)' : 'rgba(245, 158, 11, 0.4)'}`,
+              boxShadow: `0 0 12px ${i % 2 === 0 ? 'rgba(251, 191, 36, 0.5)' : 'rgba(245, 158, 11, 0.5)'}`,
               animation: `floatParticle ${9 + (i % 6)}s ease-in-out infinite`,
               animationDelay: `${(i * 0.18) % 7}s`
             }}
@@ -1327,15 +1327,19 @@ const PixelatedTitle = () => {
   }, []);
 
   return (
-    <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-center pixel-text text-amber-100 px-3 sm:px-4 md:px-6 border-3 sm:border-4 border-yellow-700 bg-gradient-to-br from-amber-900/60 to-yellow-900/60 backdrop-blur-sm rounded-lg py-3 sm:py-4 md:py-6 inline-block max-w-[95%] leading-tight whitespace-nowrap"
-        style={{
-          textShadow: '2px 2px 0px rgba(101, 67, 33, 0.8), -1px -1px 0px rgba(255, 215, 0, 0.3)',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 0 20px rgba(255, 215, 0, 0.2)',
-          imageRendering: 'pixelated'
-        }}>
-      {displayedText}
-      <span className={`ml-1 sm:ml-2 ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}>_</span>
-    </h1>
+    return (
+      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-center pixel-text text-amber-100 px-3 sm:px-4 md:px-6 border-3 sm:border-4 border-yellow-700 bg-gradient-to-br from-amber-900/60 to-yellow-900/60 backdrop-blur-sm rounded-lg py-3 sm:py-4 md:py-6 inline-block max-w-[95%] leading-tight"
+          style={{
+            textShadow: '2px 2px 0px rgba(101, 67, 33, 0.8), -1px -1px 0px rgba(255, 215, 0, 0.3)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 0 20px rgba(255, 215, 0, 0.2)',
+            imageRendering: 'pixelated',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'clip'
+          }}>
+        {displayedText}
+        <span className={`ml-1 sm:ml-2 ${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}>_</span>
+      </h1>
   );
 };
 
@@ -1701,11 +1705,10 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       {/* Mission Checkpoint - Always at bottom above navigation */}
       {isMissionOpen && mission.checkpoint && (
         <div className="mt-4">
-          <div 
-            className={`p-3 border-4 rounded-lg backdrop-blur-md shadow-2xl`}
+          <div className="p-3 border-4 rounded-lg backdrop-blur-md shadow-2xl"
             style={{
-              background: `linear-gradient(135deg, ${selectedStage.theme.bg.replace('from-', '').split(' ')[0]}33, ${selectedStage.theme.bg.split('to-')[1]}33)`,
-              borderColor: selectedStage.theme.border.replace('border-', '')
+              backgroundColor: `${selectedStage.theme.particle}40`,
+              borderColor: selectedStage.theme.particle
             }}
           >
             <div className="flex items-center gap-2 mb-2">
@@ -1718,14 +1721,20 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
               >
                 <span className="text-sm">🎯</span>
               </div>
-              <div className="text-[10px] font-black pixel-text text-yellow-100 uppercase drop-shadow-lg">
+              <div className="text-[10px] font-black pixel-text text-white uppercase drop-shadow-lg">
                 {mission.checkpoint.title}
               </div>
             </div>
-            <div className="text-[9px] pixel-text text-yellow-50 space-y-1">
+            <div className="text-[9px] pixel-text text-white space-y-1">
               {mission.checkpoint.requirements.map((req, idx) => (
-                <div key={idx} className="flex items-start gap-1 bg-black/30 border border-yellow-500/30 p-1.5 rounded backdrop-blur-sm">
-                  <span className="text-yellow-300 flex-shrink-0 drop-shadow">□</span>
+                <div key={idx} 
+                  className="flex items-start gap-1 border p-1.5 rounded backdrop-blur-sm"
+                  style={{
+                    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    borderColor: `${selectedStage.theme.particle}50`
+                  }}
+                >
+                  <span className="flex-shrink-0 drop-shadow" style={{ color: selectedStage.theme.particle }}>□</span>
                   <span className="flex-1 drop-shadow">{req}</span>
                 </div>
               ))}
@@ -2960,8 +2969,8 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
         }}
       >
         {/* Old paper/parchment overlay - creates aged map effect */}
-        <div className="fixed inset-0 bg-gradient-to-b from-amber-50/70 via-yellow-100/60 to-orange-50/70 pointer-events-none" 
-             style={{ backgroundColor: 'rgba(245, 222, 179, 0.4)' }}></div>
+        <div className="fixed inset-0 bg-gradient-to-b from-amber-50/30 via-yellow-100/25 to-orange-50/30 pointer-events-none" 
+             style={{ backgroundColor: 'rgba(245, 222, 179, 0.15)' }}></div>
         
         {/* Aged paper texture overlay */}
         <div className="absolute inset-0 pointer-events-none opacity-20" style={{
@@ -3004,26 +3013,26 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       <div className="relative z-10 flex-1 flex flex-col overflow-visible">
 
         {/* Enhanced floating particles for main menu */}
-          <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-            {[...Array(80)].map((_, i) => (
-              <div
-                key={`menu-particle-${i}`}
-                className="absolute rounded-full"
-                style={{
-                  width: `${3 + (i % 4)}px`,
-                  height: `${3 + (i % 4)}px`,
-                  backgroundColor: '#ffd700',
-                  left: `${(i * 1.3) % 100}%`,
-                  top: `${(i * 4.7) % 100}%`,
-                  opacity: 0.3 + ((i % 3) * 0.1),
-                  filter: 'blur(1px)',
-                  boxShadow: '0 0 8px rgba(255, 215, 0, 0.5)',
-                  animation: `floatParticle ${8 + (i % 7)}s ease-in-out infinite`,
-                  animationDelay: `${(i * 0.15) % 6}s`
-                }}
-              />
-            ))}
-          </div>
+        <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+          {[...Array(120)].map((_, i) => (
+            <div
+              key={`menu-particle-${i}`}
+              className="absolute rounded-full"
+              style={{
+                width: `${4 + (i % 5)}px`,
+                height: `${4 + (i % 5)}px`,
+                backgroundColor: '#ffd700',
+                left: `${(i * 1.3) % 100}%`,
+                top: `${(i * 4.7) % 100}%`,
+                opacity: 0.35 + ((i % 3) * 0.12),
+                filter: 'blur(1px)',
+                boxShadow: '0 0 10px rgba(255, 215, 0, 0.6)',
+                animation: `floatParticle ${8 + (i % 7)}s ease-in-out infinite`,
+                animationDelay: `${(i * 0.15) % 6}s`
+              }}
+            />
+          ))}
+        </div>
             
       {!selectedStage ? (
         /* STAGE SELECTION VIEW */
@@ -3172,7 +3181,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
 
       {/* Theme-matched floating particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(70)].map((_, i) => {
+        {[...Array(110)].map((_, i) => {
           const getParticleColor = () => {
             const particleClass = selectedStage.theme.particle;
             if (particleClass.includes('green')) return '#4ade80';
@@ -3196,14 +3205,14 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
               key={`stage-particle-${i}`}
               className="absolute rounded-full"
               style={{
-                width: `${3 + (i % 4)}px`,
-                height: `${3 + (i % 4)}px`,
+                width: `${4 + (i % 5)}px`,
+                height: `${4 + (i % 5)}px`,
                 backgroundColor: color,
                 left: `${(i * 1.5) % 100}%`,
                 top: `${(i * 4.3) % 100}%`,
-                opacity: 0.3 + ((i % 3) * 0.1),
+                opacity: 0.35 + ((i % 3) * 0.12),
                 filter: 'blur(1px)',
-                boxShadow: `0 0 10px ${color}66`,
+                boxShadow: `0 0 12px ${color}88`,
                 animation: `floatParticle ${7 + (i % 8)}s ease-in-out infinite`,
                 animationDelay: `${(i * 0.12) % 5}s`
               }}
@@ -3213,7 +3222,7 @@ const MissionCard = ({ mission, mIdx, selectedStage, selectedMission, completedT
       </div>
       
       {/* Pixel Grid */}
-      <div className="absolute inset-0 opacity-5" style={{
+      <div className="fixed inset-0 opacity-5 pointer-events-none" style={{
         backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
         backgroundSize: '20px 20px'
       }}></div>
